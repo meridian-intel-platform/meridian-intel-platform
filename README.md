@@ -195,7 +195,7 @@ OCaml Gateway (port 8000)
 
 ## About Meridian
 
-Meridian is a technology company building at the intersection of business, tech, and community. Meridian Intel is our first product — a zero-hallucination document intelligence platform built for the domains that matter most.
+Meridian is a technology company building at the intersection of business, tech, and community. Meridian Intel is our first product a zero-hallucination document intelligence platform built for the domains that matter most.
 
 **Contact:** meridianintel@gmail.com
 **LinkedIn:** [linkedin.com/company/meridian](https://linkedin.com/company/meridian)
