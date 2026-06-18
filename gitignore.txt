@@ -1,0 +1,81 @@
+# ─────────────────────────────────────────────────────────────
+# RAG Intelligence Platform — .gitignore
+# ─────────────────────────────────────────────────────────────
+
+# ── SECRETS ───────────────────────────────────────────────────
+.env
+.env.*
+*.env
+secrets/
+
+# ── MODELS (large binary files) ───────────────────────────────
+*.gguf
+*.bin
+*.pt
+*.pth
+*.ckpt
+models/
+
+# ── DATA & DATABASES ──────────────────────────────────────────
+data/
+*.db
+*.sqlite
+*.sqlite3
+chroma/
+
+# ── PYTHON ────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+*.egg
+
+# ── OCAML ─────────────────────────────────────────────────────
+_build/
+*.byte
+*.native
+*.install
+*.merlin
+.ocamlformat-ignore
+
+# ── NODE (if frontend tooling added later) ────────────────────
+node_modules/
+npm-debug.log
+yarn-error.log
+.next/
+.nuxt/
+
+# ── DOCKER ────────────────────────────────────────────────────
+.docker/
+
+# ── OS ────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+
+# ── LOGS ──────────────────────────────────────────────────────
+*.log
+logs/
+*.out
+
+# ── UPLOADS (user documents — never commit) ───────────────────
+uploads/
+temp/
+tmp/
+
+# ── IDE ───────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.code-workspace
