@@ -10,7 +10,7 @@ This repository contains the **frontend** of the Meridian Intel platform. The ba
 
 ## Live Platform
 
-🔗 **[meridianintel.com](https://meridianintel.com)** *(coming soon)*
+🔗 **[meridianintel.app](https://meridianintel.app)** *(coming soon)*
 
 ---
 
@@ -195,10 +195,10 @@ OCaml Gateway (port 8000)
 
 ## About Meridian
 
-Meridian is a technology company building at the intersection of business, tech, and community. Meridian Intel is our first product a zero-hallucination document intelligence platform built for the domains that matter most.
+Meridian is a technology company building at the intersection of business, tech, and community. Meridian Intel is our first product — a zero-hallucination document intelligence platform built for the domains that matter most.
 
-**Contact:** meridianintel@gmail.com
-**LinkedIn:** [linkedin.com/company/meridian](https://linkedin.com/company/meridian)
+**Contact:** merdianintel@gmail.com
+**LinkedIn:** [linkedin.com/in/faith-odhe](https://www.linkedin.com/in/faith-odhe/) *(personal — company page coming soon)*
 
 ---
 
@@ -207,4 +207,4 @@ Meridian is a technology company building at the intersection of business, tech,
 Frontend code is provided for portfolio and evaluation purposes.
 Backend, models, and proprietary logic are not included in this repository.
 
-© 2026 Meridian. All rights reserved.
+© 2026 Mazal Arc · All rights reserved.
