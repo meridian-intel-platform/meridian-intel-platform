@@ -79,3 +79,4 @@ tmp/
 .vscode/
 .idea/
 *.code-workspace
+data/gcs-key.json
