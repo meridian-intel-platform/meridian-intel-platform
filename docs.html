@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation · Meridian Intel</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080D14;--bg2:#0F172A;--bg3:#1E293B;
+  --text:#F8FAFC;--muted:#64748B;--dim:#334155;--border:#1E293B;
+  --accent:#A78BFA;--accent-dim:rgba(167,139,250,0.12);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;line-height:1.7;min-height:100vh}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(8,13,20,0.92);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);padding:0 2rem;height:52px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-family:'DM Mono',monospace;font-size:12px;color:var(--text);display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.nav-back{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 14px;border-radius:4px;transition:all 0.2s}
+.nav-back:hover{color:var(--text);border-color:var(--dim)}
+
+.layout{display:flex;max-width:1200px;margin:0 auto;min-height:calc(100vh - 52px)}
+
+.sidebar{width:240px;flex-shrink:0;padding:2.5rem 1.5rem;border-right:1px solid var(--border);position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
+.side-group{margin-bottom:1.75rem}
+.side-group-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--dim);margin-bottom:0.6rem}
+.side-link{display:block;font-size:13px;color:var(--muted);text-decoration:none;padding:5px 0;transition:color 0.2s;border-left:2px solid transparent;padding-left:10px;margin-left:-10px}
+.side-link:hover{color:var(--text)}
+.side-link.active{color:var(--accent);border-left-color:var(--accent)}
+
+.content{flex:1;padding:2.5rem 3rem 6rem;max-width:760px}
+.doc-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.doc-title{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:600;letter-spacing:-0.02em;margin-bottom:0.75rem}
+.doc-sub{color:var(--muted);font-size:15px;margin-bottom:2.5rem;max-width:560px}
+
+section{margin-bottom:3.5rem;scroll-margin-top:72px}
+h2{font-size:1.3rem;font-weight:600;margin-bottom:0.5rem;letter-spacing:-0.01em}
+h3{font-size:1rem;font-weight:500;color:var(--accent);margin:1.75rem 0 0.75rem;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase}
+.section-sub{color:var(--muted);font-size:14px;margin-bottom:1.25rem}
+p{color:#CBD5E1;font-size:15px;margin-bottom:1rem}
+ul,ol{color:#CBD5E1;font-size:15px;padding-left:1.4rem;margin-bottom:1rem}
+li{margin-bottom:0.45rem}
+strong{color:var(--text);font-weight:500}
+code{font-family:'DM Mono',monospace;font-size:12.5px;background:var(--bg2);padding:2px 7px;border-radius:3px;color:var(--accent)}
+
+.step-list{counter-reset:step;margin:1.25rem 0}
+.step{display:flex;gap:14px;margin-bottom:1.25rem}
+.step-num{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--accent-dim);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--accent)}
+.step-body{padding-top:2px}
+.step-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
+.step-desc{font-size:13.5px;color:var(--muted);line-height:1.6}
+
+.doc-table{width:100%;border-collapse:collapse;margin:1.25rem 0 1.5rem;font-size:13.5px}
+.doc-table th{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;font-weight:400}
+.doc-table td{padding:9px 12px;border-bottom:1px solid rgba(30,41,59,0.5);color:#CBD5E1;vertical-align:top}
+.doc-table tr:last-child td{border-bottom:none}
+.doc-table td:first-child{font-family:'DM Mono',monospace;font-size:12px;color:var(--accent);white-space:nowrap}
+
+.badge{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;padding:2px 8px;border-radius:10px;margin-left:6px}
+.badge-live{background:rgba(34,197,94,0.12);color:#22C55E;border:1px solid rgba(34,197,94,0.25)}
+.badge-soon{background:rgba(245,158,11,0.1);color:#F59E0B;border:1px solid rgba(245,158,11,0.2)}
+.badge-roadmap{background:rgba(167,139,250,0.1);color:var(--accent);border:1px solid rgba(167,139,250,0.2)}
+
+.callout{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px;padding:1.1rem 1.4rem;margin:1.25rem 0}
+.callout p{margin-bottom:0;font-size:13.5px;color:#CBD5E1}
+.callout-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+
+.code-block{background:#0B1120;border:1px solid var(--border);border-radius:6px;padding:1rem 1.25rem;margin:1.25rem 0;overflow-x:auto}
+.code-block pre{font-family:'DM Mono',monospace;font-size:12.5px;color:#A5B4FC;line-height:1.65;white-space:pre}
+.code-block .c-key{color:#22C55E}
+.code-block .c-str{color:#FCD34D}
+.code-block .c-comment{color:var(--dim)}
+
+.field-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin:1.25rem 0}
+.field-chip{font-family:'DM Mono',monospace;font-size:11px;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;color:#CBD5E1}
+
+.score-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:1rem 1.25rem;margin-bottom:0.75rem}
+.score-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.score-card-name{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:0.06em;text-transform:uppercase}
+.score-card-range{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
+.score-card p{font-size:13px;color:var(--muted);margin-bottom:0}
+
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-family:'DM Mono',monospace;font-size:10px;color:var(--dim)}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--text)}
+
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{width:100%;position:static;height:auto;border-right:none;border-bottom:1px solid var(--border);padding:1.5rem}
+  .content{padding:2rem 1.25rem 4rem;max-width:100%}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <div class="nav-dot"></div>
+    Meridian Intel
+  </a>
+  <a href="index.html" class="nav-back">← Back to Platform</a>
+</nav>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="side-group">
+      <div class="side-group-title">Getting Started</div>
+      <a href="#intro" class="side-link">Introduction</a>
+      <a href="#quickstart" class="side-link">Quick Start</a>
+      <a href="#fields" class="side-link">Domain Fields</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Reference</div>
+      <a href="#formats" class="side-link">Supported Formats</a>
+      <a href="#tiers" class="side-link">Tier Guide</a>
+      <a href="#results" class="side-link">Understanding Results</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Developers</div>
+      <a href="#api" class="side-link">API Reference</a>
+      <a href="#security" class="side-link">Security &amp; Privacy</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Support</div>
+      <a href="#faq" class="side-link">FAQ</a>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <p class="doc-eyebrow">Documentation</p>
+    <h1 class="doc-title">Meridian Intel</h1>
+    <p class="doc-sub">Everything you need to upload, query, and understand results from your documents — zero hallucination, every domain.</p>
+
+    <section id="intro">
+      <h2>Introduction</h2>
+      <p class="section-sub">What Meridian Intel does and how it's different.</p>
+      <p>Meridian Intel is a Retrieval-Augmented Generation (RAG) platform built for accuracy-critical document review. Upload a document, ask a question in plain language, and get an answer grounded entirely in what the document says — never beyond it.</p>
+      <div class="callout">
+        <div class="callout-title">Zero-Hallucination Guarantee</div>
+        <p>If no relevant content is found in your document, the platform tells you directly rather than generating a guess. The AI model is never called when retrieval returns nothing.</p>
+      </div>
+      <p>Built by <strong>Mazal Arc</strong>, Meridian Intel was designed first for pharmaceutical compliance review — Certificates of Quality, BSE/TSE declarations, Chain of Custody documentation — and now supports 14+ domains including legal, finance, research, and IT.</p>
+    </section>
+
+    <section id="quickstart">
+      <h2>Quick Start</h2>
+      <p class="section-sub">Three steps from zero to your first answer.</p>
+
+      <div class="step-list">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Upload your document</div>
+            <div class="step-desc">Click <code>↑ Upload</code> in the workspace top bar. Select a PDF, TXT, DOCX, or DOC file under 50MB.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Select your domain field</div>
+            <div class="step-desc">Use the field selector to tell the platform what type of document you're working with. This tunes PII scrubbing defaults and retrieval behavior. Unknown types fall back to General Purpose automatically.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Ask your question</div>
+            <div class="step-desc">Type a natural language question. The platform retrieves the most relevant sections, generates a grounded answer, and shows you exactly which part of the document it used.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="fields">
+      <h2>Domain Fields</h2>
+      <p class="section-sub">14+ supported domains across 5 categories. Unrecognized fields fall back to General Purpose without failing.</p>
+
+      <h3>Science &amp; Research</h3>
+      <div class="field-grid">
+        <div class="field-chip">Pharmaceuticals &amp; Biotech</div>
+        <div class="field-chip">Medical &amp; Clinical</div>
+        <div class="field-chip">Clinical Trial Data</div>
+        <div class="field-chip">Literature Review</div>
+      </div>
+
+      <h3>Business &amp; Legal</h3>
+      <div class="field-grid">
+        <div class="field-chip">Legal Contracts</div>
+        <div class="field-chip">NDA</div>
+        <div class="field-chip">Finance &amp; SEC Filings</div>
+        <div class="field-chip">Investment Memos</div>
+        <div class="field-chip">HR &amp; People Ops</div>
+      </div>
+
+      <h3>Technology</h3>
+      <div class="field-grid">
+        <div class="field-chip">Software &amp; DevOps</div>
+        <div class="field-chip">IT Runbooks</div>
+        <div class="field-chip">Incident Reports</div>
+        <div class="field-chip">Architecture Docs</div>
+      </div>
+
+      <h3>Custom</h3>
+      <p>Don't see your field? Type a custom field name during upload. The chunking and retrieval engine works the same — only the PII scrubbing defaults differ from pre-configured fields.</p>
+    </section>
+
+    <section id="formats">
+      <h2>Supported Formats</h2>
+      <p class="section-sub">What you can upload today, and what's coming.</p>
+
+      <table class="doc-table">
+        <thead><tr><th>Format</th><th>Extraction method</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>.pdf</td><td>pdfplumber text extraction</td><td><span class="badge badge-live">Available</span></td></tr>
+          <tr><td>.txt</td><td>Plain text ingestion</td><td><span class="badge badge-live">Available</span></td></tr>
+          <tr><td>.docx / .doc</td><td>python-docx + table extraction</td><td><span class="badge badge-live">Available</span></td></tr>
+          <tr><td>Scanned PDF</td><td>OCR (EasyOCR — selected, integration in v2.1)</td><td><span class="badge badge-soon">v2.1</span></td></tr>
+          <tr><td>.csv</td><td>Tabular chunking</td><td><span class="badge badge-roadmap">v2.2</span></td></tr>
+          <tr><td>.png / .jpg</td><td>VLM diagram analysis</td><td><span class="badge badge-roadmap">v2.2</span></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        <div class="callout-title">Scanned Documents</div>
+        <p>If you upload a PDF with no extractable text (a scanned image), the platform detects this automatically and lets you know OCR support is coming rather than returning an empty or broken result.</p>
+      </div>
+    </section>
+
+    <section id="tiers">
+      <h2>Tier Guide</h2>
+      <p class="section-sub">Five tiers, each with distinct retrieval precision and feature access.</p>
+
+      <table class="doc-table">
+        <thead><tr><th>Tier</th><th>Chunk size</th><th>Results</th><th>Key unlock</th></tr></thead>
+        <tbody>
+          <tr><td>Ephemeral</td><td>600 tokens</td><td>3</td><td>Free, session-only, 1 domain</td></tr>
+          <tr><td>Segment</td><td>512 tokens</td><td>5</td><td>5 domains, document history</td></tr>
+          <tr><td>Lattice</td><td>384 tokens</td><td>6</td><td>10 domains, eval scores, full telemetry</td></tr>
+          <tr><td>Vector</td><td>256 tokens</td><td>8</td><td>All 14+ domains, PDF highlights, API key</td></tr>
+          <tr><td>Enclave</td><td>200 tokens</td><td>10</td><td>Per-user isolation, audit trail, custom SLA</td></tr>
+        </tbody>
+      </table>
+
+      <p>Smaller chunk sizes on higher tiers mean more precise retrieval — the platform searches more granular sections of your document, which matters most on dense regulatory or technical content.</p>
+    </section>
+
+    <section id="results">
+      <h2>Understanding Results</h2>
+      <p class="section-sub">How to read what the platform gives you back.</p>
+
+      <h3>Eval Scores</h3>
+      <div class="score-card">
+        <div class="score-card-head"><span class="score-card-name">Faithfulness</span><span class="score-card-range">0.00 – 1.00</span></div>
+        <p>How grounded the answer is in the retrieved document content. A score near 1.0 means the answer draws directly from your document with minimal extrapolation.</p>
+      </div>
+      <div class="score-card">
+        <div class="score-card-head"><span class="score-card-name">Answer Relevance</span><span class="score-card-range">0.00 – 1.00</span></div>
+        <p>How directly the answer addresses your specific question, rather than providing tangentially related information.</p>
+      </div>
+      <div class="score-card">
+        <div class="score-card-head"><span class="score-card-name">Context Recall</span><span class="score-card-range">0.00 – 1.00</span></div>
+        <p>Whether the retrieval step found the right section of the document at all — a low score here means the retrieval missed relevant content, independent of how the answer was written.</p>
+      </div>
+
+      <h3>Zero-Hit Responses</h3>
+      <p>When the platform tells you it found nothing relevant, this is a feature, not a failure. It means retrieval came back empty and the AI model was never called — preventing a fabricated answer. Try rephrasing your question or confirm the document contains the information you're looking for.</p>
+
+      <h3>Source Citations</h3>
+      <p>Every answer shows the page and section reference it was drawn from (e.g. <code>p.1 s2</code>), visible in the audit panel alongside the exact retrieved text.</p>
+    </section>
+
+    <section id="api">
+      <h2>API Reference</h2>
+      <p class="section-sub">Programmatic access for Vector and Enclave tier users.</p>
+
+      <h3>Requesting a Key</h3>
+      <p>API keys are currently issued manually during the validation phase. Go to <strong>Settings → Identity Hub → API Key</strong> and click <strong>Request API Key</strong>. This opens a pre-filled email to our support team — you'll receive your key within 24 hours.</p>
+
+      <h3>Authentication</h3>
+      <div class="code-block"><pre>Authorization: Bearer sk_live_xxxxxxxxxxxxxxxx</pre></div>
+
+      <h3>Query Endpoint</h3>
+      <div class="code-block"><pre><span class="c-comment">POST</span> https://meridianintel.app/query
+
+{
+  <span class="c-key">"query"</span>: <span class="c-str">"Is this batch EU GMP compliant?"</span>,
+  <span class="c-key">"field"</span>: <span class="c-str">"certificate_of_quality"</span>,
+  <span class="c-key">"tier"</span>:  <span class="c-str">"vector"</span>
+}</pre></div>
+
+      <h3>Ingest Endpoint</h3>
+      <div class="code-block"><pre><span class="c-comment">POST</span> https://meridianintel.app/ingest
+<span class="c-comment">Content-Type: multipart/form-data</span>
+
+file:  &lt;binary&gt;
+field: <span class="c-str">"legal_contract"</span>
+tier:  <span class="c-str">"vector"</span></pre></div>
+
+      <div class="callout">
+        <div class="callout-title">Rate Limiting</div>
+        <p>Per-key rate limiting via Upstash Redis is on the v2.1 roadmap. During validation, usage is monitored manually — reach out if you need higher throughput.</p>
+      </div>
+    </section>
+
+    <section id="security">
+      <h2>Security &amp; Privacy</h2>
+      <p class="section-sub">How your data is protected.</p>
+
+      <h3>PII Scrubbing</h3>
+      <p>Nine categories of personally identifiable information are scrubbed before any content reaches an AI model — email, phone, SSN, credit card, IP address, passport, date of birth, address, and names. Pharmaceutical fields use adjusted defaults so lot numbers and catalog IDs aren't incorrectly flagged.</p>
+
+      <h3>Inference</h3>
+      <p>Primary inference runs on a locally-hosted Mistral-7B model. Your document content does not reach OpenAI, Anthropic, or any third party during normal operation. The AUTO Shield cascade falls back to Gemini 2.5 Flash, then OpenAI gpt-4o-mini, only when local inference is unavailable — and only PII-scrubbed text is ever sent to any cloud provider.</p>
+
+      <h3>local_only Mode</h3>
+      <p>Enclave-tier users and compliance-sensitive deployments can enable <code>local_only</code> engine mode. In this mode, the platform never contacts any cloud provider under any condition — if local inference cannot complete, the platform returns an honest failure message rather than silently falling back to a cloud API. This provides a verifiable, auditable zero-cloud guarantee for government, legal, and regulated-industry use cases.</p>
+
+      <h3>Data Isolation</h3>
+      <p>Enclave tier users receive a fully isolated per-user vector store collection. Other tiers use a shared collection namespace with strict user-ID and document-ID tagging — retrieval is scoped to the specific document you uploaded, with zero cross-document contamination verified across real multi-document test scenarios.</p>
+
+      <p>Full details are in our <a href="privacy.html" style="color:var(--accent)">Privacy Policy</a> and <a href="terms.html" style="color:var(--accent)">Terms of Service</a>.</p>
+    </section>
+
+    <section id="faq">
+      <h2>FAQ</h2>
+      <p class="section-sub">Common questions. For anything else, use the chat widget on the homepage or email us.</p>
+
+      <h3>Does Meridian Intel train on my documents?</h3>
+      <p>No. Neither Mazal Arc nor any third-party AI provider uses your uploaded documents or queries to train or fine-tune models.</p>
+
+      <h3>What happens if I ask something the document doesn't answer?</h3>
+      <p>The platform returns a clear "no relevant content found" response rather than guessing. This is the zero-hallucination guarantee in action.</p>
+
+      <h3>Can I delete my documents?</h3>
+      <p>Yes, at any time via the platform interface or by emailing support. Deletion completes within 30 days.</p>
+
+      <h3>What's the difference between the inference engines?</h3>
+      <p>Mistral-7B runs locally on our infrastructure with zero data leaving our servers. Gemini 2.5 Flash and OpenAI gpt-4o-mini are cloud fallbacks used automatically if Mistral is unavailable, sending only PII-scrubbed content. In <code>local_only</code> mode, cloud fallback is disabled entirely — Mistral runs exclusively, and the platform returns an honest failure rather than routing to any cloud API.</p>
+
+      <h3>What is the local_only engine mode?</h3>
+      <p>A zero-cloud inference guarantee for compliance-sensitive use cases. When enabled, your document content never leaves your infrastructure under any condition. Latency is higher than AUTO mode (dependent on your hardware), but the guarantee is complete and verifiable — no exceptions, no silent fallbacks.</p>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <p>© 2026 Mazal Arc · All rights reserved &nbsp;·&nbsp;
+  <a href="index.html">Platform</a> &nbsp;·&nbsp;
+  <a href="privacy.html">Privacy</a> &nbsp;·&nbsp;
+  <a href="terms.html">Terms</a> &nbsp;·&nbsp;
+  <a href="mailto:support@meridianintel.app">support@meridianintel.app</a>
+  </p>
+</footer>
+
+<script>
+var sections = document.querySelectorAll('section[id]');
+var links    = document.querySelectorAll('.side-link');
+
+function updateActiveLink() {
+  var scrollPos = window.scrollY + 100;
+  sections.forEach(function(s) {
+    if (s.offsetTop <= scrollPos && s.offsetTop + s.offsetHeight > scrollPos) {
+      links.forEach(function(l) { l.classList.remove('active'); });
+      var active = document.querySelector('.side-link[href="#' + s.id + '"]');
+      if (active) active.classList.add('active');
+    }
+  });
+}
+window.addEventListener('scroll', updateActiveLink);
+updateActiveLink();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service · Meridian Intel</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080D14;--bg2:#0F172A;--bg3:#1E293B;
+  --text:#F8FAFC;--muted:#64748B;--dim:#334155;--border:#1E293B;
+  --accent:#A78BFA;--accent-dim:rgba(167,139,250,0.12);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;line-height:1.7;min-height:100vh}
+nav{position:sticky;top:0;z-index:100;background:rgba(8,13,20,0.92);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);padding:0 2rem;height:52px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-family:'DM Mono',monospace;font-size:12px;color:var(--text);display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.nav-back{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 14px;border-radius:4px;transition:all 0.2s}
+.nav-back:hover{color:var(--text);border-color:var(--dim)}
+.page{max-width:760px;margin:0 auto;padding:4rem 2rem 6rem}
+.doc-type{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.doc-title{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:600;letter-spacing:-0.02em;margin-bottom:0.75rem}
+.doc-meta{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.section{margin-bottom:3rem}
+h2{font-size:1.15rem;font-weight:500;color:var(--text);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);letter-spacing:-0.01em}
+h3{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin:1.5rem 0 0.5rem}
+p{color:#CBD5E1;font-size:15px;margin-bottom:1rem}
+ul,ol{color:#CBD5E1;font-size:15px;padding-left:1.5rem;margin-bottom:1rem}
+li{margin-bottom:0.4rem}
+strong{color:var(--text);font-weight:500}
+code{font-family:'DM Mono',monospace;font-size:12px;background:var(--bg2);padding:2px 7px;border-radius:3px;color:var(--accent)}
+.highlight{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px;padding:1.25rem 1.5rem;margin:1.5rem 0}
+.highlight p{margin-bottom:0;font-size:14px}
+.warn{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-left:3px solid #EF4444;border-radius:4px;padding:1.25rem 1.5rem;margin:1.5rem 0}
+.warn p{margin-bottom:0;font-size:14px;color:#FCA5A5}
+.policy-table{width:100%;border-collapse:collapse;margin:1rem 0 1.5rem;font-size:14px}
+.policy-table th{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;font-weight:400}
+.policy-table td{padding:10px 12px;border-bottom:1px solid rgba(30,41,59,0.5);color:#CBD5E1;vertical-align:top}
+.policy-table tr:last-child td{border-bottom:none}
+.contact-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin-top:2rem}
+.contact-box a{color:var(--accent);text-decoration:none}
+.toc{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin-bottom:3rem}
+.toc-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.toc ol{counter-reset:toc-counter;list-style:none;padding:0}
+.toc li{counter-increment:toc-counter;padding:4px 0}
+.toc li::before{content:counter(toc-counter,decimal-leading-zero) '. ';font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
+.toc a{color:#CBD5E1;text-decoration:none;font-size:14px;transition:color 0.2s}
+.toc a:hover{color:var(--accent)}
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-family:'DM Mono',monospace;font-size:10px;color:var(--dim)}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--text)}
+@media(max-width:640px){.page{padding:2rem 1.25rem 4rem}.doc-meta{gap:1rem}nav{padding:0 1rem}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <div class="nav-dot"></div>
+    Meridian Intel
+  </a>
+  <a href="index.html" class="nav-back">← Back to Platform</a>
+</nav>
+
+<div class="page">
+
+  <p class="doc-type">Legal Document</p>
+  <h1 class="doc-title">Terms of Service</h1>
+  <div class="doc-meta">
+    <span>Effective: June 1, 2026</span>
+    <span>Last updated: June 22, 2026</span>
+    <span>Version: 2.0</span>
+    <span>Mazal Arc · Meridian Intel</span>
+  </div>
+
+  <div class="highlight">
+    <p><strong>Plain English summary:</strong> Use Meridian Intel for lawful purposes. Don't upload illegal content. Don't try to reverse-engineer our systems. Pay for what you use. We provide the platform in good faith — you're responsible for verifying outputs before making critical decisions.</p>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#acceptance">Acceptance of terms</a></li>
+      <li><a href="#description">Platform description</a></li>
+      <li><a href="#eligibility">Eligibility</a></li>
+      <li><a href="#accounts">Accounts and access</a></li>
+      <li><a href="#tiers">Subscription tiers and billing</a></li>
+      <li><a href="#acceptable-use">Acceptable use</a></li>
+      <li><a href="#your-content">Your content and documents</a></li>
+      <li><a href="#ai-outputs">AI-generated outputs</a></li>
+      <li><a href="#ip">Intellectual property</a></li>
+      <li><a href="#disclaimers">Disclaimers and limitations</a></li>
+      <li><a href="#indemnification">Indemnification</a></li>
+      <li><a href="#termination">Termination</a></li>
+      <li><a href="#disputes">Disputes and governing law</a></li>
+      <li><a href="#changes">Changes to terms</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ol>
+  </div>
+
+  <!-- 1 -->
+  <div class="section" id="acceptance">
+    <h2>1. Acceptance of terms</h2>
+    <p>By accessing or using Meridian Intel ("the Platform"), operated by <strong>Mazal Arc</strong> ("we", "us", "our"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the Platform.</p>
+    <p>These Terms apply to all users including free (Ephemeral) users, paid subscribers, and enterprise (Enclave) clients. Enterprise clients may have additional terms in a separate agreement which supersede these Terms where they conflict.</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="section" id="description">
+    <h2>2. Platform description</h2>
+    <p>Meridian Intel is a Retrieval-Augmented Generation (RAG) platform that allows users to upload documents and query them using natural language. The Platform provides:</p>
+    <ul>
+      <li>Document ingestion, chunking, and vector storage</li>
+      <li>Hybrid semantic and keyword retrieval</li>
+      <li>AI-generated responses grounded in uploaded document content</li>
+      <li>PII scrubbing and data protection features</li>
+      <li>Evaluation scoring (faithfulness, answer relevance, context recall)</li>
+      <li>Document and query history (tier-dependent)</li>
+    </ul>
+    <p>The Platform operates across five tiers: <strong>Ephemeral</strong> (Free), <strong>Segment</strong>, <strong>Lattice</strong>, <strong>Vector</strong>, and <strong>Enclave</strong> (Enterprise). Features and limits vary by tier as described on the pricing page.</p>
+  </div>
+
+  <!-- 3 -->
+  <div class="section" id="eligibility">
+    <h2>3. Eligibility</h2>
+    <p>You must be at least 18 years old to use Meridian Intel. By using the Platform, you represent and warrant that:</p>
+    <ul>
+      <li>You are at least 18 years of age</li>
+      <li>You have the legal capacity to enter into these Terms</li>
+      <li>You are not located in a country subject to U.S. or UK government embargo</li>
+      <li>You are not on any government prohibited or restricted party list</li>
+      <li>Your use of the Platform complies with all applicable laws in your jurisdiction</li>
+    </ul>
+  </div>
+
+  <!-- 4 -->
+  <div class="section" id="accounts">
+    <h2>4. Accounts and access</h2>
+
+    <h3>Account creation</h3>
+    <p>Access to the Platform requires identity verification via a one-time email code sent to your registered address. You agree to provide an accurate email address during access requests and to keep your session credentials secure. You are responsible for all activity that occurs under your verified session.</p>
+
+    <h3>Owner access</h3>
+    <p>Platform owner/administrative access is protected by a server-side verified access code and JWT. Attempts to circumvent, brute-force, or reverse-engineer owner authentication are strictly prohibited and may result in immediate account termination and legal action.</p>
+
+    <h3>Account security</h3>
+    <p>You must notify us immediately at <a href="mailto:support@meridianintel.app" style="color:var(--accent)">support@meridianintel.app</a> if you become aware of any unauthorized access to your account. We are not liable for losses resulting from unauthorized account access that occurs through no fault of ours.</p>
+  </div>
+
+  <!-- 5 -->
+  <div class="section" id="tiers">
+    <h2>5. Subscription tiers and billing</h2>
+
+    <table class="policy-table">
+      <thead>
+        <tr><th>Tier</th><th>Pilot price</th><th>Post-validation price</th><th>Billing</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Ephemeral</strong></td><td>Free</td><td>Free</td><td>N/A</td></tr>
+        <tr><td><strong>Segment</strong></td><td>$29/month</td><td>$49/month</td><td>Monthly, auto-renewing</td></tr>
+        <tr><td><strong>Lattice</strong></td><td>$59/month</td><td>$99/month</td><td>Monthly, auto-renewing</td></tr>
+        <tr><td><strong>Vector</strong></td><td>$89/month</td><td>$179/month</td><td>Monthly, auto-renewing</td></tr>
+        <tr><td><strong>Enclave</strong></td><td>Custom</td><td>Custom</td><td>Per contract</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Pilot pricing and price changes</h3>
+    <p>Current prices listed above are pilot prices, available during Meridian Intel's validation phase (the first ten paying customers). Pilot prices are not permanent and will increase for new customers once the validation phase ends. Mazal Arc reserves the right to change pricing at any time with 30 days written notice to existing subscribers.</p>
+    <p><strong>Price lock commitment:</strong> Customers who subscribe during the pilot phase are locked in at their signup price for a minimum of 12 months from their subscription start date, regardless of any general price increases during that period. After 12 months, pricing will move to the then-current rate with 30 days advance notice.</p>
+
+    <h3>Payment</h3>
+    <p>Payments are processed by Stripe. By subscribing, you authorize Stripe to charge your payment method on a recurring basis. We never store your payment card details.</p>
+
+    <h3>Upgrades and downgrades</h3>
+    <p>Tier upgrades take effect immediately. Downgrades take effect at the end of the current billing period. You retain access to your current tier's features until the downgrade date.</p>
+
+    <h3>Cancellation</h3>
+    <p>You may cancel your subscription at any time by contacting <a href="mailto:support@meridianintel.app" style="color:var(--accent)">support@meridianintel.app</a>. Access continues until the end of the paid period. No refunds are issued for partial months except where required by applicable law.</p>
+
+    <h3>Failed payments</h3>
+    <p>If a payment fails, we will attempt to retry the charge. If payment cannot be collected within 7 days, your account will be downgraded to Ephemeral tier and your stored document chunks may be deleted after 30 days notice.</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="section" id="acceptable-use">
+    <h2>6. Acceptable use</h2>
+
+    <p>You agree not to use the Platform to:</p>
+
+    <h3>Prohibited content</h3>
+    <ul>
+      <li>Upload documents containing child sexual abuse material (CSAM) or any content that sexually exploits minors</li>
+      <li>Upload content that promotes, facilitates, or incites violence, terrorism, or hate crimes</li>
+      <li>Upload illegally obtained documents or documents you do not have the right to process</li>
+      <li>Process classified government or military information without proper authorization</li>
+    </ul>
+
+    <h3>Prohibited conduct</h3>
+    <ul>
+      <li>Attempt to reverse-engineer, decompile, or extract our proprietary algorithms, chunking logic, or model configurations</li>
+      <li>Attempt to bypass, circumvent, or disable any security feature including rate limiting, authentication, or PII scrubbing</li>
+      <li>Use automated scripts, bots, or scrapers against the Platform without written permission</li>
+      <li>Resell, sublicense, or white-label the Platform without a written enterprise agreement</li>
+      <li>Interfere with other users' access to the Platform</li>
+      <li>Attempt to access other users' documents, query history, or account data</li>
+      <li>Submit false or misleading information in support requests or feedback</li>
+      <li>Use the Platform to generate content intended to deceive, defraud, or harm others</li>
+    </ul>
+
+    <h3>Compliance obligations</h3>
+    <p>You are solely responsible for ensuring your use of the Platform complies with all applicable laws and regulations in your jurisdiction, including but not limited to GDPR, HIPAA, FDA regulations for pharmaceutical data, and financial industry regulations for financial documents.</p>
+
+    <div class="warn">
+      <p><strong>Important:</strong> Meridian Intel is a retrieval and generation tool. It is not a licensed medical device, legal advisor, financial advisor, or regulatory compliance system. Outputs must be reviewed by qualified professionals before being used in regulated environments.</p>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="section" id="your-content">
+    <h2>7. Your content and documents</h2>
+
+    <h3>Ownership</h3>
+    <p>You retain full ownership of all documents you upload to the Platform. By uploading a document, you grant Mazal Arc a limited, non-exclusive, royalty-free license to process, chunk, embed, and store the document content solely for the purpose of providing the Platform services to you.</p>
+
+    <h3>Your responsibility</h3>
+    <p>You represent and warrant that:</p>
+    <ul>
+      <li>You own or have the legal right to upload and process each document</li>
+      <li>Your documents do not infringe any third-party intellectual property rights</li>
+      <li>Your documents do not contain content prohibited under Section 6</li>
+      <li>You have obtained any necessary consents from individuals whose personal data appears in your documents</li>
+    </ul>
+
+    <h3>Deletion</h3>
+    <p>You may delete your uploaded documents and associated chunks at any time via the Platform interface or by contacting support. Deletion from our systems is completed within 30 days of your request, except where retention is required by law.</p>
+  </div>
+
+  <!-- 8 -->
+  <div class="section" id="ai-outputs">
+    <h2>8. AI-generated outputs</h2>
+
+    <div class="highlight">
+      <p><strong>Zero-hallucination architecture:</strong> Meridian Intel is designed to prevent responses that go beyond your uploaded document content. If no relevant content is retrieved, the system will say so rather than generating a response from general knowledge.</p>
+    </div>
+
+    <p>Despite our zero-hallucination architecture, you acknowledge that:</p>
+    <ul>
+      <li>AI-generated responses may contain errors, omissions, or inaccuracies</li>
+      <li>Faithfulness scores and eval metrics are indicators of quality, not guarantees of accuracy</li>
+      <li>Outputs should not be used as the sole basis for medical, legal, financial, regulatory, or safety-critical decisions</li>
+      <li>You are responsible for verifying outputs against the source documents before acting on them</li>
+      <li>The Platform retrieves and synthesizes content — it does not replace professional judgment</li>
+    </ul>
+    <p>Mazal Arc is not liable for decisions made based on Platform outputs without appropriate professional verification.</p>
+  </div>
+
+  <!-- 9 -->
+  <div class="section" id="ip">
+    <h2>9. Intellectual property</h2>
+
+    <h3>Our property</h3>
+    <p>The Platform, including its OCaml gateway, FastAPI ML worker, chunking algorithms, retrieval logic, PII scrubbing system, evaluation framework, frontend design, and all associated documentation, is the exclusive intellectual property of Mazal Arc. Nothing in these Terms grants you any right to our proprietary technology.</p>
+
+    <h3>Your property</h3>
+    <p>Your uploaded documents and the query outputs generated from them remain your property. We claim no ownership over your content or the responses the Platform generates from it.</p>
+
+    <h3>Feedback</h3>
+    <p>If you submit feedback, suggestions, or ideas about the Platform (including via the thumbs up/down system or support tickets), you grant Mazal Arc a perpetual, royalty-free right to use that feedback to improve the Platform without compensation to you.</p>
+  </div>
+
+  <!-- 10 -->
+  <div class="section" id="disclaimers">
+    <h2>10. Disclaimers and limitations</h2>
+
+    <h3>As-is service</h3>
+    <p>THE PLATFORM IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.</p>
+
+    <h3>Uptime</h3>
+    <p>We do not guarantee uninterrupted availability of the Platform. Planned maintenance, infrastructure issues, or force majeure events may cause downtime. Enclave enterprise clients receive uptime SLA commitments under separate contract terms.</p>
+
+    <h3>Limitation of liability</h3>
+    <p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, MAZAL ARC SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, DATA, GOODWILL, OR BUSINESS INTERRUPTION, ARISING FROM YOUR USE OF OR INABILITY TO USE THE PLATFORM.</p>
+    <p>Our total liability to you for any claim arising from these Terms or your use of the Platform shall not exceed the amount you paid us in the 12 months preceding the claim, or $100 USD if you are an Ephemeral (free) user.</p>
+  </div>
+
+  <!-- 11 -->
+  <div class="section" id="indemnification">
+    <h2>11. Indemnification</h2>
+    <p>You agree to indemnify, defend, and hold harmless Mazal Arc and its officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses (including reasonable legal fees) arising from:</p>
+    <ul>
+      <li>Your use of the Platform in violation of these Terms</li>
+      <li>Your uploaded documents or content</li>
+      <li>Your violation of any applicable law or regulation</li>
+      <li>Your infringement of any third-party rights</li>
+    </ul>
+  </div>
+
+  <!-- 12 -->
+  <div class="section" id="termination">
+    <h2>12. Termination</h2>
+
+    <h3>By you</h3>
+    <p>You may stop using the Platform and request account deletion at any time by emailing <a href="mailto:support@meridianintel.app" style="color:var(--accent)">support@meridianintel.app</a>.</p>
+
+    <h3>By us</h3>
+    <p>We reserve the right to suspend or terminate your account immediately and without notice if:</p>
+    <ul>
+      <li>You violate any provision of these Terms</li>
+      <li>You upload prohibited content as defined in Section 6</li>
+      <li>You attempt to attack, probe, or circumvent Platform security</li>
+      <li>We are required to do so by law</li>
+      <li>Your continued use poses a risk to other users or our infrastructure</li>
+    </ul>
+
+    <h3>Effect of termination</h3>
+    <p>Upon termination, your access to the Platform ceases immediately. Your stored document chunks will be deleted within 30 days. Sections 7 (ownership), 9 (IP), 10 (disclaimers), 11 (indemnification), and 13 (disputes) survive termination.</p>
+  </div>
+
+  <!-- 13 -->
+  <div class="section" id="disputes">
+    <h2>13. Disputes and governing law</h2>
+    <p>These Terms are governed by and construed in accordance with applicable law. Any dispute arising from these Terms or your use of the Platform shall first be attempted to be resolved through good-faith negotiation by emailing <a href="mailto:support@meridianintel.app" style="color:var(--accent)">support@meridianintel.app</a>.</p>
+    <p>If a dispute cannot be resolved through negotiation within 30 days, both parties agree to binding arbitration before a mutually agreed arbitrator. Class action waiver: you agree to resolve disputes individually and not as part of a class action.</p>
+    <p>Nothing in this section prevents either party from seeking injunctive or other equitable relief in a court of competent jurisdiction to prevent irreparable harm.</p>
+  </div>
+
+  <!-- 14 -->
+  <div class="section" id="changes">
+    <h2>14. Changes to terms</h2>
+    <p>We may update these Terms from time to time. When we make material changes, we will update the "Last updated" date and notify registered users by email at least 14 days before changes take effect.</p>
+    <p>Your continued use of the Platform after the effective date of changes constitutes your acceptance of the updated Terms. If you do not agree with the changes, you must stop using the Platform and may request account deletion.</p>
+  </div>
+
+  <!-- 15 -->
+  <div class="section" id="contact">
+    <h2>15. Contact</h2>
+    <div class="contact-box">
+      <p style="margin-bottom:0.75rem"><strong>Mazal Arc · Meridian Intel</strong></p>
+      <p style="margin-bottom:0.5rem">For legal matters, account issues, or Terms questions:</p>
+      <p style="margin-bottom:0.5rem">Email: <a href="mailto:support@meridianintel.app">support@meridianintel.app</a></p>
+      <p style="margin-bottom:0.5rem">GitHub: <a href="https://github.com/meridian-intel-platform" target="_blank">github.com/meridian-intel-platform</a></p>
+      <p style="margin-bottom:0;font-size:13px;color:var(--muted);margin-top:1rem">We aim to respond to all legal inquiries within 14 business days.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2026 Mazal Arc · All rights reserved &nbsp;·&nbsp;
+  <a href="index.html">Platform</a> &nbsp;·&nbsp;
+  <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+  <a href="terms.html">Terms of Service</a> &nbsp;·&nbsp;
+  <a href="mailto:support@meridianintel.app">support@meridianintel.app</a>
+  </p>
+</footer>
+
+</body>
+</html>

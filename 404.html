@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 · Meridian Intel</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080D14;--bg2:#0F172A;--border:#1E293B;--text:#F8FAFC;--muted:#64748B;--dim:#334155;--accent:#A78BFA}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;position:relative;overflow:hidden}
+
+.grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:48px 48px;opacity:0.3;pointer-events:none}
+.glow{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,0.06) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+
+.code{font-family:'DM Mono',monospace;font-size:clamp(5rem,15vw,9rem);font-weight:500;color:var(--border);letter-spacing:-0.05em;line-height:1;margin-bottom:0.5rem;position:relative}
+.code span{color:var(--accent)}
+.label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem}
+.title{font-size:clamp(1.2rem,3vw,1.6rem);font-weight:500;margin-bottom:0.75rem;letter-spacing:-0.02em}
+.sub{font-size:14px;color:var(--muted);line-height:1.6;max-width:400px;margin-bottom:2.5rem}
+
+.actions{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+.btn-primary{font-family:'DM Mono',monospace;font-size:12px;padding:11px 24px;border-radius:4px;border:none;background:var(--accent);color:#080D14;cursor:pointer;letter-spacing:0.08em;font-weight:500;text-decoration:none;transition:opacity 0.2s}
+.btn-primary:hover{opacity:0.85}
+.btn-ghost{font-family:'DM Mono',monospace;font-size:12px;padding:11px 24px;border-radius:4px;border:1px solid var(--border);color:var(--muted);background:none;cursor:pointer;letter-spacing:0.08em;text-decoration:none;transition:all 0.2s}
+.btn-ghost:hover{border-color:var(--muted);color:var(--text)}
+
+.trace{margin-top:3rem;font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);line-height:2}
+.trace-row{display:flex;align-items:center;gap:8px;justify-content:center}
+.trace-dot{width:4px;height:4px;border-radius:50%;background:var(--dim)}
+.trace-accent{color:var(--accent)}
+
+footer{position:absolute;bottom:1.5rem;font-family:'DM Mono',monospace;font-size:10px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="grid"></div>
+<div class="glow"></div>
+
+<div class="code">4<span>0</span>4</div>
+<div class="label">Page not found</div>
+<h1 class="title">This route doesn't exist in the corpus</h1>
+<p class="sub">The page you're looking for wasn't retrieved. It may have been moved, deleted, or the URL is incorrect.</p>
+
+<div class="actions">
+  <a href="index.html" class="btn-primary">← Back to Platform</a>
+  <a href="PAGE_2_CORE_WORKSPACE.html" class="btn-ghost">Open Workspace</a>
+</div>
+
+<div class="trace">
+  <div class="trace-row"><div class="trace-dot"></div><span>retrieval attempt</span><span class="trace-accent">→ zero hits</span></div>
+  <div class="trace-row"><div class="trace-dot"></div><span>fallback matrix</span><span class="trace-accent">→ triggered</span></div>
+  <div class="trace-row"><div class="trace-dot"></div><span>response</span><span class="trace-accent">→ 404 · not found</span></div>
+</div>
+
+<footer>© 2026 Mazal Arc · Meridian Intel · Zero-hallucination document intelligence.</footer>
+</body>
+</html>

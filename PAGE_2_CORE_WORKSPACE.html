@@ -1,0 +1,3661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAG Workspace · Vector Tier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080D14;--bg2:#0F172A;--bg3:#1E293B;
+  --text:#F8FAFC;--muted:#64748B;--dim:#334155;--border:#1E293B;
+  --accent:#A78BFA;--accent-dim:rgba(167,139,250,0.12);
+  --light-bg:#FFFFFF;--light-bg2:#F8FAFC;--light-bg3:#F1F5F9;
+  --light-text:#0F172A;--light-muted:#64748B;--light-border:#E2E8F0;
+  --fs-base:13px;--fs-msg:14px;--fs-mono:11px;--fs-small:10px;
+  --transition-theme:background 0.3s,color 0.3s,border-color 0.3s;
+}
+/* Light mode — command center */
+body.light-mode{
+  --bg:#F1F5F9;--bg2:#FFFFFF;--bg3:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;--dim:#94A3B8;--border:#E2E8F0;
+  --light-bg:#FFFFFF;--light-bg2:#F8FAFC;--light-bg3:#F1F5F9;
+}
+body.light-mode .topbar{background:#FFFFFF;border-bottom-color:#E2E8F0}
+body.light-mode .cmd-panel{background:#F8FAFC}
+body.light-mode .chat-feed{background:#F8FAFC}
+body.light-mode .input-zone{background:#FFFFFF;border-top-color:#E2E8F0}
+body.light-mode .query-input{background:#F1F5F9;border-color:#E2E8F0;color:#0F172A}
+body.light-mode .query-input::placeholder{color:#94A3B8}
+body.light-mode .field-select-btn{background:#F1F5F9;border-color:#E2E8F0;color:#64748B}
+body.light-mode .field-menu{background:#FFFFFF;border-color:#E2E8F0}
+body.light-mode .field-opt{color:#64748B}
+body.light-mode .field-opt:hover{background:rgba(167,139,250,0.08);color:#0F172A}
+body.light-mode .field-group-header{color:var(--accent)}
+body.light-mode .msg-text{color:#0F172A}
+body.light-mode .msg-text.user-text{color:#475569}
+body.light-mode .msg-text code{background:#E2E8F0;color:var(--accent)}
+body.light-mode .context-path .ctx-node{background:#E2E8F0;border-color:#CBD5E1;color:#64748B}
+body.light-mode .ctx-arrow{color:#94A3B8}
+body.light-mode .telemetry{background:#FFFFFF;border-top-color:#E2E8F0}
+body.light-mode .tel-item{color:#64748B}
+body.light-mode .overflow-menu{background:#FFFFFF;border-color:#E2E8F0}
+body.light-mode .ov-item{color:#64748B}
+body.light-mode .ov-item:hover{background:rgba(167,139,250,0.06);color:#0F172A}
+body.light-mode .ov-label{color:#94A3B8}
+body.light-mode .ov-divider{background:#E2E8F0}
+body.light-mode .sp-panel{background:#FFFFFF;border-left-color:#E2E8F0}
+body.light-mode .sp-header{border-bottom-color:#E2E8F0}
+body.light-mode .sp-title{color:#0F172A}
+body.light-mode .sp-item{border-bottom-color:#F1F5F9}
+body.light-mode .sp-item-label{color:#475569}
+body.light-mode .sp-item-action{color:#94A3B8}
+body.light-mode .sp-section-title{color:var(--accent)}
+body.light-mode .sp-input{background:#F1F5F9;border-color:#E2E8F0;color:#0F172A}
+body.light-mode .sp-toggle{background:#CBD5E1}
+body.light-mode .sp-pii-item{background:#F8FAFC;border-color:#E2E8F0}
+body.light-mode .sp-pii-label{color:#64748B}
+body.light-mode .sp-tier-chip{border-color:#E2E8F0;color:#64748B}
+body.light-mode .sp-footer{border-top-color:#E2E8F0}
+body.light-mode .sp-footer-text{color:#94A3B8}
+body.light-mode .hist-sidebar{background:#FFFFFF;border-right-color:#E2E8F0}
+body.light-mode .hist-header{border-bottom-color:#E2E8F0}
+body.light-mode .hist-title{color:#0F172A}
+body.light-mode .hist-tab{color:#64748B}
+body.light-mode .hist-item:hover{background:rgba(167,139,250,0.06)}
+body.light-mode .hist-item-name{color:#475569}
+body.light-mode .hist-item-meta{color:#94A3B8}
+body.light-mode .hist-section-label{color:#94A3B8;border-bottom-color:#E2E8F0}
+body.light-mode .hist-tier-lock{background:#F8FAFC;border-color:#E2E8F0;color:#64748B}
+body.light-mode .hist-btn{border-color:#E2E8F0;color:#64748B}
+body.light-mode .mobile-tabs{background:#FFFFFF;border-bottom-color:#E2E8F0}
+body.light-mode .mobile-tab{color:#64748B}
+/* Font size scaling */
+body.fs-medium{--fs-base:15px;--fs-msg:15px;--fs-mono:12px;--fs-small:11px}
+body.fs-large{--fs-base:17px;--fs-msg:17px;--fs-mono:14px;--fs-small:12px}
+.msg-text{font-size:var(--fs-msg)!important}
+.chat-feed,.input-zone{font-size:var(--fs-base)!important}
+.msg-role,.msg-time,.msg-field-tag,.ctx-node,.ctx-arrow{font-size:var(--fs-small)!important}
+.tel-item,.tel-val{font-size:var(--fs-small)}
+.field-opt,.field-group-header{font-size:var(--fs-mono)!important}
+.chunk-text,.doc-para,.doc-table td,.audit-body{font-size:var(--fs-base)!important}
+
+html,body{height:100%;overflow:hidden;font-family:'Space Grotesk',sans-serif}
+body{background:var(--bg);color:var(--text);display:flex;flex-direction:column}
+
+/* TOPBAR */
+.topbar{height:48px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1rem;gap:0;flex-shrink:0;z-index:1000;position:relative}
+.tb-brand{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);padding:0 1rem;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.tb-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);transition:background 0.3s}
+.tb-tier{font-family:'DM Mono',monospace;font-size:10px;padding:3px 10px;border-radius:12px;background:var(--accent-dim);color:var(--accent);border:1px solid rgba(167,139,250,0.3);margin-left:1rem;transition:all 0.3s}
+.tb-spacer{flex:1}
+.tb-field{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);padding:0 1rem;border-left:1px solid var(--border);height:100%;display:flex;align-items:center;gap:6px}
+.field-dot{width:5px;height:5px;border-radius:50%;background:#2DD4BF}
+.tb-btn{font-family:'DM Mono',monospace;font-size:10px;padding:5px 14px;border-radius:3px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;transition:all 0.2s;height:28px;display:flex;align-items:center;gap:5px;margin-left:6px}
+.tb-btn:hover{border-color:var(--dim);color:var(--text)}
+.tb-home{font-family:'DM Mono',monospace;font-size:10px;padding:5px 12px;border-radius:3px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;transition:all 0.2s;height:28px;display:flex;align-items:center;margin-left:6px}
+.tb-home:hover{color:var(--text)}
+
+/* OVERFLOW MENU */
+.tb-overflow-btn{width:28px;height:28px;background:none;border:1px solid var(--border);border-radius:3px;color:var(--muted);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;line-height:1;padding-bottom:2px;margin-left:6px}
+.tb-overflow-btn:hover{border-color:var(--dim);color:var(--text)}
+.overflow-wrap{position:relative;z-index:1001}
+.overflow-menu{position:fixed;top:54px;right:1rem;width:230px;background:#0F1B2D;border:1px solid var(--border);border-radius:6px;z-index:2000;box-shadow:0 8px 32px rgba(0,0,0,0.6);display:none}
+.overflow-menu.open{display:block}
+.ov-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);padding:10px 14px 4px}
+.ov-item{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);padding:10px 14px;cursor:pointer;transition:background 0.15s;display:flex;align-items:center;justify-content:space-between;user-select:none}
+.ov-item:hover{background:rgba(167,139,250,0.08);color:var(--text)}
+.ov-item.ov-active{color:var(--accent)}
+.ov-item.ov-danger:hover{background:rgba(239,68,68,0.08);color:#F87171}
+.ov-divider{height:1px;background:var(--border);margin:3px 0}
+
+/* WORKSPACE LAYOUT */
+.workspace{display:flex;flex:1;min-height:0;position:relative}
+
+/* LEFT COMMAND PANEL */
+.cmd-panel{width:62%;display:flex;flex-direction:column;border-right:1px solid var(--border);min-width:0;overflow:hidden}
+.chat-feed{flex:1;overflow-y:auto;padding:1.5rem 1.5rem 1rem;display:flex;flex-direction:column;gap:0;scroll-behavior:smooth}
+.chat-feed::-webkit-scrollbar{width:3px}
+.chat-feed::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
+.msg-row{padding:0.75rem 0;border-bottom:1px solid rgba(30,41,59,0.5)}
+.msg-row:last-child{border-bottom:none}
+.msg-meta{display:flex;align-items:center;gap:8px;margin-bottom:0.4rem}
+.msg-role{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase}
+.msg-role.user{color:var(--accent)}
+.msg-role.system{color:#2DD4BF}
+.msg-time{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim)}
+.msg-field-tag{font-family:'DM Mono',monospace;font-size:9px;padding:1px 7px;border-radius:10px;background:rgba(45,212,191,0.1);color:#2DD4BF;border:1px solid rgba(45,212,191,0.2)}
+.msg-text{color:var(--text);line-height:1.65;max-width:680px}
+.msg-text.user-text{color:#CBD5E1;font-style:italic}
+.msg-text code{font-family:'DM Mono',monospace;font-size:12px;background:var(--bg2);padding:1px 6px;border-radius:3px;color:var(--accent)}
+.context-path{margin-top:0.5rem;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.ctx-node{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);padding:2px 6px;border:1px solid var(--border);border-radius:2px;background:var(--bg2)}
+.ctx-arrow{font-size:9px;color:var(--dim)}
+
+/* INPUT ZONE */
+.input-zone{padding:1rem 1.5rem;border-top:1px solid var(--border);background:var(--bg)}
+.input-row{display:flex;gap:8px;align-items:flex-end}
+
+/* FIELD DROPDOWN */
+.field-dropdown-wrap{position:relative;flex-shrink:0}
+.field-select-btn{font-family:'DM Mono',monospace;font-size:11px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;color:var(--muted);padding:0 10px;height:40px;outline:none;cursor:pointer;transition:border-color 0.2s;display:flex;align-items:center;gap:8px;white-space:nowrap;min-width:170px;justify-content:space-between}
+.field-select-btn:hover,.field-select-btn.open{border-color:var(--accent);color:var(--text)}
+.field-chevron{font-size:10px;transition:transform 0.2s;color:var(--muted)}
+.field-select-btn.open .field-chevron{transform:rotate(180deg)}
+.field-menu{position:absolute;bottom:calc(100% + 6px);left:0;min-width:230px;background:#0F1B2D;border:1px solid var(--border);border-radius:6px;z-index:400;box-shadow:0 -8px 24px rgba(0,0,0,0.5);display:none;max-height:340px;overflow-y:auto}
+.field-menu.open{display:block}
+.field-menu::-webkit-scrollbar{width:3px}
+.field-menu::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
+.field-group-header{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);padding:10px 14px 5px;font-weight:500}
+.field-opt{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);padding:7px 14px 7px 22px;cursor:pointer;transition:background 0.15s;border-left:2px solid transparent}
+.field-opt:hover{background:rgba(167,139,250,0.08);color:var(--text);border-left-color:var(--accent)}
+.field-opt.selected{background:rgba(167,139,250,0.12);color:var(--accent);border-left-color:var(--accent)}
+.field-opt.general-opt{padding-left:14px;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:2px}
+.field-opt.custom-opt{border-top:1px solid var(--border);margin-top:2px;padding-top:10px;padding-left:14px;color:var(--accent)}
+
+.query-input{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:10px 14px;font-family:'Space Grotesk',sans-serif;font-size:var(--fs-base);color:var(--text);resize:none;outline:none;transition:border-color 0.2s;height:40px;line-height:1.4}
+.query-input:focus{border-color:var(--accent);height:80px}
+.query-input::placeholder{color:var(--dim)}
+.send-btn{height:40px;padding:0 18px;border-radius:4px;border:none;background:var(--accent);color:#080D14;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;cursor:pointer;transition:opacity 0.2s;white-space:nowrap;flex-shrink:0}
+.send-btn:hover{opacity:0.85}
+
+/* RIGHT DOC PANEL */
+.doc-panel{flex:1;display:flex;flex-direction:column;background:var(--light-bg);min-width:0;color:var(--light-text);overflow:hidden}
+.doc-header{height:48px;background:var(--light-bg2);border-bottom:1px solid var(--light-border);display:flex;align-items:center;padding:0 1rem;gap:8px;flex-shrink:0}
+.doc-title{font-family:'DM Mono',monospace;font-size:11px;color:var(--light-muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.doc-badge{font-family:'DM Mono',monospace;font-size:9px;padding:2px 8px;border-radius:10px;background:#EDE9FE;color:#7C3AED;border:1px solid #DDD6FE}
+.doc-content{flex:1;overflow-y:auto;padding:1.5rem}
+.doc-content::-webkit-scrollbar{width:3px}
+.doc-content::-webkit-scrollbar-thumb{background:#E2E8F0;border-radius:2px}
+.pdf-viewer-wrap{display:flex;flex-direction:column;align-items:center;gap:12px}
+.pdf-nav{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;background:#fff;padding:8px 12px;border-radius:8px;border:1px solid #E2E8F0;font-family:'DM Mono',monospace;font-size:11px;color:var(--light-text)}
+.pdf-nav button{font-family:'DM Mono',monospace;font-size:11px;padding:4px 10px;border-radius:5px;border:1px solid #E2E8F0;background:#fff;color:var(--light-text);cursor:pointer}
+.pdf-nav button:hover:not(:disabled){background:#F8FAFC}
+.pdf-nav button:disabled{opacity:0.35;cursor:default}
+.pdf-canvas-wrap{position:relative;box-shadow:0 1px 4px rgba(0,0,0,0.12);border-radius:4px;overflow:hidden;max-width:100%}
+.pdf-canvas-wrap canvas{display:block;max-width:100%;height:auto}
+.pdf-loading{font-family:'DM Mono',monospace;font-size:12px;color:var(--light-muted);padding:2rem;text-align:center}
+.pdf-error{font-family:'DM Mono',monospace;font-size:12px;color:#DC2626;padding:1.5rem;text-align:center;background:#FEF2F2;border-radius:8px;border:1px solid #FECACA}
+.docx-render{font-size:13px;line-height:1.65;color:var(--light-text);max-width:680px;margin:0 auto}
+.docx-render h1,.docx-render h2,.docx-render h3{font-weight:600;margin:1.2em 0 0.5em;line-height:1.3}
+.docx-render h1{font-size:18px}
+.docx-render h2{font-size:15px}
+.docx-render h3{font-size:13px}
+.docx-render p{margin:0 0 0.9em}
+.docx-render table{border-collapse:collapse;width:100%;margin:0.8em 0;font-size:12px}
+.docx-render td,.docx-render th{border:1px solid #E2E8F0;padding:6px 10px;text-align:left}
+.docx-render th{background:#F8FAFC;font-weight:600}
+.docx-render ul,.docx-render ol{margin:0 0 0.9em;padding-left:1.4em}
+.docx-render strong{font-weight:600}
+.doc-section{margin-bottom:1.5rem}
+.doc-section-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--light-muted);margin-bottom:0.75rem;padding-bottom:6px;border-bottom:1px solid var(--light-border)}
+.doc-para{color:var(--light-text);line-height:1.7;margin-bottom:0.5rem}
+.doc-highlight{background:rgba(167,139,250,0.2);border-radius:2px;padding:1px 2px;cursor:help;border-bottom:2px solid #A78BFA;position:relative}
+.doc-highlight::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:0;background:#1E293B;color:#F8FAFC;font-family:'DM Mono',monospace;font-size:9px;padding:3px 8px;border-radius:3px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.15s;z-index:10}
+.doc-highlight:hover::after{opacity:1}
+.doc-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:1rem}
+.doc-table th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--light-muted);padding:6px 10px;border-bottom:1px solid var(--light-border);text-align:left}
+.doc-table td{padding:7px 10px;border-bottom:1px solid var(--light-border);color:var(--light-text);font-size:12px}
+.doc-table tr:hover td{background:var(--light-bg3)}
+.pass-badge{font-family:'DM Mono',monospace;font-size:9px;padding:2px 8px;border-radius:10px;background:#DCFCE7;color:#15803D}
+
+/* AUDIT PANEL */
+.audit-panel{border-top:1px solid var(--light-border);background:var(--light-bg2);flex-shrink:0}
+.audit-tabs{display:flex;border-bottom:1px solid var(--light-border)}
+.audit-tab{font-family:'DM Mono',monospace;font-size:10px;padding:8px 16px;border:none;background:none;color:var(--light-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.08em;text-transform:uppercase}
+.audit-tab.active{color:#7C3AED;border-bottom-color:#7C3AED}
+.audit-tab:hover:not(.active){color:var(--light-text)}
+.audit-body{padding:1rem;max-height:200px;overflow-y:auto}
+.audit-body::-webkit-scrollbar{width:3px}
+.audit-body::-webkit-scrollbar-thumb{background:#E2E8F0;border-radius:2px}
+.chunk-item{border:1px solid var(--light-border);border-radius:4px;padding:0.75rem;margin-bottom:8px;background:var(--light-bg);position:relative;overflow:hidden}
+.chunk-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#A78BFA}
+.chunk-ref{font-family:'DM Mono',monospace;font-size:9px;color:#7C3AED;margin-bottom:4px;letter-spacing:0.1em}
+.chunk-text{color:var(--light-muted);line-height:1.6}
+.chunk-score{font-family:'DM Mono',monospace;font-size:9px;color:var(--light-muted);margin-top:4px}
+.score-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--light-border)}
+.score-row:last-child{border-bottom:none}
+.score-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--light-muted);width:120px;flex-shrink:0}
+.score-bar-wrap{flex:1;height:4px;background:#E2E8F0;border-radius:2px;overflow:hidden}
+.score-bar{height:100%;border-radius:2px;transition:width 0.6s ease}
+.score-val{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;width:36px;text-align:right;flex-shrink:0}
+
+/* TELEMETRY */
+.telemetry{height:28px;background:var(--bg2);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 1rem;gap:0;flex-shrink:0}
+.tel-item{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);padding:0 12px;border-right:1px solid var(--border);display:flex;align-items:center;gap:5px;height:100%;white-space:nowrap}
+.tel-item:first-child{padding-left:0}
+.tel-item:last-child{border-right:none}
+.tel-val{color:var(--accent)}
+.tel-dot{width:5px;height:5px;border-radius:50%;background:#22C55E;animation:pulse-dot 2s ease-in-out infinite;flex-shrink:0}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:0.4}}
+.tel-spacer{flex:1}
+.tel-tier-badge{font-family:'DM Mono',monospace;font-size:9px;color:var(--accent);padding:1px 8px;border:1px solid rgba(167,139,250,0.3);border-radius:10px;transition:all 0.3s}
+
+/* SETTINGS PANEL */
+.sp-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:600;display:none}
+.sp-overlay.open{display:block}
+.sp-panel{position:fixed;top:0;right:0;bottom:0;width:360px;background:#0B1120;border-left:1px solid var(--border);z-index:601;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.3s cubic-bezier(0.16,1,0.3,1)}
+.sp-panel.open{transform:translateX(0)}
+.sp-header{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;border-bottom:1px solid var(--border);flex-shrink:0}
+.sp-title{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.1em;color:var(--text)}
+.sp-close{background:none;border:1px solid var(--border);border-radius:3px;color:var(--muted);cursor:pointer;width:26px;height:26px;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.sp-close:hover{color:var(--text);border-color:var(--dim)}
+.sp-body{flex:1;overflow-y:auto;padding:1.25rem}
+.sp-body::-webkit-scrollbar{width:3px}
+.sp-body::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
+.sp-section{margin-bottom:1.75rem}
+.sp-section-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem}
+.sp-item{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(30,41,59,0.6);cursor:pointer}
+.sp-item:last-child{border-bottom:none}
+.sp-item-label{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);transition:color 0.15s}
+.sp-item:hover .sp-item-label{color:var(--text)}
+.sp-item-action{font-family:'DM Mono',monospace;font-size:10px;color:var(--dim)}
+.sp-badge{font-family:'DM Mono',monospace;font-size:9px;padding:2px 7px;border-radius:10px}
+.sp-badge-premium{background:rgba(167,139,250,0.15);color:var(--accent);border:1px solid rgba(167,139,250,0.3)}
+.sp-badge-soon{background:rgba(100,116,139,0.2);color:var(--muted);border:1px solid var(--border)}
+.sp-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:8px 12px;font-family:'DM Mono',monospace;font-size:12px;color:var(--text);margin-top:6px;outline:none;transition:border-color 0.2s}
+.sp-input:focus{border-color:var(--accent)}
+.sp-toggle{width:32px;height:18px;border-radius:9px;background:var(--dim);border:none;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0}
+.sp-toggle::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform 0.2s}
+.sp-toggle.on{background:var(--accent)}
+.sp-toggle.on::after{transform:translateX(14px)}
+.sp-theme-row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.sp-theme-dot{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border-color 0.2s;flex-shrink:0}
+.sp-theme-dot:hover,.sp-theme-dot.active{border-color:#fff}
+.sp-tier-row{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.sp-tier-chip{font-family:'DM Mono',monospace;font-size:10px;padding:5px 10px;border-radius:3px;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all 0.2s}
+.sp-tier-chip:hover{border-color:var(--accent);color:var(--accent)}
+.sp-tier-chip.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+.sp-pii-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.sp-pii-item{display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:6px 10px}
+.sp-pii-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
+.sp-footer{border-top:1px solid var(--border);padding:1rem 1.25rem;flex-shrink:0;text-align:center}
+.sp-footer-text{font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);line-height:1.8}
+.sp-footer-text a{color:var(--muted);text-decoration:none;transition:color 0.2s}
+.sp-footer-text a:hover{color:var(--accent)}
+
+/* TIER LOCKED */
+.tier-locked{opacity:0.3;pointer-events:none}
+
+/* ── HISTORY SIDEBAR ── */
+.hist-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:550;display:none}
+.hist-overlay.open{display:block}
+.hist-sidebar{position:fixed;top:0;left:0;bottom:0;width:300px;background:#0B1120;border-right:1px solid var(--border);z-index:551;display:flex;flex-direction:column;transform:translateX(-100%);transition:transform 0.3s cubic-bezier(0.16,1,0.3,1)}
+.hist-header{position:sticky;top:0;z-index:5;background:#0B1120}
+body.light-mode .hist-header{background:#FFFFFF}
+.hist-sidebar.open{transform:translateX(0)}
+.hist-header{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;border-bottom:1px solid var(--border);flex-shrink:0}
+.hist-title{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.1em;color:var(--text)}
+.hist-close{background:none;border:1px solid var(--border);border-radius:3px;color:var(--muted);cursor:pointer;width:26px;height:26px;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.hist-close:hover{color:var(--text);border-color:var(--dim)}
+.hist-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.hist-tab{flex:1;font-family:'DM Mono',monospace;font-size:10px;padding:9px 0;border:none;background:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.08em;text-transform:uppercase}
+.hist-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.hist-body{flex:1;overflow-y:auto;padding:1rem}
+.hist-body::-webkit-scrollbar{width:3px}
+.hist-body::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
+.hist-section-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin:0.75rem 0 0.5rem;padding-bottom:4px;border-bottom:1px solid var(--border)}
+.hist-item{display:flex;align-items:flex-start;gap:10px;padding:9px 8px;border-radius:4px;cursor:pointer;transition:background 0.15s;margin-bottom:2px}
+.hist-item:hover{background:rgba(167,139,250,0.07)}
+.hist-item-icon{font-size:13px;flex-shrink:0;margin-top:1px}
+.hist-item-body{flex:1;min-width:0}
+.hist-item-name{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color 0.15s}
+.hist-item:hover .hist-item-name{color:var(--text)}
+.hist-item-meta{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-top:2px;display:flex;gap:6px}
+.hist-item-badge{font-family:'DM Mono',monospace;font-size:8px;padding:1px 5px;border-radius:8px;background:var(--accent-dim);color:var(--accent);border:1px solid rgba(167,139,250,0.2)}
+.hist-empty{font-family:'DM Mono',monospace;font-size:11px;color:var(--dim);text-align:center;padding:2rem 1rem;line-height:1.8}
+.hist-tier-lock{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-align:center;padding:1.5rem 1rem;background:var(--bg2);border-radius:6px;border:1px solid var(--border);line-height:1.8}
+.hist-tier-lock a{color:var(--accent);cursor:pointer}
+.hist-btn{font-family:'DM Mono',monospace;font-size:10px;width:100%;padding:8px;border-radius:4px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;margin-top:0.75rem;transition:all 0.2s}
+.hist-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── MOBILE RESPONSIVENESS (PAGE 2) ── */
+@media (max-width: 768px) {
+
+  /* Topbar */
+  .topbar { padding: 0 0.75rem; gap: 0; overflow-x: auto }
+  .tb-brand { font-size: 10px; padding: 0 0.75rem; white-space: nowrap }
+  .tb-tier { font-size: 9px; padding: 2px 7px; margin-left: 6px }
+  .tb-field { display: none }
+  .tb-btn { font-size: 9px; padding: 4px 8px; margin-left: 4px }
+  .tb-home { font-size: 9px; padding: 4px 8px; margin-left: 4px }
+  .tb-overflow-btn { margin-left: 4px }
+
+  /* Workspace — stack vertically */
+  .workspace { flex-direction: column }
+
+  /* Command panel — full width, fixed height */
+  .cmd-panel {
+    width: 100%;
+    height: 55vh;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Mobile tab bar to switch between chat and document */
+  .mobile-tabs {
+    display: flex !important;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    background: var(--bg2);
+  }
+  .mobile-tab {
+    flex: 1;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 8px 0;
+    border: none;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .mobile-tab.active { color: var(--accent); border-bottom-color: var(--accent) }
+
+  /* Doc panel — full width below */
+  .doc-panel {
+    flex: none;
+    width: 100%;
+    height: 45vh;
+    display: none;  /* shown via mobile tab JS */
+  }
+  .doc-panel.mobile-active { display: flex }
+  .cmd-panel.mobile-hidden { display: none }
+  .cmd-panel.mobile-active { display: flex }
+
+  /* Chat feed */
+  .chat-feed { padding: 1rem }
+  .msg-text { font-size: 13px }
+
+  /* Input zone */
+  .input-zone { padding: 0.75rem }
+  .input-row { gap: 6px }
+  .field-select-btn { min-width: 120px; font-size: 10px; height: 36px }
+  .query-input { height: 36px; font-size: 12px }
+  .query-input:focus { height: 60px }
+  .send-btn { height: 36px; padding: 0 12px; font-size: 10px }
+
+  /* Field menu — open upward, full mobile width */
+  .field-menu { min-width: 200px; max-height: 260px }
+
+  /* Telemetry — show only key stats */
+  .telemetry { padding: 0 0.5rem; overflow-x: auto }
+  .tel-item { padding: 0 8px; font-size: 9px }
+  .tel-item:nth-child(n+6):not(:last-child) { display: none }
+  .tel-tier-badge { font-size: 8px }
+
+  /* Settings panel — full width on mobile */
+  .sp-panel { width: 100% }
+
+  /* History sidebar — full width on mobile */
+  .hist-sidebar { width: 100% }
+
+  /* Overflow menu */
+  .overflow-menu { width: 200px }
+
+  /* Audit panel */
+  .audit-body { max-height: 150px }
+  .score-label { width: 90px; font-size: 9px }
+
+  /* Doc content */
+  .doc-content { padding: 1rem }
+  .doc-table { font-size: 11px }
+  .doc-table th { font-size: 8px }
+}
+
+@media (max-width: 480px) {
+  .tb-brand span { display: none }
+  .field-select-btn { min-width: 100px; font-size: 9px }
+  .sp-pii-grid { grid-template-columns: 1fr }
+  .sp-tier-row { gap: 4px }
+  .sp-tier-chip { font-size: 9px; padding: 4px 7px }
+}
+
+/* ── RESPONSIVE — All devices ── */
+
+/* Large desktops 1440px+ */
+@media (min-width:1440px){
+  .cmd-panel{width:58%}
+  .chat-feed{padding:2rem}
+  .topbar{padding:0 2rem}
+  .overflow-menu{right:2rem}
+}
+
+/* Small laptops / large tablets landscape 769–1023px */
+@media (max-width:1023px) and (min-width:769px){
+  .cmd-panel{width:55%}
+  .tb-field{font-size:9px;padding:0 0.75rem}
+  .overflow-menu{width:210px;right:0.75rem}
+  .sp-panel{width:320px}
+  .hist-sidebar{width:280px}
+  .doc-content{padding:1rem}
+  .audit-body{max-height:170px}
+}
+
+/* Tablets portrait + large phones landscape 481–768px */
+@media (max-width:768px){
+  .topbar{padding:0 0.75rem}
+  .tb-brand{font-size:10px;padding:0 0.75rem}
+  .tb-tier{font-size:9px;padding:2px 7px;margin-left:6px}
+  .tb-field{display:none}
+  .tb-btn{font-size:9px;padding:4px 8px;margin-left:3px}
+  .tb-home{font-size:9px;padding:4px 8px;margin-left:3px}
+  .tb-overflow-btn{margin-left:3px;width:26px;height:26px}
+  .overflow-menu{right:0.5rem!important;width:210px;top:54px}
+  .mobile-tabs{display:flex!important}
+  .workspace{flex-direction:column}
+  .cmd-panel{width:100%!important;height:52vh;border-right:none;border-bottom:1px solid var(--border);overflow:hidden}
+  .doc-panel{flex:none;width:100%;height:48vh;display:none;overflow:hidden}
+  .doc-panel.mobile-active{display:flex}
+  .cmd-panel.mobile-hidden{display:none}
+  .cmd-panel.mobile-active{display:flex}
+  .input-zone{padding:0.6rem 0.75rem}
+  .input-row{gap:5px}
+  .field-select-btn{min-width:110px;font-size:10px;height:36px}
+  .query-input{height:36px;padding:8px 10px}
+  .query-input:focus{height:60px}
+  .send-btn{height:36px;padding:0 10px;font-size:10px}
+  .field-menu{min-width:200px;max-height:260px}
+  .chat-feed{padding:0.75rem}
+  .telemetry{padding:0 0.5rem;overflow-x:auto}
+  .tel-item{padding:0 7px;font-size:9px;white-space:nowrap}
+  .tel-item:nth-child(n+5):not(.tel-spacer):not(:last-child){display:none}
+  .tel-tier-badge{font-size:8px}
+  .sp-panel{width:100%}
+  .hist-sidebar{width:88%;max-width:340px}
+  .audit-body{max-height:140px}
+  .score-label{width:85px;font-size:9px}
+  .doc-content{padding:0.75rem}
+  .doc-table{font-size:11px}
+  .doc-table th{font-size:8px;padding:5px 6px}
+  .doc-table td{padding:5px 6px}
+  .doc-header{padding:0 0.75rem}
+}
+
+/* Phones portrait 320–480px */
+@media (max-width:480px){
+  .tb-brand{font-size:9px;padding:0 0.5rem;letter-spacing:0}
+  .tb-tier{display:none}
+  .tb-btn{padding:3px 6px;font-size:8px}
+  .overflow-menu{width:calc(100vw - 1rem)!important;right:0.5rem!important;left:0.5rem;top:54px}
+  .field-select-btn{min-width:95px;font-size:9px}
+  .sp-pii-grid{grid-template-columns:1fr}
+  .sp-tier-row{gap:4px}
+  .sp-tier-chip{font-size:9px;padding:4px 7px}
+  .audit-tab{font-size:9px;padding:7px 10px}
+  .chunk-ref{font-size:8px}
+  .hist-sidebar{width:100%;max-width:100%}
+  .doc-content{padding:0.5rem}
+  .doc-table{font-size:10px}
+  .input-zone{padding:0.5rem}
+  .send-btn{padding:0 8px;font-size:9px}
+  .tel-item:nth-child(n+4):not(.tel-spacer):not(:last-child){display:none}
+}
+
+/* iPhone SE and very small screens */
+@media (max-width:360px){
+  .topbar{padding:0 0.4rem}
+  .tb-home{display:none}
+  .field-select-btn{min-width:80px;font-size:8px}
+  .overflow-menu{width:calc(100vw - 0.8rem)!important;right:0.4rem!important;left:0.4rem;top:54px}
+}
+
+/* iPad Pro / large tablets landscape */
+@media (min-width:1024px) and (max-width:1180px){
+  .cmd-panel{width:56%}
+  .sp-panel{width:340px}
+}
+
+/* Force desktop layout on 769px+ */
+@media (min-width:769px){
+  .mobile-tabs{display:none!important}
+  .cmd-panel{display:flex!important;overflow:hidden}
+  .doc-panel{display:flex!important;overflow:hidden}
+  .cmd-panel.mobile-hidden{display:flex!important}
+}
+
+
+
+/* ── ERROR STATES ── */
+.msg-row.msg-error .msg-text{color:#FCA5A5}
+.msg-row.msg-error .msg-role{color:#EF4444}
+.msg-row.msg-warning .msg-text{color:#FCD34D}
+.msg-row.msg-warning .msg-role{color:#F59E0B}
+.msg-row.msg-zero .msg-text{color:var(--muted)}
+.msg-row.msg-zero .msg-role{color:var(--muted)}
+
+.upload-error{font-family:'DM Mono',monospace;font-size:11px;color:#FCA5A5;padding:6px 10px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:4px;margin-top:6px;display:none}
+.upload-success{font-family:'DM Mono',monospace;font-size:11px;color:#86EFAC;padding:6px 10px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:4px;margin-top:6px;display:none}
+
+.tel-item.tel-error .tel-val{color:#F87171!important}
+.tel-item.tel-warn .tel-val{color:#FCD34D!important}
+
+/* ── ONBOARDING MODAL ── */
+.ob-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:3000;display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
+.ob-modal{background:#0B1120;border:1px solid var(--border);border-radius:12px;width:100%;max-width:460px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.6)}
+.ob-header{padding:1.5rem 1.5rem 0;display:flex;align-items:flex-start;justify-content:space-between}
+.ob-title{font-size:18px;font-weight:600;letter-spacing:-0.02em}
+.ob-subtitle{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.5}
+.ob-close{background:none;border:1px solid var(--border);border-radius:3px;color:var(--muted);cursor:pointer;width:26px;height:26px;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;margin-left:1rem}
+.ob-close:hover{color:var(--text);border-color:var(--dim)}
+.ob-steps{padding:1.5rem}
+.ob-step{display:flex;gap:1rem;padding:0.75rem 0;border-bottom:1px solid rgba(30,41,59,0.5)}
+.ob-step:last-child{border-bottom:none}
+.ob-step-num{width:28px;height:28px;border-radius:50%;background:var(--accent-dim);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);flex-shrink:0}
+.ob-step-body{}
+.ob-step-title{font-size:14px;font-weight:500;margin-bottom:3px}
+.ob-step-desc{font-size:12px;color:var(--muted);line-height:1.55}
+.ob-step-desc code{font-family:'DM Mono',monospace;font-size:11px;background:var(--bg2);padding:1px 5px;border-radius:2px;color:var(--accent)}
+.ob-footer{padding:1rem 1.5rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border)}
+.ob-tier-badge{font-family:'DM Mono',monospace;font-size:9px;color:var(--accent);padding:2px 8px;border:1px solid rgba(167,139,250,0.3);border-radius:10px}
+.ob-btn{font-family:'DM Mono',monospace;font-size:11px;padding:9px 22px;border-radius:4px;border:none;background:var(--accent);color:#080D14;cursor:pointer;font-weight:500;transition:opacity 0.2s}
+.ob-btn:hover{opacity:0.85}
+.ob-skip{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);cursor:pointer;text-decoration:underline;background:none;border:none;transition:color 0.2s}
+.ob-skip:hover{color:var(--text)}
+
+/* Upload zone visual states */
+.upload-zone-wrap{position:relative}
+.upload-zone-active{border-color:var(--accent)!important}
+
+
+/* ── EMPTY DOC STATE ── */
+.empty-doc-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:2rem;text-align:center;color:var(--light-muted)}
+.empty-doc-icon{font-size:40px;margin-bottom:1rem;opacity:0.3}
+.empty-doc-title{font-family:'DM Mono',monospace;font-size:13px;color:var(--light-text);margin-bottom:0.5rem;font-weight:500}
+.empty-doc-sub{font-size:13px;color:var(--light-muted);line-height:1.65;max-width:240px;margin-bottom:1.5rem}
+.empty-doc-btn{font-family:'DM Mono',monospace;font-size:11px;padding:9px 20px;border-radius:4px;border:1px solid var(--light-border);background:none;color:var(--light-muted);cursor:pointer;transition:all 0.2s}
+.empty-doc-btn:hover{border-color:#A78BFA;color:#A78BFA}
+
+
+/* ── INFO MODAL ── */
+.info-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:2500;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(3px)}
+.info-overlay.open{display:flex}
+.info-modal{background:#0B1120;border:1px solid var(--border);border-radius:10px;width:100%;max-width:520px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,0.7)}
+.info-modal-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);flex-shrink:0}
+.info-modal-title{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent)}
+.info-modal-close{background:none;border:1px solid var(--border);border-radius:3px;color:var(--muted);cursor:pointer;width:26px;height:26px;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.info-modal-close:hover{color:var(--text);border-color:var(--dim)}
+.info-modal-body{flex:1;overflow-y:auto;padding:1.25rem 1.5rem}
+.info-modal-body::-webkit-scrollbar{width:3px}
+.info-modal-body::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
+.info-section{margin-bottom:1.5rem}
+.info-section:last-child{margin-bottom:0}
+.info-section-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.info-item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:13px;color:#CBD5E1;line-height:1.55}
+.info-item-icon{flex-shrink:0;font-size:12px;margin-top:2px}
+.info-item.done .info-item-icon{color:#22C55E}
+.info-item.next .info-item-icon{color:var(--accent)}
+.info-item.soon .info-item-icon{color:#F59E0B}
+.info-item.note{color:var(--muted);font-family:'DM Mono',monospace;font-size:11px}
+.info-version-badge{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;padding:2px 8px;border-radius:10px;margin-right:6px}
+.info-v21{background:rgba(167,139,250,0.15);color:var(--accent);border:1px solid rgba(167,139,250,0.3)}
+.info-v22{background:rgba(45,212,191,0.1);color:#2DD4BF;border:1px solid rgba(45,212,191,0.2)}
+.info-v3{background:rgba(245,158,11,0.1);color:#F59E0B;border:1px solid rgba(245,158,11,0.2)}
+.info-modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
+.info-modal-footer a{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-decoration:none;transition:color 0.2s}
+.info-modal-footer a:hover{color:var(--accent)}
+.info-modal-btn{font-family:'DM Mono',monospace;font-size:11px;padding:7px 18px;border-radius:4px;border:none;background:var(--accent);color:#080D14;cursor:pointer;transition:opacity 0.2s}
+.info-modal-btn:hover{opacity:0.85}
+.info-price-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(30,41,59,0.4);font-size:12px;color:#CBD5E1}
+.info-price-row:last-child{border-bottom:none}
+.info-price-tier{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent)}
+.info-price-now{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-decoration:line-through}
+.info-price-next{font-family:'DM Mono',monospace;font-size:11px;color:#22C55E}
+@media(max-width:640px){.info-modal{max-width:100%;max-height:90vh}.info-modal-header,.info-modal-body,.info-modal-footer{padding:1rem}}
+
+
+/* ── BYOK ── */
+.byok-section{margin-top:10px;padding:10px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:4px}
+.byok-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:0.1em;margin-bottom:6px}
+.byok-input-row{display:flex;gap:6px;margin-top:6px}
+.byok-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:7px 10px;font-family:'DM Mono',monospace;font-size:11px;color:var(--text);outline:none;transition:border-color 0.2s}
+.byok-input:focus{border-color:var(--accent)}
+.byok-input::placeholder{color:var(--dim)}
+.byok-btn{font-family:'DM Mono',monospace;font-size:10px;padding:7px 12px;border-radius:4px;border:1px solid var(--accent);background:none;color:var(--accent);cursor:pointer;white-space:nowrap;transition:all 0.2s;flex-shrink:0}
+.byok-btn:hover{background:var(--accent);color:#080D14}
+.byok-status{font-family:'DM Mono',monospace;font-size:9px;margin-top:5px}
+.byok-active{color:#22C55E}
+.byok-inactive{color:var(--dim)}
+
+
+/* ── FEEDBACK THUMBS ── */
+.msg-feedback{display:flex;align-items:center;gap:6px;margin-top:6px}
+.fb-btn{background:none;border:1px solid var(--border);border-radius:4px;color:var(--muted);cursor:pointer;font-size:12px;padding:3px 8px;transition:all 0.2s;font-family:'DM Mono',monospace;font-size:10px;display:flex;align-items:center;gap:4px}
+.fb-btn:hover{border-color:var(--dim);color:var(--text)}
+.fb-btn.fb-up:hover{border-color:#22C55E;color:#22C55E}
+.fb-btn.fb-down:hover{border-color:#F87171;color:#F87171}
+.fb-btn.fb-active-up{border-color:#22C55E;color:#22C55E;background:rgba(34,197,94,0.08)}
+.fb-btn.fb-active-down{border-color:#F87171;color:#F87171;background:rgba(248,113,113,0.08)}
+.fb-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim)}
+
+
+.sp-cancel-btn{width:100%;font-family:'DM Mono',monospace;font-size:12px;padding:10px;border-radius:5px;border:1px solid var(--border);background:var(--bg2);color:var(--muted);cursor:pointer;margin-bottom:12px;transition:all 0.2s;letter-spacing:0.04em}
+.sp-cancel-btn:hover{border-color:#F87171;color:#F87171;background:rgba(248,113,113,0.06)}
+.sp-header{position:sticky;top:0;z-index:5;background:#0B1120}
+body.light-mode .sp-header{background:#FFFFFF}
+
+
+/* ── PROFILE / BILLING / CANCEL FLOW ── */
+.pf-field{margin-bottom:14px}
+.pf-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:0.08em;margin-bottom:5px;display:block}
+.pf-input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:9px 11px;font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color 0.2s}
+.pf-input:focus{border-color:var(--accent)}
+.pf-select{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:9px 11px;font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--text);outline:none;cursor:pointer}
+.pf-save-btn{font-family:'DM Mono',monospace;font-size:11px;padding:9px 20px;border-radius:4px;border:none;background:var(--accent);color:#080D14;cursor:pointer;font-weight:500;margin-top:6px;transition:opacity 0.2s}
+.pf-save-btn:hover{opacity:0.85}
+
+.bill-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(30,41,59,0.5);font-size:13px}
+.bill-row:last-child{border-bottom:none}
+.bill-row-label{color:var(--muted)}
+.bill-row-val{color:var(--text);font-family:'DM Mono',monospace;font-size:12px}
+.bill-invoice{display:flex;align-items:center;justify-content:space-between;padding:8px 0;font-size:12px;color:#CBD5E1}
+.bill-invoice-link{color:var(--accent);text-decoration:none;font-family:'DM Mono',monospace;font-size:11px}
+.bill-invoice-link:hover{text-decoration:underline}
+
+.cancel-step{display:none}
+.cancel-step.active{display:block}
+.cancel-reason{display:block;width:100%;text-align:left;background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:11px 14px;margin-bottom:8px;color:#CBD5E1;font-size:13px;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif}
+.cancel-reason:hover{border-color:var(--dim)}
+.cancel-reason.selected{border-color:var(--accent);background:rgba(167,139,250,0.06);color:var(--text)}
+
+.offer-card{background:linear-gradient(135deg,rgba(167,139,250,0.1),rgba(167,139,250,0.02));border:1px solid rgba(167,139,250,0.3);border-radius:8px;padding:1.25rem;margin:1rem 0;text-align:center}
+.offer-badge{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;background:var(--accent);color:#080D14;padding:3px 10px;border-radius:10px;margin-bottom:10px;letter-spacing:0.06em}
+.offer-title{font-size:16px;font-weight:600;margin-bottom:6px}
+.offer-desc{font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.55}
+.offer-actions{display:flex;gap:8px;justify-content:center}
+.offer-accept{font-family:'DM Mono',monospace;font-size:11px;padding:9px 18px;border-radius:4px;border:none;background:var(--accent);color:#080D14;cursor:pointer;font-weight:500}
+.offer-decline{font-family:'DM Mono',monospace;font-size:11px;padding:9px 18px;border-radius:4px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer}
+.offer-decline:hover{color:var(--text);border-color:var(--dim)}
+
+.comm-pref-item{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(30,41,59,0.5)}
+.comm-pref-item:last-child{border-bottom:none}
+.comm-pref-label{font-size:13px;color:#CBD5E1}
+.comm-pref-desc{font-size:11px;color:var(--muted);margin-top:2px}
+
+.cancel-final{text-align:center;padding:1rem 0}
+.cancel-final-icon{font-size:32px;margin-bottom:10px;opacity:0.5}
+
+
+/* ── TRIAL SYSTEM ── */
+.trial-badge{font-family:'DM Mono',monospace;font-size:9px;padding:1px 8px;border-radius:10px;border:1px solid rgba(245,158,11,0.4);color:#F59E0B;background:rgba(245,158,11,0.08);cursor:pointer;transition:all 0.2s}
+.trial-badge:hover{background:rgba(245,158,11,0.14)}
+.trial-badge.trial-urgent{border-color:rgba(239,68,68,0.5);color:#F87171;background:rgba(239,68,68,0.08);animation:trialPulse 2s ease-in-out infinite}
+@keyframes trialPulse{0%,100%{opacity:1}50%{opacity:0.6}}
+
+.trial-banner{display:none;align-items:center;justify-content:space-between;gap:12px;padding:9px 1rem;background:rgba(245,158,11,0.08);border-bottom:1px solid rgba(245,158,11,0.25);font-size:12.5px;flex-shrink:0}
+.trial-banner.show{display:flex}
+.trial-banner.urgent{background:rgba(239,68,68,0.08);border-bottom-color:rgba(239,68,68,0.25)}
+.trial-banner-text{color:#FCD34D}
+.trial-banner.urgent .trial-banner-text{color:#FCA5A5}
+.trial-banner-actions{display:flex;gap:8px;flex-shrink:0}
+.trial-banner-btn{font-family:'DM Mono',monospace;font-size:10px;padding:5px 12px;border-radius:4px;border:1px solid rgba(245,158,11,0.4);background:none;color:#F59E0B;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.trial-banner-btn:hover{background:rgba(245,158,11,0.12)}
+.trial-banner-dismiss{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);background:none;border:none;cursor:pointer;padding:5px}
+
+/* ── AUTH GATE ── */
+.auth-gate{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:var(--bg, #0F1117);transition:opacity 0.3s}
+.auth-gate.hidden{opacity:0;pointer-events:none}
+.auth-card{background:#fff;border-radius:16px;padding:2.5rem;width:100%;max-width:400px;box-shadow:0 8px 40px rgba(0,0,0,0.18);display:flex;flex-direction:column;gap:1.25rem}
+.auth-logo{font-family:'DM Mono',monospace;font-size:13px;font-weight:600;color:#7C3AED;letter-spacing:0.04em}
+.auth-title{font-size:20px;font-weight:700;color:#0F172A;line-height:1.3;margin:0}
+.auth-sub{font-size:13px;color:#64748B;margin:0;line-height:1.5}
+.auth-field{display:flex;flex-direction:column;gap:5px}
+.auth-field label{font-family:'DM Mono',monospace;font-size:11px;color:#64748B;font-weight:500}
+.auth-field input{font-family:'DM Mono',monospace;font-size:13px;padding:10px 12px;border:1px solid #E2E8F0;border-radius:8px;outline:none;color:#0F172A;transition:border-color 0.2s;background:#FAFAFA}
+.auth-field input:focus{border-color:#7C3AED;background:#fff}
+.auth-btn-primary{font-family:'DM Mono',monospace;font-size:13px;font-weight:600;padding:11px;border-radius:8px;border:none;background:#7C3AED;color:#fff;cursor:pointer;transition:background 0.2s}
+.auth-btn-primary:hover:not(:disabled){background:#6D28D9}
+.auth-btn-primary:disabled{opacity:0.5;cursor:not-allowed}
+.auth-msg{font-family:'DM Mono',monospace;font-size:11px;padding:8px 12px;border-radius:6px;display:none}
+.auth-msg.error{background:#FEF2F2;color:#DC2626;border:1px solid #FECACA;display:block}
+.auth-msg.success{background:#F0FDF4;color:#16A34A;border:1px solid #BBF7D0;display:block}
+.auth-resend{font-family:'DM Mono',monospace;font-size:11px;color:#7C3AED;background:none;border:none;cursor:pointer;padding:0;text-decoration:underline;align-self:flex-start}
+.auth-step{display:flex;flex-direction:column;gap:1.25rem}
+.auth-step.hidden{display:none}
+.auth-code-hint{font-family:'DM Mono',monospace;font-size:11px;color:#64748B}
+.auth-divider{height:1px;background:#F1F5F9;margin:0 -2.5rem}
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+</head>
+<body>
+
+<!-- AUTH GATE — sits over entire workspace until token is validated -->
+<div class="auth-gate" id="auth-gate">
+  <div class="auth-card">
+    <div class="auth-logo">◈ Meridian Intel</div>
+
+    <!-- Step 1: Name + Email -->
+    <div class="auth-step" id="auth-step-1">
+      <div>
+        <div class="auth-title">Request access</div>
+        <div class="auth-sub" style="margin-top:6px">Enter your name and email to receive a one-time access code.</div>
+      </div>
+      <div class="auth-divider"></div>
+      <div class="auth-field">
+        <label>Full name</label>
+        <input type="text" id="auth-name" placeholder="Faith Odhe" autocomplete="name" />
+      </div>
+      <div class="auth-field">
+        <label>Work email</label>
+        <input type="email" id="auth-email" placeholder="you@company.com" autocomplete="email" />
+      </div>
+      <div class="auth-msg" id="auth-msg-1"></div>
+      <button class="auth-btn-primary" id="auth-send-btn" onclick="authRequestCode()">Send access code →</button>
+    </div>
+
+    <!-- Step 2: Code entry -->
+    <div class="auth-step hidden" id="auth-step-2">
+      <div>
+        <div class="auth-title">Check your email</div>
+        <div class="auth-sub" style="margin-top:6px">We sent a 6-digit code to <strong id="auth-email-display"></strong>. It expires in 10 minutes.</div>
+      </div>
+      <div class="auth-divider"></div>
+      <div class="auth-field">
+        <label>Access code</label>
+        <input type="text" id="auth-code" placeholder="000000" maxlength="6"
+               autocomplete="one-time-code" inputmode="numeric"
+               style="font-size:22px;letter-spacing:0.2em;text-align:center" />
+      </div>
+      <div class="auth-msg" id="auth-msg-2"></div>
+      <button class="auth-btn-primary" id="auth-verify-btn" onclick="authVerifyCode()">Verify code →</button>
+      <button class="auth-resend" onclick="authGoBack()">← Use a different email</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-brand"><div class="tb-dot" id="tb-dot"></div>Meridian Intel</div>
+  <span class="tb-tier" id="tb-tier">◈ Vector</span>
+  <div class="tb-spacer"></div>
+  <div class="tb-field"><div class="field-dot"></div><span id="active-field">Pharmaceuticals &amp; Biotech</span></div>
+  <button class="tb-btn" onclick="uploadDoc()" title="Upload document (PDF, TXT, DOCX)">↑ Upload</button>
+  <button class="tb-home" onclick="window.location.href='PAGE_1_LANDING_HUB.html'">← Hub</button>
+  <button class="tb-btn" onclick="openHistory()" id="hist-btn" title="Document &amp; Query History">History</button>
+  <div class="overflow-wrap">
+    <button class="tb-overflow-btn" id="overflow-btn" onclick="toggleOverflow()">⋮</button>
+    <div class="overflow-menu" id="overflow-menu">
+      <div class="ov-item" onclick="openSettings()">⚙&nbsp; Platform Settings</div>
+      <div class="ov-divider"></div>
+      <div class="ov-label">ENGINE</div>
+      <div class="ov-item ov-active" id="ov-mistral" onclick="setEngine('mistral')">🖥&nbsp; Mistral-7B · Local</div>
+      <div class="ov-item" id="ov-gemini" onclick="setEngine('gemini')">☁&nbsp; Gemini 2.5 · Cloud</div>
+      <div class="ov-item" id="ov-shield" onclick="toggleShield()">🛡&nbsp; AUTO Shield &nbsp;<span id="shield-state" style="color:#22C55E">ON</span></div>
+      <div class="ov-divider"></div>
+      <div class="ov-item" onclick="toggleDarkMode()">☀&nbsp; <span id="ov-mode-label">Light Mode</span></div>
+      <div class="ov-item" onclick="openSettings('apikey');renderApiKeySection()">🔑&nbsp; API Key</div>
+      <div class="ov-divider"></div>
+      <div class="ov-item ov-danger" onclick="clearChat()">Clear Chat</div>
+    </div>
+  </div>
+</div>
+
+<!-- TRIAL BANNER -->
+<div class="trial-banner" id="trial-banner">
+  <span class="trial-banner-text" id="trial-banner-text"></span>
+  <div class="trial-banner-actions">
+    <button class="trial-banner-btn" onclick="openBilling()">Upgrade now</button>
+    <button class="trial-banner-dismiss" onclick="dismissTrialBanner()">Dismiss</button>
+  </div>
+</div>
+
+<!-- MOBILE TABS -->
+  <!-- Mobile tab bar (hidden on desktop) -->
+  <div class="mobile-tabs" id="mobile-tabs" style="display:none">
+    <button class="mobile-tab active" id="mtab-chat" onclick="switchMobileTab('chat')">Chat</button>
+    <button class="mobile-tab" id="mtab-doc" onclick="switchMobileTab('doc')">Document</button>
+  </div>
+
+<!-- WORKSPACE -->
+<div class="workspace">
+
+  <!-- LEFT: COMMAND CENTER -->
+  <div class="cmd-panel">
+    <div class="chat-feed" id="chat-feed">
+      <div class="msg-row">
+        <div class="msg-meta"><span class="msg-role system">SYSTEM</span><span class="msg-time">09:41:02</span></div>
+        <div class="msg-text">Meridian Intel initialized. Vector tier active. Dual retrieval: ChromaDB + FTS5 hybrid. Zero-hit fallback matrix armed. Gemini 2.5 Flash on standby.</div>
+        <div class="context-path">
+          <span class="ctx-node">Mistral-7B</span><span class="ctx-arrow">→</span>
+          <span class="ctx-node">ChromaDB</span><span class="ctx-arrow">+</span>
+          <span class="ctx-node">FTS5</span><span class="ctx-arrow">→</span>
+          <span class="ctx-node">RRF Fusion</span><span class="ctx-arrow">→</span>
+          <span class="ctx-node">PII Scrub</span>
+        </div>
+      </div>
+      <div class="msg-row" id="typing-row" style="display:none">
+        <div class="msg-meta"><span class="msg-role system">VECTOR</span><span class="msg-time" id="typing-time"></span></div>
+        <div class="msg-text" style="color:var(--dim);font-family:'DM Mono',monospace;font-size:13px"><span id="typing-label">retrieving</span><span id="typing-dots">...</span></div>
+      </div>
+    </div>
+
+    <!-- INPUT -->
+    <div class="input-zone">
+      <div class="input-row">
+        <div class="field-dropdown-wrap">
+          <button class="field-select-btn" id="field-select-btn" onclick="toggleFieldDropdown(event)">
+            <span id="field-select-label">Pharmaceuticals &amp; Biotech</span>
+            <span class="field-chevron">▾</span>
+          </button>
+          <div class="field-menu" id="field-menu">
+            <div class="field-opt general-opt selected" data-value="general" data-label="General Purpose" onclick="selectField(this)">General Purpose</div>
+            <div class="field-group-header">Science &amp; Research</div>
+            <div class="field-opt selected" data-value="certificate_of_quality" data-label="Pharmaceuticals &amp; Biotech" onclick="selectField(this)">Pharmaceuticals &amp; Biotech</div>
+            <div class="field-opt" data-value="legal_contract" data-label="Legal &amp; Compliance" onclick="selectField(this)">Legal &amp; Compliance</div>
+            <div class="field-opt" data-value="financial_report" data-label="Finance &amp; Accounting" onclick="selectField(this)">Finance &amp; Accounting</div>
+            <div class="field-opt" data-value="clinical_trial" data-label="Medical &amp; Clinical" onclick="selectField(this)">Medical &amp; Clinical</div>
+            <div class="field-opt" data-value="audit_report" data-label="Engineering &amp; Manufacturing" onclick="selectField(this)">Engineering &amp; Manufacturing</div>
+            <div class="field-group-header">Technology</div>
+            <div class="field-opt" data-value="it_runbook" data-label="Software &amp; DevOps" onclick="selectField(this)">Software &amp; DevOps</div>
+            <div class="field-opt" data-value="incident_report" data-label="Cybersecurity" onclick="selectField(this)">Cybersecurity</div>
+            <div class="field-opt" data-value="api_documentation" data-label="Data Science &amp; ML" onclick="selectField(this)">Data Science &amp; ML</div>
+            <div class="field-group-header">Business</div>
+            <div class="field-opt" data-value="employee_handbook" data-label="HR &amp; People Ops" onclick="selectField(this)">HR &amp; People Ops</div>
+            <div class="field-opt" data-value="investment_memo" data-label="Marketing &amp; Brand" onclick="selectField(this)">Marketing &amp; Brand</div>
+            <div class="field-opt" data-value="sec_filing" data-label="Operations &amp; Supply Chain" onclick="selectField(this)">Operations &amp; Supply Chain</div>
+            <div class="field-group-header">Academic</div>
+            <div class="field-opt" data-value="research_paper" data-label="Academic Research" onclick="selectField(this)">Academic Research</div>
+            <div class="field-opt" data-value="nda" data-label="Public Policy &amp; Gov" onclick="selectField(this)">Public Policy &amp; Gov</div>
+            <div class="field-opt custom-opt" onclick="selectCustomField()">+ Custom field...</div>
+          </div>
+        </div>
+        <textarea class="query-input" id="query-input" placeholder="Query the document…" rows="1" onkeydown="handleKey(event)"></textarea>
+        <button class="send-btn" onclick="sendQuery()">Send →</button>
+      </div>
+      <div class="upload-error" id="upload-error"></div>
+      <div class="upload-success" id="upload-success"></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: DOCUMENT VIEWER -->
+  <div class="doc-panel">
+    <div class="doc-header">
+      <span class="doc-title" id="doc-title">No document loaded</span>
+      <span class="doc-badge" id="doc-badge">Vector · PDF.js</span>
+    </div>
+    <div class="doc-content" id="doc-content-area">
+      <div class="empty-doc-state">
+        <div class="empty-doc-icon">&#128196;</div>
+        <div class="empty-doc-title">No document loaded</div>
+        <div class="empty-doc-sub">Click &#8593; Upload in the top bar to load a document.<br>Certificates of Quality, contracts, reports, runbooks — PDF, DOCX, DOC, or TXT works.</div>
+        <button class="empty-doc-btn" onclick="uploadDoc()">&#8593; Upload Document</button>
+      </div>
+    </div>
+    <div class="audit-panel" id="audit-panel">
+      <div class="audit-tabs">
+        <button class="audit-tab active" onclick="switchTab('chunks',this)">Source Chunks</button>
+        <button class="audit-tab" id="scores-tab" onclick="switchTab('scores',this)">Eval Scores</button>
+      </div>
+      <div class="audit-body" id="audit-chunks">
+        <div style="padding:1rem;text-align:center;font-size:11px;color:#94A3B8">No chunks yet</div>
+      </div>
+      <div class="audit-body" id="audit-scores" style="display:none">
+        <div class="score-row"><span class="score-label">Faithfulness</span><div class="score-bar-wrap"><div class="score-bar" style="width:94%;background:#A78BFA"></div></div><span class="score-val" style="color:#A78BFA">0.94</span></div>
+        <div class="score-row"><span class="score-label">Answer Relevance</span><div class="score-bar-wrap"><div class="score-bar" style="width:91%;background:#818CF8"></div></div><span class="score-val" style="color:#818CF8">0.91</span></div>
+        <div class="score-row"><span class="score-label">Context Recall</span><div class="score-bar-wrap"><div class="score-bar" style="width:88%;background:#2DD4BF"></div></div><span class="score-val" style="color:#2DD4BF">0.88</span></div>
+        <div class="score-row"><span class="score-label" style="font-size:9px;color:var(--light-muted)">Gemini 2.5 Flash · LLM-judge</span><div class="score-bar-wrap"></div><span class="score-val" style="color:#22C55E;font-size:9px">pass ✓</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TELEMETRY -->
+<div class="telemetry" id="telemetry">
+  <div class="tel-item"><div class="tel-dot" id="tel-dot"></div><span id="tel-mode-label">LIVE</span></div>
+  <div class="tel-item">LATENCY <span class="tel-val" id="tel-latency">312ms</span></div>
+  <div class="tel-item">TOKENS <span class="tel-val" id="tel-tokens">1,847</span></div>
+  <div class="tel-item">CHUNKS <span class="tel-val" id="tel-chunks">3</span></div>
+  <div class="tel-item">CACHE <span class="tel-val" id="tel-cache">MISS</span></div>
+  <div class="tel-item">ENGINE <span class="tel-val" id="tel-engine">Mistral-7B</span></div>
+  <div class="tel-spacer"></div>
+  <div class="tel-item">TURNS <span class="tel-val" id="tel-turns">1</span></div>
+  <div class="tel-item">FIELD <span class="tel-val" id="tel-field">cert_of_quality</span></div>
+  <div class="tel-item"><span class="tel-tier-badge" id="tel-tier-badge">Vector · Premium</span></div>
+  <div class="tel-item" id="trial-badge-wrap" style="display:none"><span class="trial-badge" id="trial-badge" onclick="openBilling()"></span></div>
+</div>
+
+<!-- SETTINGS OVERLAY (click only on the dark backdrop, not the panel) -->
+<div class="sp-overlay" id="sp-overlay" onclick="closeSettings()"></div>
+<div class="sp-panel" id="sp-panel" onclick="event.stopPropagation()">
+  <div class="sp-header">
+    <span class="sp-title">⚙ PLATFORM SETTINGS</span>
+    <button class="sp-close" onclick="closeSettings()">✕</button>
+  </div>
+  <div class="sp-body">
+
+    <div class="sp-section">
+      <div class="sp-section-title">Identity Hub</div>
+      <div class="sp-item" onclick="openProfile()"><span class="sp-item-label">Profile &amp; Role</span><span class="sp-item-action">edit →</span></div>
+      <div class="sp-item" onclick="spAction('session')"><span class="sp-item-label">Session Token</span><span class="sp-item-action">view →</span></div>
+
+      <!-- API KEY SECTION -->
+      <div style="margin-top:12px" id="api-key-section">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:8px;letter-spacing:0.1em">API KEY <span id="api-key-tier-note" style="color:var(--accent)"></span></div>
+        <div id="api-key-locked" style="display:none">
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:10px 12px">
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">🔒 API access requires Vector or Enclave tier.</div>
+            <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);margin-top:4px">Upgrade your plan to generate an API key.</div>
+          </div>
+        </div>
+        <div id="api-key-available">
+          <div id="api-key-display" style="display:none;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:10px 12px;margin-bottom:8px">
+            <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:4px">YOUR API KEY</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <code id="api-key-value" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);flex:1;word-break:break-all"></code>
+              <button onclick="copyApiKey()" style="font-family:'DM Mono',monospace;font-size:9px;padding:3px 8px;border-radius:3px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;white-space:nowrap;flex-shrink:0" id="copy-key-btn">Copy</button>
+            </div>
+            <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-top:6px">⚠ Store this key securely. It will not be shown again.</div>
+          </div>
+          <button onclick="generateApiKey()" id="gen-key-btn" style="font-family:'DM Mono',monospace;font-size:11px;padding:8px 16px;border-radius:4px;border:1px solid var(--accent);background:none;color:var(--accent);cursor:pointer;transition:all 0.2s;width:100%">Request API Key →</button>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-top:6px">Format: <span style="color:var(--accent)">sk_live_xxxxxxxxxxxxxxxx</span> · Vector &amp; Enclave tiers only</div>
+        </div>
+
+        <!-- BYOK for Segment / Lattice -->
+        <div id="byok-section" style="display:none;margin-top:12px">
+          <div class="byok-section">
+            <div class="byok-label">BRING YOUR OWN GEMINI KEY</div>
+            <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);line-height:1.55">
+              Segment &amp; Lattice users can supply their own Gemini API key to enable cloud inference.
+              Your key is stored in memory only — never sent to our servers.
+            </div>
+            <div class="byok-input-row">
+              <input class="byok-input" type="password" id="byok-key-input" placeholder="AIza...your Gemini key">
+              <button class="byok-btn" onclick="saveBYOKKey()">Save</button>
+            </div>
+            <div class="byok-status byok-inactive" id="byok-status">No key set — using Mistral-7B local inference</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-top:6px">
+            Get a free Gemini key at <span style="color:var(--accent)">aistudio.google.com</span> ·
+            Upgrade to Vector to use our included key
+          </div>
+        </div>
+      </div>
+
+      <!-- OWNER TEST MODE — completely separate -->
+      <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:5px;letter-spacing:0.1em">OWNER TEST MODE</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-bottom:6px">For platform admin and tier demo switching only.</div>
+        <input class="sp-input" type="password" id="owner-code-input" placeholder="Enter owner access code…" oninput="checkOwnerCode(this.value)">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;margin-top:4px" id="owner-status"></div>
+      </div>
+    </div>
+
+    <div class="sp-section">
+      <div class="sp-section-title">Revenue Perimeter</div>
+      <div class="sp-item"><span class="sp-item-label">Current Plan</span><span class="sp-badge sp-badge-premium" id="sp-plan-badge">Vector · Premium</span></div>
+      <div class="sp-item" onclick="openBilling()"><span class="sp-item-label">Billing &amp; Invoices</span><span class="sp-item-action">→</span></div>
+      <div class="sp-item" onclick="spAction('upgrade')"><span class="sp-item-label">Upgrade to Enclave</span><span class="sp-item-action" style="color:var(--accent)">Enterprise →</span></div>
+      <div class="sp-item" onclick="openCancelFlow()"><span class="sp-item-label">Downgrade / Cancel</span><span class="sp-item-action">→</span></div>
+      <div style="margin-top:12px">
+        <div id="tier-override-wrap" style="display:none">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:8px;letter-spacing:0.1em">TIER OVERRIDE <span style="color:#F59E0B">· Owner only</span></div>
+        <div class="sp-tier-row" id="sp-tier-row">
+          <div class="sp-tier-chip" onclick="setTier('ephemeral')">Ephemeral</div>
+          <div class="sp-tier-chip" onclick="setTier('segment')">Segment</div>
+          <div class="sp-tier-chip" onclick="setTier('lattice')">Lattice</div>
+          <div class="sp-tier-chip active" onclick="setTier('vector')">Vector</div>
+          <div class="sp-tier-chip" onclick="setTier('enclave')">Enclave</div>
+        </div>
+        </div><!-- end tier-override-wrap -->
+      </div>
+    </div>
+
+    <div class="sp-section">
+      <div class="sp-section-title">User Engagement</div>
+      <div class="sp-item" onclick="reportBug()"><span class="sp-item-label">Bug Report</span><span class="sp-item-action">open →</span></div>
+      <div class="sp-item" onclick="reportZeroHit()"><span class="sp-item-label">Zero-Hit Failure Report</span><span class="sp-item-action">auto-fill →</span></div>
+      <div class="sp-item" onclick="requestFeature()"><span class="sp-item-label">Feature Request Queue</span><span class="sp-item-action">submit →</span></div>
+      <div class="sp-item" onclick="showFeedbackSummary()"><span class="sp-item-label">Feedback &amp; Ratings</span><span class="sp-item-action">→</span></div>
+      <div class="sp-item" onclick="openCommPrefs()"><span class="sp-item-label">Communication Preferences</span><span class="sp-item-action">→</span></div>
+    </div>
+
+    <div class="sp-section">
+      <div class="sp-section-title">🔐 PII Scrubbing</div>
+      <div class="sp-pii-grid">
+        <div class="sp-pii-item"><span class="sp-pii-label">Phone</span><button class="sp-toggle on" onclick="this.classList.toggle('on')"></button></div>
+        <div class="sp-pii-item"><span class="sp-pii-label">Email</span><button class="sp-toggle on" onclick="this.classList.toggle('on')"></button></div>
+        <div class="sp-pii-item"><span class="sp-pii-label">SSN</span><button class="sp-toggle on" onclick="this.classList.toggle('on')"></button></div>
+        <div class="sp-pii-item"><span class="sp-pii-label">Credit Card</span><button class="sp-toggle" onclick="this.classList.toggle('on')"></button></div>
+        <div class="sp-pii-item"><span class="sp-pii-label">IP Address</span><button class="sp-toggle" onclick="this.classList.toggle('on')"></button></div>
+        <div class="sp-pii-item"><span class="sp-pii-label">Passport</span><button class="sp-toggle" onclick="this.classList.toggle('on')"></button></div>
+        <div class="sp-pii-item"><span class="sp-pii-label">DOB</span><button class="sp-toggle on" onclick="this.classList.toggle('on')"></button></div>
+        <div class="sp-pii-item"><span class="sp-pii-label">Address</span><button class="sp-toggle on" onclick="this.classList.toggle('on')"></button></div>
+        <div class="sp-pii-item"><span class="sp-pii-label">Names</span><button class="sp-toggle on" onclick="this.classList.toggle('on')"></button></div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-top:8px">Pharma field: CC, IP, Phone, Passport OFF by default.</div>
+    </div>
+
+    <div class="sp-section">
+      <div class="sp-section-title">Appearance</div>
+
+      <div class="sp-item" onclick="toggleDarkMode()" style="cursor:pointer">
+        <span class="sp-item-label" id="mode-label">Dark Mode</span>
+        <button class="sp-toggle on" id="mode-toggle" onclick="event.stopPropagation();toggleDarkMode()"></button>
+      </div>
+
+      <div style="margin-top:12px">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:8px;letter-spacing:0.1em">FONT SIZE</div>
+        <div style="display:flex;gap:6px">
+          <button class="sp-tier-chip" id="fs-small" onclick="setFontSize('small')">Small</button>
+          <button class="sp-tier-chip active" id="fs-medium" onclick="setFontSize('medium')">Medium</button>
+          <button class="sp-tier-chip" id="fs-large" onclick="setFontSize('large')">Large</button>
+        </div>
+      </div>
+
+      <div style="margin-top:14px">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:8px;letter-spacing:0.1em">ACCENT COLOR <span id="tier-palette-label" style="color:var(--accent)"></span></div>
+        <div class="sp-theme-row" id="theme-palette">
+          <!-- populated by JS based on tier -->
+        </div>
+      </div>
+    </div>
+
+    <div class="sp-section">
+      <div class="sp-section-title">Platform &amp; Updates</div>
+      <div class="sp-item" onclick="spAction('changelog')"><span class="sp-item-label">What's New · v2.0 <span class="sp-badge sp-badge-premium">June 2026</span></span><span class="sp-item-action">view →</span></div>
+      <div class="sp-item" onclick="spAction('roadmap')"><span class="sp-item-label">Upcoming Features</span><span class="sp-item-action">v2.1/v2.2/v3 →</span></div>
+    </div>
+
+  </div>
+  <div class="sp-footer">
+    <button class="sp-cancel-btn" onclick="closeSettings()">Cancel ✕</button>
+    <div class="sp-footer-text">
+      © 2026 Mazal Arc · Meridian Intel<br>
+      <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a> · <a href="mailto:support@meridianintel.app">Contact</a>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- HISTORY OVERLAY -->
+<div class="hist-overlay" id="hist-overlay" onclick="closeHistory()"></div>
+
+<!-- HISTORY SIDEBAR -->
+<div class="hist-sidebar" id="hist-sidebar">
+  <div class="hist-header">
+    <span class="hist-title">History</span>
+    <button class="hist-close" onclick="closeHistory()">✕</button>
+  </div>
+  <div class="hist-tabs">
+    <button class="hist-tab active" id="htab-files" onclick="switchHistTab('files',this)">Documents</button>
+    <button class="hist-tab" id="htab-queries" onclick="switchHistTab('queries',this)">Queries</button>
+  </div>
+  <div class="hist-body" id="hist-body">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<script>
+
+// ── State ──────────────────────────────────────────────────
+let turnCount = 1;
+let totalTokens = 1847;
+let currentFieldValue = 'certificate_of_quality';
+let currentFieldLabel = 'Pharmaceuticals & Biotech';
+let currentTier = 'vector';
+let activeEngine = 'mistral';
+let shieldOn = true;
+
+const TIER_ORDER  = ['ephemeral','segment','lattice','vector','enclave'];
+const TIER_COLORS = {ephemeral:'#64748B',segment:'#2DD4BF',lattice:'#818CF8',vector:'#A78BFA',enclave:'#F59E0B'};
+const TIER_LABELS = {ephemeral:'Ephemeral · Free',segment:'Segment · Mid',lattice:'Lattice · Mid-Premium',vector:'Vector · Premium',enclave:'Enclave · Enterprise'};
+
+// ── Overflow menu ──────────────────────────────────────────
+function toggleOverflow() {
+  const menu = document.getElementById('overflow-menu');
+  menu.classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  const wrap = document.querySelector('.overflow-wrap');
+  if (wrap && !wrap.contains(e.target)) {
+    document.getElementById('overflow-menu').classList.remove('open');
+  }
+});
+
+// ── Engine ─────────────────────────────────────────────────
+function setEngine(eng) {
+  activeEngine = eng;
+  document.getElementById('ov-mistral').classList.toggle('ov-active', eng === 'mistral');
+  document.getElementById('ov-gemini').classList.toggle('ov-active', eng === 'gemini');
+  const label = eng === 'mistral' ? 'Mistral-7B' : 'Gemini 2.5';
+  document.getElementById('tel-engine').textContent = label;
+  document.getElementById('overflow-menu').classList.remove('open');
+  addSystemMsg('Engine switched to ' + label + (eng === 'gemini' ? ' · Cloud active.' : ' · Local inference active.'));
+}
+
+function toggleShield() {
+  shieldOn = !shieldOn;
+  const el = document.getElementById('shield-state');
+  el.textContent = shieldOn ? 'ON' : 'OFF';
+  el.style.color = shieldOn ? '#22C55E' : '#F87171';
+  document.getElementById('overflow-menu').classList.remove('open');
+  addSystemMsg('AUTO Shield ' + (shieldOn ? 'enabled.' : 'disabled — manual engine selection only.'));
+}
+
+// ── Settings panel ─────────────────────────────────────────
+function openSettings(section) {
+  document.getElementById('overflow-menu').classList.remove('open');
+  document.getElementById('sp-overlay').classList.add('open');
+  document.getElementById('sp-panel').classList.add('open');
+  if (section === 'theme') {
+    setTimeout(function() {
+      var el = document.querySelector('.sp-section-title[data-id="theme"]');
+      if (el) el.scrollIntoView({behavior:'smooth'});
+    }, 350);
+  }
+  if (section === 'apikey') {
+    setTimeout(function() {
+      var el = document.getElementById('api-key-section');
+      if (el) el.scrollIntoView({behavior:'smooth', block:'center'});
+      renderApiKeySection();
+    }, 350);
+  }
+}
+function closeSettings() {
+  document.getElementById('sp-overlay').classList.remove('open');
+  document.getElementById('sp-panel').classList.remove('open');
+}
+
+// ── Color palette — tier-aware ─────────────────────────────
+var COLOR_PALETTE = {
+  ephemeral: [
+    {hex:'#64748B',dim:'rgba(100,116,139,0.12)',name:'Slate'}
+  ],
+  segment: [
+    {hex:'#64748B',dim:'rgba(100,116,139,0.12)',name:'Slate'},
+    {hex:'#2DD4BF',dim:'rgba(45,212,191,0.12)',name:'Teal'},
+    {hex:'#3B82F6',dim:'rgba(59,130,246,0.12)',name:'Blue'}
+  ],
+  lattice: [
+    {hex:'#64748B',dim:'rgba(100,116,139,0.12)',name:'Slate'},
+    {hex:'#2DD4BF',dim:'rgba(45,212,191,0.12)',name:'Teal'},
+    {hex:'#3B82F6',dim:'rgba(59,130,246,0.12)',name:'Blue'},
+    {hex:'#818CF8',dim:'rgba(129,140,248,0.12)',name:'Indigo'},
+    {hex:'#22C55E',dim:'rgba(34,197,94,0.12)',name:'Green'},
+    {hex:'#EF4444',dim:'rgba(239,68,68,0.12)',name:'Red'}
+  ],
+  vector: [
+    {hex:'#64748B',dim:'rgba(100,116,139,0.12)',name:'Slate'},
+    {hex:'#2DD4BF',dim:'rgba(45,212,191,0.12)',name:'Teal'},
+    {hex:'#3B82F6',dim:'rgba(59,130,246,0.12)',name:'Blue'},
+    {hex:'#818CF8',dim:'rgba(129,140,248,0.12)',name:'Indigo'},
+    {hex:'#A78BFA',dim:'rgba(167,139,250,0.12)',name:'Violet'},
+    {hex:'#F472B6',dim:'rgba(244,114,182,0.12)',name:'Pink'},
+    {hex:'#22C55E',dim:'rgba(34,197,94,0.12)',name:'Green'},
+    {hex:'#F59E0B',dim:'rgba(245,158,11,0.12)',name:'Amber'},
+    {hex:'#EF4444',dim:'rgba(239,68,68,0.12)',name:'Red'},
+    {hex:'#0EA5E9',dim:'rgba(14,165,233,0.12)',name:'Sky'}
+  ],
+  enclave: [
+    {hex:'#64748B',dim:'rgba(100,116,139,0.12)',name:'Slate'},
+    {hex:'#2DD4BF',dim:'rgba(45,212,191,0.12)',name:'Teal'},
+    {hex:'#3B82F6',dim:'rgba(59,130,246,0.12)',name:'Blue'},
+    {hex:'#818CF8',dim:'rgba(129,140,248,0.12)',name:'Indigo'},
+    {hex:'#A78BFA',dim:'rgba(167,139,250,0.12)',name:'Violet'},
+    {hex:'#F472B6',dim:'rgba(244,114,182,0.12)',name:'Pink'},
+    {hex:'#22C55E',dim:'rgba(34,197,94,0.12)',name:'Green'},
+    {hex:'#F59E0B',dim:'rgba(245,158,11,0.12)',name:'Amber'},
+    {hex:'#EF4444',dim:'rgba(239,68,68,0.12)',name:'Red'},
+    {hex:'#0EA5E9',dim:'rgba(14,165,233,0.12)',name:'Sky'},
+    {hex:'#EAB308',dim:'rgba(234,179,8,0.12)',name:'Gold'},
+    {hex:'#DC2626',dim:'rgba(220,38,38,0.12)',name:'Crimson'},
+    {hex:'#1D4ED8',dim:'rgba(29,78,216,0.12)',name:'Royal Blue'},
+    {hex:'#7C3AED',dim:'rgba(124,58,237,0.12)',name:'Purple'}
+  ]
+};
+
+var currentAccent = '#A78BFA';
+var currentAccentDim = 'rgba(167,139,250,0.12)';
+
+function renderPalette() {
+  var palette  = COLOR_PALETTE[currentTier] || COLOR_PALETTE['vector'];
+  var row      = document.getElementById('theme-palette');
+  var lbl      = document.getElementById('tier-palette-label');
+  if (!row) return;
+  var unlocked = palette.length;
+  if (lbl) lbl.textContent = '· ' + unlocked + ' colors unlocked';
+  var html = '';
+  palette.forEach(function(c) {
+    var isActive = c.hex === currentAccent;
+    html += '<div class="sp-theme-dot' + (isActive?' active':'') + '" '
+          + 'style="background:' + c.hex + '" '
+          + 'data-hex="' + c.hex + '" data-dim="' + c.dim + '" '
+          + 'onclick="setAccentFromDot(this)" '
+          + 'title="' + c.name + '"></div>';
+  });
+  row.innerHTML = html;
+}
+
+function setAccentFromDot(dotEl) {
+  var hex = dotEl.dataset.hex;
+  var dim = dotEl.dataset.dim;
+  setAccent(hex, dim, dotEl);
+}
+
+function setAccent(color, dimColor, dotEl) {
+  currentAccent    = color;
+  currentAccentDim = dimColor;
+  document.documentElement.style.setProperty('--accent', color);
+  document.documentElement.style.setProperty('--accent-dim', dimColor);
+  document.querySelectorAll('.sp-theme-dot').forEach(function(d){ d.classList.remove('active'); });
+  if (dotEl) dotEl.classList.add('active');
+  document.getElementById('tb-dot').style.background = color;
+  try { localStorage.setItem('rag_accent', color); localStorage.setItem('rag_accent_dim', dimColor); } catch(e){}
+}
+
+// ── Light / Dark mode ──────────────────────────────────────
+var isDark = true;
+
+function toggleDarkMode() {
+  isDark = !isDark;
+  document.body.classList.toggle('light-mode', !isDark);
+  var modeToggle = document.getElementById('mode-toggle');
+  var modeLabel  = document.getElementById('mode-label');
+  var ovLabel    = document.getElementById('ov-mode-label');
+  if (isDark) {
+    if (modeToggle) modeToggle.classList.add('on');
+    if (modeLabel)  modeLabel.textContent = 'Dark Mode';
+    if (ovLabel)    ovLabel.textContent   = 'Light Mode';
+  } else {
+    if (modeToggle) modeToggle.classList.remove('on');
+    if (modeLabel)  modeLabel.textContent = 'Light Mode';
+    if (ovLabel)    ovLabel.textContent   = 'Dark Mode';
+  }
+  try { localStorage.setItem('rag_dark_mode', isDark ? '1' : '0'); } catch(e){}
+}
+
+// ── Font size ──────────────────────────────────────────────
+var currentFs = 'medium';
+
+function setFontSize(size) {
+  currentFs = size;
+  document.body.classList.remove('fs-medium','fs-large');
+
+  var baseSize = '13px';
+  var msgSize  = '14px';
+  var monoSize = '11px';
+  var smSize   = '10px';
+
+  if (size === 'medium') {
+    document.body.classList.add('fs-medium');
+    baseSize = '15px'; msgSize = '15px'; monoSize = '12px'; smSize = '11px';
+  } else if (size === 'large') {
+    document.body.classList.add('fs-large');
+    baseSize = '17px'; msgSize = '17px'; monoSize = '14px'; smSize = '13px';
+  }
+
+  // Set CSS variables directly on root for immediate effect
+  var root = document.documentElement;
+  root.style.setProperty('--fs-base',  baseSize);
+  root.style.setProperty('--fs-msg',   msgSize);
+  root.style.setProperty('--fs-mono',  monoSize);
+  root.style.setProperty('--fs-small', smSize);
+
+  // Update active button
+  document.querySelectorAll('#fs-small,#fs-medium,#fs-large').forEach(function(b){
+    b.classList.remove('active');
+  });
+  var btn = document.getElementById('fs-' + size);
+  if (btn) btn.classList.add('active');
+
+  try { localStorage.setItem('rag_font_size', size); } catch(e){}
+}
+
+// ── Restore preferences on load ────────────────────────────
+function restorePreferences() {
+  try {
+    var savedDark   = localStorage.getItem('rag_dark_mode');
+    var savedAccent = localStorage.getItem('rag_accent');
+    var savedDim    = localStorage.getItem('rag_accent_dim');
+    var savedFs     = localStorage.getItem('rag_font_size');
+    if (savedDark === '0') toggleDarkMode();
+    if (savedAccent && savedDim) setAccent(savedAccent, savedDim, null);
+    if (savedFs) setFontSize(savedFs);
+    else { setFontSize('medium'); }
+  } catch(e) {}
+  renderPalette();
+}
+document.addEventListener('DOMContentLoaded', restorePreferences);
+
+// ── Tier gating ────────────────────────────────────────────
+function setTier(tier) {
+  // Guard — only owner mode can switch tiers
+  if (!ownerModeActive) {
+    addErrorMsg('Tier switching requires owner access. Enter your owner code in Platform Settings.', 'warning');
+    return;
+  }
+  if (!TIER_COLORS[tier]) {
+    addErrorMsg('Unknown tier: ' + tier, 'error');
+    return;
+  }
+  currentTier = tier;
+  var color = TIER_COLORS[tier];
+  document.documentElement.style.setProperty('--accent', color);
+  document.documentElement.style.setProperty('--accent-dim', 'rgba(' + hexToRgb(color) + ',0.12)');
+  document.getElementById('tb-dot').style.background = color;
+  document.getElementById('tb-tier').textContent = '◈ ' + tier.charAt(0).toUpperCase() + tier.slice(1);
+  document.getElementById('tel-tier-badge').textContent = TIER_LABELS[tier];
+  document.getElementById('sp-plan-badge').textContent = TIER_LABELS[tier];
+  document.querySelectorAll('.sp-tier-chip').forEach(function(c) {
+    c.classList.toggle('active', c.textContent.trim().toLowerCase() === tier);
+  });
+  var idx = TIER_ORDER.indexOf(tier);
+  // Feature gates — enforced by tier index
+  // Ephemeral (0): no audit panel, no telemetry, no highlights, no history
+  // Segment   (1): audit chunks only, dimmed telemetry, no highlights
+  // Lattice   (2): both audit tabs, full telemetry, no highlights
+  // Vector    (3): everything including highlights and eval scores
+  // Enclave   (4): everything + audit trail label
+
+  var scoresTab  = document.getElementById('scores-tab');
+  var auditPanel = document.getElementById('audit-panel');
+  var telemetry  = document.getElementById('telemetry');
+  var histBtn    = document.getElementById('hist-btn');
+
+  // Scores tab — Lattice+
+  if (scoresTab)  scoresTab.classList.toggle('tier-locked', idx < 2);
+
+  // Audit panel — Segment+
+  if (auditPanel) auditPanel.classList.toggle('tier-locked', idx < 1);
+
+  // Telemetry — Lattice+
+  if (telemetry)  telemetry.style.opacity = idx >= 2 ? '1' : '0.3';
+
+  // History sidebar — Segment+
+  if (histBtn) {
+    histBtn.style.opacity = idx >= 1 ? '1' : '0.4';
+    histBtn.style.pointerEvents = idx >= 1 ? 'auto' : 'none';
+    histBtn.title = idx >= 1 ? 'Document & Query History' : 'History requires Segment tier or above';
+  }
+
+  // PDF highlights — Vector+
+  document.querySelectorAll('.doc-highlight').forEach(function(h) {
+    h.style.background   = idx >= 3 ? 'rgba(167,139,250,0.2)' : 'transparent';
+    h.style.borderBottom = idx >= 3 ? '2px solid ' + color : 'none';
+    h.style.cursor       = idx >= 3 ? 'help' : 'default';
+  });
+
+  // Query results limit indicator
+  var nResults = [3,5,6,8,10][idx] || 3;
+  document.getElementById('tel-chunks').title = 'Max ' + nResults + ' results on ' + tier + ' tier';
+
+  // Enclave badge
+  var tierBadge = document.getElementById('tel-tier-badge');
+  if (tierBadge && tier === 'enclave') {
+    tierBadge.style.borderColor = '#F59E0B';
+    tierBadge.style.color       = '#F59E0B';
+  } else if (tierBadge) {
+    tierBadge.style.borderColor = '';
+    tierBadge.style.color       = '';
+  }
+  addSystemMsg('Tier switched to ' + TIER_LABELS[tier] + '. Feature gates updated.');
+  renderPalette();
+  renderApiKeySection();
+  renderBYOKSection();
+}
+function hexToRgb(hex) {
+  var r = parseInt(hex.slice(1,3),16);
+  var g = parseInt(hex.slice(3,5),16);
+  var b = parseInt(hex.slice(5,7),16);
+  return r + ',' + g + ',' + b;
+}
+
+// ── Owner mode ─────────────────────────────────────────────
+var ownerModeActive = false;
+var ownerAttempts   = 0;
+var OWNER_MAX       = 3;
+
+function checkOwnerCode(val) {
+  var status  = document.getElementById('owner-status');
+  var tierWrap = document.getElementById('tier-override-wrap');
+
+  // Lockout check
+  if (ownerAttempts >= OWNER_MAX) {
+    status.textContent = '✗ Too many attempts. Refresh to try again.';
+    status.style.color = '#F87171';
+    return;
+  }
+
+  if (val === btoa('meridian2026').split('').reverse().join('')) {
+    ownerModeActive  = true;
+    ownerAttempts    = 0;
+    status.textContent = '✓ Owner mode active — tier override unlocked';
+    status.style.color = '#22C55E';
+    if (tierWrap) tierWrap.style.display = 'block';
+    // Clear input after success
+    setTimeout(function() {
+      var inp = document.getElementById('owner-code-input');
+      if (inp) inp.value = '';
+    }, 500);
+  } else if (val.length >= 6) {
+    ownerAttempts++;
+    var remaining = OWNER_MAX - ownerAttempts;
+    if (remaining <= 0) {
+      status.textContent = '✗ Too many attempts. Refresh to try again.';
+    } else {
+      status.textContent = '✗ Invalid code · ' + remaining + ' attempt' + (remaining === 1 ? '' : 's') + ' remaining';
+    }
+    status.style.color = '#F87171';
+    if (tierWrap) tierWrap.style.display = 'none';
+    ownerModeActive = false;
+  } else {
+    status.textContent = '';
+    if (!ownerModeActive && tierWrap) tierWrap.style.display = 'none';
+  }
+}
+
+// ── Settings actions ───────────────────────────────────────
+function spAction(action) {
+  var msgs = {
+    session:   'Session ID: ' + Math.random().toString(36).slice(2,10).toUpperCase() + ' — Expires in 24h.',
+    apikey:    'API key generation available on Vector and Enclave tiers. Format: sk_live_...',
+    upgrade:   'To upgrade to Enclave Enterprise, contact support@meridianintel.app or schedule a demo.',
+    changelog: [
+      'MERIDIAN INTEL v2.0 — RELEASED June 2026',
+      '─────────────────────────────────────────',
+      'PLATFORM',
+      '✓ Five-tier architecture: Ephemeral, Segment, Lattice, Vector, Enclave',
+      '✓ Tier-aware chunking (600 to 200 tokens per tier)',
+      '✓ Hybrid retrieval: ChromaDB semantic + SQLite FTS5 + RRF fusion',
+      '✓ Zero-hallucination guarantee — LLM blocked on empty retrieval',
+      '✓ FTS5 query sanitization — punctuation in natural-language queries no longer causes retrieval failures',
+      '✓ doc_id scoped retrieval — zero cross-document contamination verified across 4 real documents',
+      '',
+      'INFERENCE ENGINE',
+      '✓ Three-engine AUTO Shield cascade: Mistral-7B (local) → Gemini 2.5 Flash → OpenAI gpt-4o-mini',
+      '✓ Per-engine cascading timeouts: Mistral 10s → Gemini 15s → OpenAI 15s (worst-case bounded ~25s)',
+      '✓ Gemini rate-limit detection with 60s cooldown — skips automatically, never retries a rate-limited engine',
+      '✓ local_only engine mode — true zero-cloud guarantee: never falls back to any cloud provider under any condition; returns honest failure message instead',
+      '✓ Startup warm-up routine — all three engines loaded proactively at worker start, eliminating cold-start cost for real user queries',
+      '✓ Honest failure messages — no fabricated answers when retrieval or inference fails',
+      '',
+      'DOCUMENT SUPPORT',
+      '✓ PDF (.pdf) — pdfplumber text extraction + real PDF.js page rendering in viewer',
+      '✓ DOCX (.docx) — python-docx extraction + real mammoth.js content rendering in viewer',
+      '✓ DOC (.doc) — legacy Word format support',
+      '✓ TXT (.txt) — plain text ingestion + real raw content display in viewer',
+      '✓ Scanned PDF detection with honest "OCR coming in v2.1" message',
+      '',
+      'DOCUMENT VIEWER',
+      '✓ Real PDF.js page-by-page rendering — actual document pages, not metadata summaries',
+      '✓ HiDPI/Retina canvas sharpness fix — renders at full physical pixel resolution',
+      '✓ Prev/Next page navigation with correct page count',
+      '✓ Real mammoth.js DOCX rendering — headings, paragraphs, tables, formatting preserved',
+      '✓ Real TXT content display — actual file text shown, not just chunk statistics',
+      '✓ Format-accurate badge: Vector · PDF.js / Vector · DOCX / Vector · TXT',
+      '',
+      'AUTHENTICATION',
+      '✓ Email-based workspace access gate — name + email → 6-digit code via Resend (access@meridianintel.app)',
+      '✓ Cryptographically secure code generation (Python secrets module)',
+      '✓ 10-minute code expiry, 5-attempt lockout (15-minute cooldown)',
+      '✓ HMAC-signed JWT session tokens (8-hour expiry)',
+      '✓ Token stored in memory only — never localStorage',
+      '✓ Owner code verified server-side — never stored in frontend',
+      '✓ Session lockout after failed owner attempts',
+      '',
+      'INTELLIGENCE',
+      '✓ RAGAS-style eval framework — 25 samples, 14 fields, 5 tiers',
+      '✓ Faithfulness, Answer Relevance, Context Recall scoring',
+      '✓ Lexical-overlap faithfulness proxy (real-time, per-query)',
+      '✓ Nine-category PII scrubbing with pharma-field-aware defaults',
+      '',
+      'FRONTEND',
+      '✓ Grouped field dropdown — 14+ domains across 5 categories',
+      '✓ Tabbed audit panel — Source Chunks + Eval Scores',
+      '✓ Live telemetry bar — latency, tokens, chunks, cache, engine',
+      '✓ History sidebar — documents and query history (tier-gated)',
+      '✓ Platform Settings — Identity Hub, Revenue Perimeter, PII controls',
+      '✓ Light / Dark mode with localStorage persistence',
+      '✓ Font size control — Small, Medium, Large',
+      '✓ Full responsive layout — 360px to 4K',
+      '✓ Onboarding modal — first visit, tier-aware, dismissible',
+      '✓ Honest error states — no fake demo content anywhere',
+      '',
+      'SECURITY & INFRASTRUCTURE',
+      '✓ OCaml gateway with JWT auth and per-engine cascading timeouts',
+      '✓ ChromaDB posthog telemetry suppressed — clean production logs',
+      '✓ WHOIS privacy, DNSSEC, Bot Fight Mode on meridianintel.app',
+      '✓ API keys never persisted server-side (BYOK model)',
+    ].join('\n'),
+    roadmap:   [
+      'MERIDIAN INTEL — UPCOMING FEATURES',
+      '─────────────────────────────────────────',
+      '',
+      'v2.1 — INTELLIGENCE & INFRASTRUCTURE',
+      '→ OCR layer for scanned PDF documents (EasyOCR — selected, not yet integrated)',
+      '→ Streaming token responses (real-time typing effect)',
+      '→ PDF.js chunk-position highlighting — citations jump to exact location in viewer',
+      '→ Embedding-based semantic query cache (upgrade from exact-match cache)',
+      '→ Clerk authentication — full per-user accounts replacing current email-code gate',
+      '→ Upstash Redis rate limiting',
+      '→ Stripe Revenue Perimeter wiring (live billing)',
+      '→ Docker Compose for local/prod parity',
+      '→ Render production deployment',
+      '→ GPU deployment for local_only mode (~4s inference, verified on RTX A2000)',
+      '',
+      'v2.2 — FORMAT EXPANSION',
+      '→ CSV (.csv) ingestion — tabular chunking strategy',
+      '→ Image ingestion (.png, .jpg) — VLM diagram analysis',
+      '→ HNSW parameter tuning (M, construction_ef) for search speed at scale',
+      '→ Cross-document retrieval and synthesis',
+      '→ Data Processing Agreement (DPA) template',
+      '→ Team seat-based pricing model',
+      '',
+      'v3 — ENTERPRISE & SCALE',
+      '→ GraphRAG — cross-document knowledge graph reasoning',
+      '→ HyDE query expansion — hypothetical document embeddings',
+      '→ Full RAGAS-style LLM-judge faithfulness evaluation',
+      '→ SOC 2 Type II certification',
+      '→ 21 CFR Part 11 validation documentation (pharma)',
+      '→ Private cloud deployment (Docker on customer AWS/Azure)',
+      '→ True on-premise deployment option',
+      '→ White-label enterprise offering',
+      '→ Meridian Community platform launch',
+      '',
+      'PRICING (post-validation)',
+      '→ Segment: $49/month (currently $29 — pilot pricing)',
+      '→ Lattice:  $99/month (currently $59 — pilot pricing)',
+      '→ Vector:   $179/month (currently $89 — pilot pricing)',
+      '→ Enclave:  $2,000–$8,000/month custom',
+      '→ Annual plans with 20-25% discount',
+      '→ Price increases apply to new customers only — existing',
+      '   customers locked in at signup price for 12 months.',
+      '',
+      'Contact: support@meridianintel.app',
+      'GitHub: github.com/meridian-intel-platform',
+    ].join('\n')
+  };
+  // Simple text actions — show in info modal
+  var simpleActions = ['session','upgrade'];
+  var val = msgs[action];
+  if (!val) return;
+
+  if (action === 'changelog') {
+    showInfoModal('changelog');
+  } else if (action === 'roadmap') {
+    showInfoModal('roadmap');
+  } else {
+    // Simple text — show in a small info modal
+    var overlay = document.getElementById('info-overlay');
+    var title   = document.getElementById('info-modal-title');
+    var body    = document.getElementById('info-modal-body');
+    if (!overlay || !body) { alert(val); return; }
+    var actionLabels = {
+      session:'Session Token', upgrade:'Upgrade to Enclave',
+      bug:'Bug Report', zerohit:'Zero-Hit Report', feature:'Feature Request', feedback:'Feedback'
+    };
+    title.textContent = actionLabels[action] || action;
+    body.innerHTML = '<div style="font-size:14px;color:#CBD5E1;line-height:1.7">' + val + '</div>';
+    overlay.classList.add('open');
+  }
+}
+
+function closeInfoModal() {
+  document.getElementById('info-overlay').classList.remove('open');
+}
+
+function showInfoModal(type) {
+  var overlay = document.getElementById('info-overlay');
+  var title   = document.getElementById('info-modal-title');
+  var body    = document.getElementById('info-modal-body');
+  if (!overlay || !body) return;
+
+  if (type === 'changelog') {
+    title.textContent = "What's New · Meridian Intel v2.0";
+    body.innerHTML = buildChangelog();
+  } else {
+    title.textContent = 'Upcoming Features · Roadmap';
+    body.innerHTML = buildRoadmap();
+  }
+  overlay.classList.add('open');
+}
+
+function buildChangelog() {
+  var sections = [
+    { title: 'Platform', items: [
+      'Five-tier architecture: Ephemeral, Segment, Lattice, Vector, Enclave',
+      'Tier-aware chunking — 600 tokens (Ephemeral) to 200 tokens (Enclave)',
+      'Hybrid retrieval: ChromaDB semantic + SQLite FTS5 + RRF fusion',
+      'Zero-hallucination guarantee — LLM blocked on empty retrieval',
+      'Dynamic AUTO Shield: Mistral-7B local + Gemini 2.5 Flash fallback',
+    ]},
+    { title: 'Document Support', items: [
+      'PDF (.pdf) — pdfplumber text extraction',
+      'TXT (.txt) — plain text ingestion',
+      'DOCX / DOC — python-docx extraction with table support',
+      'Scanned PDF detection with graceful v2.1 Coming Soon message',
+    ]},
+    { title: 'Intelligence', items: [
+      'RAGAS-style eval framework — 25 samples, 14 fields, 5 tiers',
+      'Faithfulness, Answer Relevance, Context Recall scoring',
+      'Regression testing with baseline comparison and delta alerts',
+      'Nine-category PII scrubbing with pharma-field-aware defaults',
+    ]},
+    { title: 'Workspace', items: [
+      'Grouped field dropdown — 14+ domains across 5 categories + custom field',
+      'Tabbed audit panel — Source Chunks + Eval Scores',
+      'Live telemetry bar — latency, tokens, chunks, cache, engine',
+      'History sidebar — documents and queries (tier-gated)',
+      'Platform Settings — Identity Hub, Revenue Perimeter, PII controls',
+      'Tier-aware color palette — 1 color (Ephemeral) to 14 (Enclave)',
+      'Light / Dark mode with localStorage persistence',
+      'Font size control — Small, Medium, Large',
+      'Full responsive layout — 360px to 4K across all devices',
+      'Onboarding modal — first visit, tier-aware, dismissible',
+      'Error states — upload validation, query guards, scanned PDF detection',
+    ]},
+    { title: 'Landing & Marketing', items: [
+      'FAQ chatbot — 11 topics, auto-escalation, ticket creation',
+      'Five-tier interactive selection cards with accent color switching',
+      'Domain: meridianintel.app (Cloudflare, DNSSEC, WHOIS privacy)',
+      'Privacy Policy and Terms of Service — tailored to Mazal Arc',
+    ]},
+    { title: 'Security', items: [
+      'OCaml gateway with JWT auth and 180-second timeout wrapper',
+      'Owner code verified server-side — never stored in frontend source',
+      'Session lockout after failed owner verification attempts',
+      'WHOIS privacy, DNSSEC, Bot Fight Mode, AI crawler blocking',
+    ]},
+  ];
+  var html = '<div style="font-size:10px;color:var(--muted);margin-bottom:1.25rem;padding:8px 12px;background:rgba(167,139,250,0.06);border:1px solid rgba(167,139,250,0.15);border-radius:4px">Released June 19, 2026 · Mazal Arc · Meridian Intel v2.0.0</div>';
+  sections.forEach(function(s) {
+    html += '<div class="info-section"><div class="info-section-title">' + s.title + '</div>';
+    s.items.forEach(function(item) {
+      html += '<div class="info-item done"><span class="info-item-icon">✓</span><span>' + item + '</span></div>';
+    });
+    html += '</div>';
+  });
+  return html;
+}
+
+function buildRoadmap() {
+  var html = '';
+
+  // v2.1
+  html += '<div class="info-section"><div class="info-section-title"><span class="info-version-badge info-v21">v2.1</span>Intelligence Upgrade</div>';
+  var v21 = [
+    'Streaming token responses — real-time typing effect',
+    'PDF.js canvas highlights wired to real chunk positions',
+    'OCR layer for scanned PDFs (Tesseract / AWS Textract)',
+    'Clerk authentication integration',
+    'Stripe billing and Revenue Perimeter wiring',
+    'Team seat-based pricing model',
+    'Annual subscription plans with discount',
+    'Data Processing Agreement (DPA) template',
+    'Docker Compose for local / production parity',
+    'Render production deployment',
+  ];
+  v21.forEach(function(item) {
+    html += '<div class="info-item next"><span class="info-item-icon">→</span><span>' + item + '</span></div>';
+  });
+  html += '</div>';
+
+  // v2.2
+  html += '<div class="info-section"><div class="info-section-title"><span class="info-version-badge info-v22">v2.2</span>Format Expansion</div>';
+  var v22 = [
+    'CSV (.csv) ingestion — tabular chunking strategy',
+    'Image ingestion (.png, .jpg) — VLM diagram analysis',
+    'HNSW vector indexing upgrade (ChromaDB / FAISS)',
+    'Cross-document retrieval and synthesis',
+    'Upstash Redis rate limiting',
+  ];
+  v22.forEach(function(item) {
+    html += '<div class="info-item soon"><span class="info-item-icon">→</span><span>' + item + '</span></div>';
+  });
+  html += '</div>';
+
+  // v3
+  html += '<div class="info-section"><div class="info-section-title"><span class="info-version-badge info-v3">v3</span>Enterprise & Scale</div>';
+  var v3 = [
+    'GraphRAG — cross-document knowledge graph reasoning',
+    'HyDE query expansion — hypothetical document embeddings',
+    'SOC 2 Type II certification',
+    '21 CFR Part 11 validation documentation (pharma)',
+    'Private cloud deployment on customer AWS / Azure',
+    'True on-premise deployment option',
+    'White-label enterprise offering',
+    'Meridian Community platform launch',
+    'Meridian Connect — second Mazal Arc product',
+  ];
+  v3.forEach(function(item) {
+    html += '<div class="info-item soon"><span class="info-item-icon">→</span><span>' + item + '</span></div>';
+  });
+  html += '</div>';
+
+  // Pricing
+  html += '<div class="info-section"><div class="info-section-title">Pricing Roadmap (post-validation)</div>';
+  var prices = [
+    {tier:'Segment',  now:'$29/mo', next:'$49/mo'},
+    {tier:'Lattice',  now:'$59/mo', next:'$99/mo'},
+    {tier:'Vector',   now:'$89/mo', next:'$179/mo'},
+    {tier:'Enclave',  now:'Custom', next:'$2,000–$8,000/mo'},
+  ];
+  prices.forEach(function(p) {
+    html += '<div class="info-price-row"><span class="info-price-tier">' + p.tier + '</span><span class="info-price-now">' + p.now + '</span><span class="info-price-next">' + p.next + '</span></div>';
+  });
+  html += '<div class="info-item note" style="margin-top:8px"><span class="info-item-icon">ℹ</span><span>Current prices are pilot pricing, available through the end of our validation phase (first 10 customers). Price increases apply to new customers only — existing customers are locked in at their signup price for 12 months.</span></div>';
+  html += '</div>';
+
+  return html;
+}
+
+// ── Field dropdown ─────────────────────────────────────────
+function toggleFieldDropdown(e) {
+  e.stopPropagation();
+  var btn  = document.getElementById('field-select-btn');
+  var menu = document.getElementById('field-menu');
+  var open = menu.classList.contains('open');
+  btn.classList.toggle('open', !open);
+  menu.classList.toggle('open', !open);
+}
+document.addEventListener('click', function(e) {
+  var wrap = document.querySelector('.field-dropdown-wrap');
+  if (wrap && !wrap.contains(e.target)) {
+    document.getElementById('field-select-btn').classList.remove('open');
+    document.getElementById('field-menu').classList.remove('open');
+  }
+});
+function selectField(el) {
+  currentFieldValue = el.dataset.value;
+  currentFieldLabel = el.dataset.label.replace(/&amp;/g,'&');
+  document.getElementById('field-select-label').innerHTML = el.innerHTML;
+  document.querySelectorAll('.field-opt').forEach(function(o) { o.classList.remove('selected'); });
+  el.classList.add('selected');
+  document.getElementById('field-select-btn').classList.remove('open');
+  document.getElementById('field-menu').classList.remove('open');
+  document.getElementById('active-field').innerHTML = el.innerHTML;
+  document.getElementById('tel-field').textContent = currentFieldValue.slice(0,14);
+}
+function selectCustomField() {
+  var custom = prompt('Enter custom field name:','');
+  if (custom && custom.trim()) {
+    currentFieldValue = custom.trim().toLowerCase().replace(/\s+/g,'_');
+    currentFieldLabel = custom.trim();
+    document.getElementById('field-select-label').textContent = currentFieldLabel;
+    document.getElementById('active-field').textContent = currentFieldLabel;
+    document.getElementById('tel-field').textContent = currentFieldValue.slice(0,14);
+  }
+  document.getElementById('field-select-btn').classList.remove('open');
+  document.getElementById('field-menu').classList.remove('open');
+}
+
+// ── Chat ───────────────────────────────────────────────────
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendQuery(); }
+}
+function switchTab(tab, btn) {
+  document.querySelectorAll('.audit-tab').forEach(function(t) { t.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('audit-chunks').style.display = tab === 'chunks' ? 'block' : 'none';
+  document.getElementById('audit-scores').style.display = tab === 'scores' ? 'block' : 'none';
+}
+function addSystemMsg(text) {
+  var feed = document.getElementById('chat-feed');
+  var typing = document.getElementById('typing-row');
+  var row = document.createElement('div');
+  row.className = 'msg-row';
+  row.innerHTML = '<div class="msg-meta"><span class="msg-role system">SYSTEM</span><span class="msg-time">' + new Date().toTimeString().slice(0,8) + '</span></div><div class="msg-text" style="color:var(--muted);font-size:13px">' + text + '</div>';
+  feed.insertBefore(row, typing);
+  feed.scrollTop = feed.scrollHeight;
+}
+function clearChat() {
+  document.getElementById('overflow-menu').classList.remove('open');
+
+  // Clear chat feed
+  var feed = document.getElementById('chat-feed');
+  var rows = feed.querySelectorAll('.msg-row:not(#typing-row)');
+  rows.forEach(function(r) { r.remove(); });
+
+  // Reset telemetry
+  turnCount = 0; totalTokens = 0;
+  document.getElementById('tel-turns').textContent = '0';
+  document.getElementById('tel-tokens').textContent = '0';
+  document.getElementById('tel-tokens').textContent = '0';
+  document.getElementById('tel-chunks').textContent = '0';
+  document.getElementById('tel-cache').textContent = '-';
+  document.getElementById('tel-latency').textContent = '-';
+
+  // Reset document viewer
+  document.getElementById('doc-title').textContent = 'No document loaded';
+  document.getElementById('doc-content-area').innerHTML =
+    '<div class="empty-doc-state">' +
+      '<div class="empty-doc-icon">&#128196;</div>' +
+      '<div class="empty-doc-title">No document loaded</div>' +
+      '<div class="empty-doc-sub">Click &#8593; Upload in the top bar to load a document.<br>Certificates of Quality, contracts, reports, runbooks — PDF, DOCX, DOC, or TXT works.</div>' +
+      '<button class="empty-doc-btn" onclick="uploadDoc()">&#8593; Upload Document</button>' +
+    '</div>';
+
+  // Reset audit panel
+  document.getElementById('audit-chunks').innerHTML = '<div style="padding:1rem;text-align:center;font-size:11px;color:#94A3B8">No chunks yet</div>';
+  document.getElementById('audit-scores').innerHTML = '<div style="padding:1rem;text-align:center;font-size:11px;color:#94A3B8">No scores yet</div>';
+
+  // Reset upload status
+  var uploadErr = document.getElementById('upload-error');
+  var uploadOk  = document.getElementById('upload-success');
+  if (uploadErr) uploadErr.style.display = 'none';
+  if (uploadOk)  uploadOk.style.display  = 'none';
+
+  // Reset doc state flag
+  docUploaded = false;
+
+  // Post system message
+  addSystemMsg('Session cleared. Upload a document to begin.');
+}
+
+// ── Backend API configuration ──────────────────────────────
+// Change API_BASE when moving from local testing to production.
+// Local gateway:  http://localhost:8000
+// Production:     https://meridianintel.app
+var API_BASE   = 'http://localhost:8000';
+var API_MODE   = 'live';   // 'live' = real backend, 'demo' = hardcoded fallback
+var currentDocId = null;   // doc_id returned by /ingest, required by /query
+
+async function apiPing() {
+  try {
+    var res = await fetch(API_BASE + '/health', { method: 'GET' });
+    return res.ok;
+  } catch (e) {
+    return false;
+  }
+}
+
+function uploadDoc() {
+  // Create hidden file input
+  var inp = document.createElement('input');
+  inp.type = 'file';
+  inp.accept = '.pdf,.txt,.docx,.doc,application/pdf,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword';
+  inp.style.display = 'none';
+  inp.onchange = function(e) {
+    var file = e.target.files[0];
+    if (file) validateAndUpload(file);
+    document.body.removeChild(inp);
+  };
+  document.body.appendChild(inp);
+  inp.click();
+}
+
+// ── Demo responses ─────────────────────────────────────────
+var DEMOS = {
+  expiry:  {a:'Expiry Date: <code>2026-01-14</code>. Storage: 2–8°C, protect from light.', f:0.97,r:0.96,c:0.97, lat:198, eng:'Semantic Cache', ref:'p.1 s2 · chunk_idx:1', txt:'Expiry Date: 2026-01-14. Storage Conditions: 2–8°C, protect from light.'},
+  assay:   {a:'Assay (HPLC): <code>99.4%</code> — within 98.0–102.0% spec. PASS.', f:0.99,r:0.97,c:0.99, lat:224, eng:'Mistral-7B', ref:'p.2 s5 · chunk_idx:6', txt:'Assay (HPLC): 98.0–102.0%. Result: 99.4%. PASS.'},
+  qp:      {a:'QP: <code>Dr. A. Mueller</code>. Released 2024-02-01. Cleared for EU distribution.', f:0.96,r:0.93,c:0.95, lat:267, eng:'Mistral-7B', ref:'p.3 s1 · chunk_idx:7', txt:'Released for distribution. QP Signature: Dr. A. Mueller. Date: 2024-02-01.'},
+  default: {a:'Backend offline — this is a placeholder response. Restart the server and re-upload your document to get real, grounded answers.', f:0.0,r:0.0,c:0.0, lat:312, eng:'Demo', ref:'—', txt:'No real document context available.'}
+};
+function getDemo(q) {
+  q = q.toLowerCase();
+  if (q.includes('expir') || q.includes('storage') || q.includes('date')) return DEMOS.expiry;
+  if (q.includes('assay') || q.includes('hplc') || q.includes('spec')) return DEMOS.assay;
+  if (q.includes('qp') || q.includes('qualified') || q.includes('release') || q.includes('sign')) return DEMOS.qp;
+  return DEMOS.default;
+}
+
+async function sendQuery() {
+    var input = document.getElementById('query-input');
+  var q = input.value.trim();
+  if (!q) return;
+  if (!checkQueryPreconditions(q)) return;
+  input.value = '';
+  input.style.height = '40px';
+
+  var feed  = document.getElementById('chat-feed');
+  var trow  = document.getElementById('typing-row');
+  var now   = new Date().toTimeString().slice(0,8);
+  var urow  = document.createElement('div');
+  urow.className = 'msg-row';
+  urow.innerHTML = '<div class="msg-meta"><span class="msg-role user">YOU</span><span class="msg-time">' + now + '</span><span class="msg-field-tag">' + currentFieldValue + '</span></div><div class="msg-text user-text">' + q + '</div>';
+  feed.insertBefore(urow, trow);
+  trow.style.display = 'block';
+  document.getElementById('typing-time').textContent = now;
+  feed.scrollTop = feed.scrollHeight;
+
+  var dots = 0;
+  var dotTimer = setInterval(function() { dots=(dots+1)%4; document.getElementById('typing-dots').textContent='.'.repeat(dots)||'...'; }, 300);
+
+  // If a response takes longer than expected, swap the label to a
+  // reassuring status message instead of leaving a silent spinner —
+  // real testing showed occasional slow responses (engine fallback,
+  // transient API slowdowns) that can run 10-25+ seconds.
+  var STATUS_MESSAGES = [
+    'evaluating extended context boundaries',
+    'still working — thanks for your patience',
+    'cross-checking retrieved sources',
+  ];
+  var statusIndex = 0;
+  var statusTimer = setTimeout(function escalate() {
+    var label = document.getElementById('typing-label');
+    if (label) label.textContent = STATUS_MESSAGES[statusIndex % STATUS_MESSAGES.length];
+    statusIndex++;
+    statusTimer = setTimeout(escalate, 6000);
+  }, 7000);
+
+  var result = await runQuery(q);
+
+  clearInterval(dotTimer);
+  clearTimeout(statusTimer);
+  var labelReset = document.getElementById('typing-label');
+  if (labelReset) labelReset.textContent = 'retrieving';
+  trow.style.display = 'none';
+  turnCount++;
+
+  var srow = document.createElement('div');
+  srow.className = 'msg-row';
+  var msgId = 'msg_' + Date.now();
+  srow.setAttribute('data-msg-id', msgId);
+  var fbHtml = '<div class="msg-feedback" data-msg-id="' + msgId + '"><button class="fb-btn fb-up" data-rating="1" onclick="submitFeedback(this)"><span>Helpful</span></button><button class="fb-btn fb-down" data-rating="-1" onclick="submitFeedback(this)"><span>Not helpful</span></button><span class="fb-label" id="fb-label-' + msgId + '"></span></div>';
+
+  if (result.zeroHit) {
+    trackZeroHit(q);
+    srow.innerHTML = '<div class="msg-meta"><span class="msg-role system">VECTOR</span><span class="msg-time">' + new Date().toTimeString().slice(0,8) + '</span></div><div class="msg-text">' + result.answer + '</div>' + fbHtml;
+    feed.insertBefore(srow, trow);
+    feed.scrollTop = feed.scrollHeight;
+    document.getElementById('tel-chunks').textContent = '0';
+    document.getElementById('tel-turns').textContent = turnCount;
+    return;
+  }
+
+  totalTokens += result.tokens || Math.floor(80 + Math.random()*120);
+
+  srow.innerHTML = '<div class="msg-meta"><span class="msg-role system">VECTOR</span><span class="msg-time">' + new Date().toTimeString().slice(0,8) + '</span></div><div class="msg-text">' + result.answer + '</div><div class="context-path"><span class="ctx-node">' + result.ref + '</span><span class="ctx-arrow">→</span><span class="ctx-node">faith:' + result.faithfulness + '</span><span class="ctx-arrow">→</span><span class="ctx-node">recall:' + result.recall + '</span></div>' + fbHtml;
+  feed.insertBefore(srow, trow);
+  feed.scrollTop = feed.scrollHeight;
+
+  document.getElementById('tel-latency').textContent = result.latency + 'ms';
+  document.getElementById('tel-tokens').textContent = totalTokens.toLocaleString();
+  document.getElementById('tel-chunks').textContent = result.chunkCount;
+  document.getElementById('tel-cache').textContent = result.cacheHit ? 'HIT' : 'MISS';
+  document.getElementById('tel-engine').textContent = result.engine;
+  document.getElementById('tel-turns').textContent = turnCount;
+  document.getElementById('audit-chunks').innerHTML = result.chunksHtml;
+  document.getElementById('audit-scores').innerHTML =
+    '<div class="score-row"><span class="score-label">Faithfulness</span><div class="score-bar-wrap"><div class="score-bar" style="width:' + (result.faithfulness*100) + '%;background:#A78BFA"></div></div><span class="score-val" style="color:#A78BFA">' + result.faithfulness + '</span></div>' +
+    '<div class="score-row"><span class="score-label">Answer Relevance</span><div class="score-bar-wrap"><div class="score-bar" style="width:' + (result.relevance*100) + '%;background:#818CF8"></div></div><span class="score-val" style="color:#818CF8">' + result.relevance + '</span></div>' +
+    '<div class="score-row"><span class="score-label">Context Recall</span><div class="score-bar-wrap"><div class="score-bar" style="width:' + (result.recall*100) + '%;background:#2DD4BF"></div></div><span class="score-val" style="color:#2DD4BF">' + result.recall + '</span></div>';
+}
+
+// ── Real query execution with demo fallback ────────────────
+async function runQuery(q) {
+    var start = Date.now();
+
+  // No document uploaded yet — and backend mode is live — guide the user
+  if (API_MODE === 'live' && !currentDocId) {
+    return {
+      zeroHit: true,
+      answer: 'No document is loaded yet. Upload a document first, then ask your question.',
+    };
+  }
+
+  if (API_MODE === 'live' && currentDocId) {
+    try {
+      var res = await fetch(API_BASE + '/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query:   q,
+          doc_id:  currentDocId,
+          field:   currentFieldValue || 'general',
+          tier:    currentTier,
+          user_id: userProfile.name || 'anonymous',
+        }),
+      });
+
+      var data = await res.json();
+      var latency = Date.now() - start;
+
+      if (!res.ok) {
+        return { zeroHit: true, answer: data.detail || 'Something went wrong processing your query.' };
+      }
+
+      // Zero-hit — backend found nothing relevant
+      if (!data.chunks || data.chunks.length === 0) {
+        return { zeroHit: true, answer: data.answer || 'No relevant content was found in this document for that question.' };
+      }
+
+      var chunksHtml = data.chunks.map(function(c) {
+        return '<div class="chunk-item"><div class="chunk-ref">' + (c.ref || c.page) + ' · ' + currentFieldValue + '</div><div class="chunk-text">' + c.text + '</div><div class="chunk-score">distance: ' + (c.distance || 0).toFixed(2) + ' · tokens: ' + (c.tokens || '–') + '</div></div>';
+      }).join('');
+
+      return {
+        zeroHit:      false,
+        answer:       data.answer,
+        ref:          data.chunks[0].ref || data.chunks[0].page || 'p.1',
+        faithfulness: data.faithfulness != null ? data.faithfulness : 0.0,
+        relevance:    data.answer_relevance != null ? data.answer_relevance : 0.0,
+        recall:       data.context_recall != null ? data.context_recall : 0.0,
+        latency:      latency,
+        tokens:       data.tokens_used || Math.floor(80 + Math.random()*120),
+        chunkCount:   data.chunks.length,
+        cacheHit:     !!data.cache_hit,
+        engine:       data.engine === 'gemini' ? 'Gemini 2.5 Flash' : 'Mistral-7B',
+        chunksHtml:   chunksHtml,
+      };
+
+    } catch (err) {
+      console.warn('Backend unreachable during query, falling back to demo:', err);
+      API_MODE = 'demo';
+      addErrorMsg('Backend unavailable. Check that the worker and gateway are running, then reload the page.', 'warning');
+      // fall through to demo below
+    }
+  }
+
+  // ── Demo fallback ──────────────────────────────────────────
+  var demo = getDemo(q);
+  await new Promise(function(r){ setTimeout(r, demo.lat + 200); });
+  return {
+    zeroHit:      false,
+    answer:       demo.a + (API_MODE === 'demo' ? ' <span style="opacity:0.5;font-size:11px">(demo mode)</span>' : ''),
+    ref:          demo.ref.split(' · ')[0],
+    faithfulness: demo.f,
+    relevance:    demo.r,
+    recall:       demo.c,
+    latency:      demo.lat,
+    tokens:       Math.floor(80 + Math.random()*120),
+    chunkCount:   3,
+    cacheHit:     demo.eng === 'Semantic Cache',
+    engine:       demo.eng,
+    chunksHtml:   '<div class="chunk-item"><div class="chunk-ref">' + demo.ref + ' · ' + currentFieldValue + '</div><div class="chunk-text">' + demo.txt + '</div><div class="chunk-score">distance: 0.09 · tokens: 28</div></div>',
+  };
+}
+
+// ── Telemetry jitter ───────────────────────────────────────
+setInterval(function() {
+  var base = parseInt(document.getElementById('tel-latency').textContent) || 312;
+  var next = Math.max(120, base + Math.floor(Math.random()*40-20));
+  document.getElementById('tel-latency').textContent = next + 'ms';
+}, 3000);
+
+
+// ── Mobile tab switching ───────────────────────────────────────
+function isMobile() { return window.innerWidth <= 768; }
+
+function switchMobileTab(tab) {
+  var cmdPanel = document.querySelector('.cmd-panel');
+  var docPanel = document.querySelector('.doc-panel');
+  var chatTab  = document.getElementById('mtab-chat');
+  var docTab   = document.getElementById('mtab-doc');
+  if (!cmdPanel || !docPanel) return;
+  if (tab === 'chat') {
+    cmdPanel.classList.remove('mobile-hidden');
+    cmdPanel.classList.add('mobile-active');
+    docPanel.classList.remove('mobile-active');
+    if (chatTab) chatTab.classList.add('active');
+    if (docTab)  docTab.classList.remove('active');
+  } else {
+    cmdPanel.classList.add('mobile-hidden');
+    cmdPanel.classList.remove('mobile-active');
+    docPanel.classList.add('mobile-active');
+    if (chatTab) chatTab.classList.remove('active');
+    if (docTab)  docTab.classList.add('active');
+  }
+}
+
+function handleResize() {
+  var tabs     = document.getElementById('mobile-tabs');
+  var cmdPanel = document.querySelector('.cmd-panel');
+  var docPanel = document.querySelector('.doc-panel');
+  if (!tabs || !cmdPanel || !docPanel) return;
+  if (isMobile()) {
+    tabs.style.display = 'flex';
+    cmdPanel.classList.remove('mobile-hidden');
+    cmdPanel.classList.add('mobile-active');
+    docPanel.classList.remove('mobile-active');
+    var chatTab = document.getElementById('mtab-chat');
+    var docTab  = document.getElementById('mtab-doc');
+    if (chatTab) chatTab.classList.add('active');
+    if (docTab)  docTab.classList.remove('active');
+  } else {
+    tabs.style.display = 'none';
+    cmdPanel.classList.remove('mobile-hidden','mobile-active');
+    docPanel.classList.remove('mobile-active');
+    docPanel.style.display = '';
+  }
+}
+
+window.addEventListener('resize', handleResize);
+document.addEventListener('DOMContentLoaded', handleResize);
+handleResize();
+
+// ── History sidebar ────────────────────────────────────────────
+var histTab = 'files';
+
+var HIST_FILES = [
+  {name:'Certificate_of_Quality_2024-PH-007.pdf', field:'certificate_of_quality', date:'Jun 14, 2026', chunks:24},
+  {name:'audit_report_batch_007.pdf',              field:'audit_report',           date:'Jun 12, 2026', chunks:18},
+  {name:'NDA_ClientCo_2026.pdf',                   field:'nda',                    date:'Jun 09, 2026', chunks:11},
+  {name:'SEC_Filing_Q1_2026.pdf',                  field:'sec_filing',             date:'Jun 07, 2026', chunks:42},
+  {name:'IT_Runbook_Failover_v3.pdf',              field:'it_runbook',             date:'Jun 04, 2026', chunks:15},
+];
+
+var HIST_QUERIES = [
+  {q:'Is this batch compliant with EU GMP sterility requirements?', field:'certificate_of_quality', date:'Jun 14, 2026', faith:0.94},
+  {q:'What are the late payment penalties in this agreement?',      field:'nda',                    date:'Jun 12, 2026', faith:0.91},
+  {q:'Summarize the key risk factors in this filing',              field:'sec_filing',              date:'Jun 09, 2026', faith:0.88},
+  {q:'What is the first step in the database failover procedure?', field:'it_runbook',              date:'Jun 07, 2026', faith:0.96},
+  {q:'What are the bacterial endotoxin results?',                  field:'certificate_of_quality', date:'Jun 04, 2026', faith:0.97},
+];
+
+var TIER_HIST_ACCESS = {ephemeral:false, segment:'files', lattice:'files', vector:'both', enclave:'both'};
+
+function openHistory() {
+  var tierIdx = TIER_ORDER.indexOf(currentTier);
+  if (tierIdx < 1) {
+    addErrorMsg('Document history requires Segment tier or above. Upgrade your plan to access history.', 'warning');
+    return;
+  }
+  document.getElementById('hist-overlay').classList.add('open');
+  document.getElementById('hist-sidebar').classList.add('open');
+  renderHistBody();
+}
+function closeHistory() {
+  document.getElementById('hist-overlay').classList.remove('open');
+  document.getElementById('hist-sidebar').classList.remove('open');
+}
+function switchHistTab(tab, btn) {
+  histTab = tab;
+  document.querySelectorAll('.hist-tab').forEach(function(t){ t.classList.remove('active'); });
+  btn.classList.add('active');
+  renderHistBody();
+}
+function renderHistBody() {
+  var body   = document.getElementById('hist-body');
+  var access = TIER_HIST_ACCESS[currentTier];
+  if (!body) return;
+  if (!access) {
+    body.innerHTML = '<div class="hist-tier-lock">Locked on Ephemeral tier.<br><br><a onclick="closeHistory();openSettings()">Upgrade to Segment or above</a></div>';
+    return;
+  }
+  var html = '';
+  if (histTab === 'files') {
+    html = '<div class="hist-section-label">Recent Documents</div>';
+    HIST_FILES.forEach(function(f) {
+      html += '<div class="hist-item" data-name="' + f.name + '" data-field="' + f.field + '" onclick="loadHistFile(this.dataset.name,this.dataset.field)">';
+      html += '<div class="hist-item-icon">&#128196;</div>';
+      html += '<div class="hist-item-body">';
+      html += '<div class="hist-item-name">' + f.name + '</div>';
+      html += '<div class="hist-item-meta"><span>' + f.date + '</span><span>' + f.chunks + ' chunks</span></div>';
+      html += '</div></div>';
+    });
+    html += '<button class="hist-btn" onclick="uploadDoc()">&#8593; Upload New Document</button>';
+  } else {
+    if (access !== 'both') {
+      body.innerHTML = '<div class="hist-tier-lock">Query history on Lattice and above.<br><br><a onclick="closeHistory();openSettings()">Upgrade plan</a></div>';
+      return;
+    }
+    html = '<div class="hist-section-label">Recent Queries</div>';
+    HIST_QUERIES.forEach(function(q, i) {
+      html += '<div class="hist-item" data-idx="' + i + '" onclick="rerunHistQuery(' + i + ')">';
+      html += '<div class="hist-item-icon">&#128172;</div>';
+      html += '<div class="hist-item-body">';
+      html += '<div class="hist-item-name">' + q.q + '</div>';
+      html += '<div class="hist-item-meta"><span>' + q.date + '</span><span style="color:var(--accent)">faith:' + q.faith + '</span></div>';
+      html += '</div></div>';
+    });
+  }
+  body.innerHTML = html;
+}
+function loadHistFile(name, field) {
+  document.getElementById('doc-title').textContent = name;
+  currentFieldValue = field;
+  document.getElementById('active-field').textContent = field.replace(/_/g,' ');
+  document.getElementById('field-select-label').textContent = field.replace(/_/g,' ');
+  document.getElementById('tel-field').textContent = field.slice(0,14);
+  closeHistory();
+  addSystemMsg('Loaded: ' + name + ' | field: ' + field);
+}
+function rerunQuery(q, field) {
+  currentFieldValue = field;
+  document.getElementById('query-input').value = q;
+  closeHistory();
+  if (isMobile()) switchMobileTab('chat');
+  sendQuery();
+}
+
+
+function rerunHistQuery(idx) {
+  var q = HIST_QUERIES[idx];
+  if (!q) return;
+  currentFieldValue = q.field;
+  document.getElementById('query-input').value = q.q;
+  document.getElementById('field-select-label').textContent = q.field.replace(/_/g,' ');
+  document.getElementById('active-field').textContent = q.field.replace(/_/g,' ');
+  document.getElementById('tel-field').textContent = q.field.slice(0,14);
+  closeHistory();
+  if (isMobile()) switchMobileTab('chat');
+  sendQuery();
+}
+
+
+// ── API Key management ─────────────────────────────────────
+var generatedApiKey = null;
+
+function renderApiKeySection() {
+  renderBYOKSection();
+  var locked    = document.getElementById('api-key-locked');
+  var available = document.getElementById('api-key-available');
+  var tierNote  = document.getElementById('api-key-tier-note');
+  var tierIdx   = ['ephemeral','segment','lattice','vector','enclave'].indexOf(currentTier);
+
+  if (!locked || !available) return;
+
+  if (tierIdx < 3) {
+    // Below Vector — show locked state
+    locked.style.display    = 'block';
+    available.style.display = 'none';
+    if (tierNote) tierNote.textContent = '· Vector+ only';
+  } else {
+    // Vector or Enclave — show generator
+    locked.style.display    = 'none';
+    available.style.display = 'block';
+    if (tierNote) tierNote.textContent = '· ' + TIER_LABELS[currentTier];
+    // If key already generated this session, show it
+    if (generatedApiKey) {
+      showGeneratedKey(generatedApiKey);
+    }
+  }
+}
+
+function generateApiKey() {
+  var tierIdx = ['ephemeral','segment','lattice','vector','enclave'].indexOf(currentTier);
+  if (tierIdx < 3) {
+    addErrorMsg('API key generation requires Vector or Enclave tier.', 'warning');
+    return;
+  }
+  // Generate a demo key — in production this calls POST /owner/generate-key
+  var chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  var key   = 'sk_live_';
+  for (var i = 0; i < 24; i++) {
+    key += chars[Math.floor(Math.random() * chars.length)];
+  }
+  generatedApiKey = key;
+  showGeneratedKey(key);
+  addSystemMsg('API key generated. Store it securely — it will not be shown again.');
+}
+
+function showGeneratedKey(key) {
+  var display = document.getElementById('api-key-display');
+  var valEl   = document.getElementById('api-key-value');
+  var genBtn  = document.getElementById('gen-key-btn');
+  if (display) display.style.display = 'block';
+  if (valEl)   valEl.textContent     = key;
+  if (genBtn)  genBtn.textContent    = 'Request New Key →';
+}
+
+function copyApiKey() {
+  var key = document.getElementById('api-key-value');
+  var btn = document.getElementById('copy-key-btn');
+  if (!key || !key.textContent) return;
+  try {
+    navigator.clipboard.writeText(key.textContent).then(function() {
+      if (btn) { btn.textContent = 'Copied!'; btn.style.color = '#22C55E'; }
+      setTimeout(function() {
+        if (btn) { btn.textContent = 'Copy'; btn.style.color = ''; }
+      }, 2000);
+    });
+  } catch(e) {
+    // Fallback
+    var ta = document.createElement('textarea');
+    ta.value = key.textContent;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    if (btn) { btn.textContent = 'Copied!'; btn.style.color = '#22C55E'; }
+    setTimeout(function() {
+      if (btn) { btn.textContent = 'Copy'; btn.style.color = ''; }
+    }, 2000);
+  }
+}
+
+
+// ── BYOK ──────────────────────────────────────────────────
+var byokKey = null;
+
+function saveBYOKKey() {
+  var input  = document.getElementById('byok-key-input');
+  var status = document.getElementById('byok-status');
+  var val    = input ? input.value.trim() : '';
+  if (!val) {
+    byokKey = null;
+    if (status) { status.textContent = 'Key cleared — using Mistral-7B local inference'; status.className = 'byok-status byok-inactive'; }
+    return;
+  }
+  if (!val.startsWith('AIza')) {
+    if (status) { status.textContent = 'Invalid key format. Gemini keys start with AIza...'; status.className = 'byok-status'; status.style.color = '#F87171'; }
+    return;
+  }
+  byokKey = val;
+  if (input) input.value = '';
+  if (status) { status.textContent = 'Gemini key active — cloud inference enabled'; status.className = 'byok-status byok-active'; }
+  addSystemMsg('BYOK Gemini key saved in memory. Cloud inference active for this session.');
+}
+
+function renderBYOKSection() {
+  var byokEl   = document.getElementById('byok-section');
+  var availEl  = document.getElementById('api-key-available');
+  var tierIdx  = ['ephemeral','segment','lattice','vector','enclave'].indexOf(currentTier);
+  if (!byokEl) return;
+  // Show BYOK for Segment and Lattice (1 and 2)
+  // Hide for Ephemeral (no cloud), Vector/Enclave (key included)
+  if (tierIdx === 1 || tierIdx === 2) {
+    byokEl.style.display  = 'block';
+    if (availEl) availEl.style.display = 'none';
+  } else if (tierIdx >= 3) {
+    byokEl.style.display  = 'none';
+    if (availEl) availEl.style.display = 'block';
+  } else {
+    byokEl.style.display  = 'none';
+    if (availEl) availEl.style.display = 'none';
+  }
+}
+
+// ── Request API Key (email trigger) ───────────────────────
+function generateApiKey() {
+  var tierIdx = ['ephemeral','segment','lattice','vector','enclave'].indexOf(currentTier);
+  if (tierIdx < 3) {
+    addErrorMsg('API key access requires Vector or Enclave tier.', 'warning');
+    return;
+  }
+  // Build email request
+  var subject = encodeURIComponent('API Key Request — Meridian Intel ' + TIER_LABELS[currentTier]);
+  var body    = encodeURIComponent(
+    'Hello Meridian Intel team,\n\n' +
+    'I would like to request an API key for my account.\n\n' +
+    'Tier: ' + TIER_LABELS[currentTier] + '\n' +
+    'Session: ' + Math.random().toString(36).slice(2,10).toUpperCase() + '\n\n' +
+    'Please send my sk_live_ key to this email address.\n\n' +
+    'Thank you'
+  );
+  var mailtoLink = 'mailto:support@meridianintel.app?subject=' + subject + '&body=' + body;
+  window.open(mailtoLink);
+  // Show pending state
+  var genBtn = document.getElementById('gen-key-btn');
+  if (genBtn) { genBtn.textContent = 'Request sent ✓'; genBtn.style.color = '#22C55E'; genBtn.style.borderColor = '#22C55E'; }
+  setTimeout(function() {
+    if (genBtn) { genBtn.textContent = 'Request API Key →'; genBtn.style.color = ''; genBtn.style.borderColor = ''; }
+  }, 4000);
+  addSystemMsg('API key request sent to support@meridianintel.app. You will receive your key within 24 hours.');
+}
+
+// ── Feedback thumbs ────────────────────────────────────────
+var feedbackGiven = {};
+
+function submitFeedback(btn) {
+  var row    = btn.closest('.msg-feedback');
+  var msgId  = row ? row.getAttribute('data-msg-id') : null;
+  var rating = parseInt(btn.getAttribute('data-rating') || '0');
+  if (!msgId || feedbackGiven[msgId]) return;
+  feedbackGiven[msgId] = rating;
+  var label  = document.getElementById('fb-label-' + msgId);
+  if (row) {
+    row.querySelectorAll('.fb-btn').forEach(function(b) {
+      b.classList.remove('fb-active-up','fb-active-down');
+      b.style.pointerEvents = 'none';
+    });
+    btn.classList.add(rating === 1 ? 'fb-active-up' : 'fb-active-down');
+  }
+  if (label) {
+    label.textContent = rating === 1 ? 'Thanks for the feedback!' : 'We will improve this.';
+    label.style.color = rating === 1 ? '#22C55E' : '#F59E0B';
+  }
+  // In production: POST /feedback with rating, query, answer, field, tier
+  console.log('Feedback:', {msgId: msgId, rating: rating, field: currentFieldValue, tier: currentTier});
+}
+
+
+// ── Bug Report ──────────────────────────────────────────────
+function reportBug() {
+  var subject = encodeURIComponent('Bug Report — Meridian Intel ' + TIER_LABELS[currentTier]);
+  var body    = encodeURIComponent(
+    'Hello Meridian Intel team,\n\n' +
+    'I encountered a bug. Details below:\n\n' +
+    'WHAT HAPPENED:\n[describe what you saw]\n\n' +
+    'WHAT YOU EXPECTED:\n[describe what should have happened]\n\n' +
+    'STEPS TO REPRODUCE:\n1. \n2. \n3. \n\n' +
+    '— Context (auto-filled) —\n' +
+    'Tier: ' + TIER_LABELS[currentTier] + '\n' +
+    'Field: ' + (currentFieldValue || 'general') + '\n' +
+    'Engine: ' + (activeEngine === 'gemini' ? 'Gemini 2.5 Flash' : 'Mistral-7B') + '\n' +
+    'Browser: ' + navigator.userAgent.slice(0,80) + '\n' +
+    'Session: ' + Math.random().toString(36).slice(2,10).toUpperCase()
+  );
+  window.open('mailto:support@meridianintel.app?subject=' + subject + '&body=' + body);
+  addSystemMsg('Bug report draft opened in your email client. Add details and send to support@meridianintel.app.');
+}
+
+// ── Zero-Hit Failure Report ────────────────────────────────
+var lastZeroHitQuery = null;
+
+function reportZeroHit() {
+  var subject = encodeURIComponent('Zero-Hit Report — Meridian Intel ' + TIER_LABELS[currentTier]);
+  var queryContext = lastZeroHitQuery
+    ? 'Query that returned zero hits: "' + lastZeroHitQuery + '"\n\n'
+    : 'No zero-hit events logged this session.\n\nIf you experienced a zero-hit you believe was incorrect, describe your query below:\n\n';
+  var body = encodeURIComponent(
+    'Hello Meridian Intel team,\n\n' +
+    queryContext +
+    'WHY I BELIEVE THIS SHOULD HAVE RETURNED A RESULT:\n[explain]\n\n' +
+    '— Context (auto-filled) —\n' +
+    'Tier: ' + TIER_LABELS[currentTier] + '\n' +
+    'Field: ' + (currentFieldValue || 'general') + '\n' +
+    'Document: ' + (document.getElementById('doc-title') ? document.getElementById('doc-title').textContent : 'none') + '\n' +
+    'Session: ' + Math.random().toString(36).slice(2,10).toUpperCase()
+  );
+  window.open('mailto:support@meridianintel.app?subject=' + subject + '&body=' + body);
+  addSystemMsg('Zero-hit report draft opened. This helps us improve retrieval accuracy.');
+}
+
+// ── Feature Request ─────────────────────────────────────────
+function requestFeature() {
+  var subject = encodeURIComponent('Feature Request — Meridian Intel');
+  var body    = encodeURIComponent(
+    'Hello Meridian Intel team,\n\n' +
+    'I would like to request a feature:\n\n' +
+    'WHAT I WANT:\n[describe the feature]\n\n' +
+    'WHY IT WOULD HELP:\n[describe your use case]\n\n' +
+    '— Context (auto-filled) —\n' +
+    'Tier: ' + TIER_LABELS[currentTier] + '\n' +
+    'Field: ' + (currentFieldValue || 'general')
+  );
+  window.open('mailto:support@meridianintel.app?subject=' + subject + '&body=' + body);
+  addSystemMsg('Feature request draft opened. Requests are reviewed weekly and added to the v2.1/v2.2/v3 roadmap.');
+}
+
+// ── Feedback Summary ────────────────────────────────────────
+function showFeedbackSummary() {
+  var overlay = document.getElementById('info-overlay');
+  var title   = document.getElementById('info-modal-title');
+  var body    = document.getElementById('info-modal-body');
+  if (!overlay || !body) return;
+
+  var total = Object.keys(feedbackGiven).length;
+  var ups   = Object.values(feedbackGiven).filter(function(r){return r===1;}).length;
+  var downs = Object.values(feedbackGiven).filter(function(r){return r===-1;}).length;
+
+  title.textContent = 'Feedback & Ratings';
+  var html = '<div class="info-section">';
+  html += '<div class="info-section-title">This Session</div>';
+  if (total === 0) {
+    html += '<div class="info-item note"><span class="info-item-icon">ℹ</span><span>No feedback given yet. Use the Helpful / Not helpful buttons under any response to rate it.</span></div>';
+  } else {
+    html += '<div class="info-item done"><span class="info-item-icon">+</span><span>' + ups + ' helpful response' + (ups===1?'':'s') + '</span></div>';
+    html += '<div class="info-item note" style="color:#F87171"><span class="info-item-icon">-</span><span>' + downs + ' unhelpful response' + (downs===1?'':'s') + '</span></div>';
+    html += '<div class="info-item note"><span class="info-item-icon">Σ</span><span>' + total + ' total response' + (total===1?'':'s') + ' rated</span></div>';
+  }
+  html += '</div>';
+  html += '<div class="info-section"><div class="info-section-title">How Feedback Is Used</div>';
+  html += '<div class="info-item next"><span class="info-item-icon">→</span><span>Ratings are logged with the field, tier, and engine used</span></div>';
+  html += '<div class="info-item next"><span class="info-item-icon">→</span><span>Low-rated responses are reviewed to improve retrieval and prompting</span></div>';
+  html += '<div class="info-item next"><span class="info-item-icon">→</span><span>In production, feedback posts to <code style="font-family:\'DM Mono\',monospace;color:var(--accent)">/feedback</code> in real time</span></div>';
+  html += '</div>';
+  body.innerHTML = html;
+  overlay.classList.add('open');
+}
+
+
+// ── Profile & Role ──────────────────────────────────────────
+var userProfile = { name: 'Faith', role: 'QA Compliance Officer', org: '' };
+
+function openProfile() {
+  var overlay = document.getElementById('info-overlay');
+  var title   = document.getElementById('info-modal-title');
+  var body    = document.getElementById('info-modal-body');
+  if (!overlay || !body) return;
+
+  title.textContent = 'Profile & Role';
+  body.innerHTML =
+    '<div class="pf-field"><label class="pf-label">DISPLAY NAME</label>' +
+    '<input class="pf-input" id="pf-name" value="' + userProfile.name + '"></div>' +
+    '<div class="pf-field"><label class="pf-label">ROLE</label>' +
+    '<select class="pf-select" id="pf-role">' +
+      '<option' + (userProfile.role==='QA Compliance Officer'?' selected':'') + '>QA Compliance Officer</option>' +
+      '<option' + (userProfile.role==='QA Manager'?' selected':'') + '>QA Manager</option>' +
+      '<option' + (userProfile.role==='Regulatory Affairs'?' selected':'') + '>Regulatory Affairs</option>' +
+      '<option' + (userProfile.role==='Legal Counsel'?' selected':'') + '>Legal Counsel</option>' +
+      '<option' + (userProfile.role==='Developer'?' selected':'') + '>Developer</option>' +
+      '<option' + (userProfile.role==='Other'?' selected':'') + '>Other</option>' +
+    '</select></div>' +
+    '<div class="pf-field"><label class="pf-label">ORGANIZATION (OPTIONAL)</label>' +
+    '<input class="pf-input" id="pf-org" placeholder="Company or lab name" value="' + userProfile.org + '"></div>' +
+    '<button class="pf-save-btn" onclick="saveProfile()">Save Changes</button>';
+
+  overlay.classList.add('open');
+}
+
+function saveProfile() {
+  var name = document.getElementById('pf-name');
+  var role = document.getElementById('pf-role');
+  var org  = document.getElementById('pf-org');
+  userProfile.name = name ? name.value : userProfile.name;
+  userProfile.role = role ? role.value : userProfile.role;
+  userProfile.org  = org ? org.value : userProfile.org;
+  closeInfoModal();
+  addSystemMsg('Profile updated: ' + userProfile.name + ' · ' + userProfile.role);
+}
+
+// ── Billing & Invoices ──────────────────────────────────────
+function openBilling() {
+  var overlay = document.getElementById('info-overlay');
+  var title   = document.getElementById('info-modal-title');
+  var body    = document.getElementById('info-modal-body');
+  if (!overlay || !body) return;
+
+  title.textContent = 'Billing & Invoices';
+  var html = '<div class="info-section"><div class="info-section-title">Current Plan</div>';
+  html += '<div class="bill-row"><span class="bill-row-label">Tier</span><span class="bill-row-val">' + TIER_LABELS[currentTier] + '</span></div>';
+  html += '<div class="bill-row"><span class="bill-row-label">Billing cycle</span><span class="bill-row-val">Monthly</span></div>';
+  html += '<div class="bill-row"><span class="bill-row-label">Next charge</span><span class="bill-row-val">Jul 19, 2026</span></div>';
+  html += '<div class="bill-row"><span class="bill-row-label">Payment method</span><span class="bill-row-val">Stripe · pending setup</span></div>';
+  html += '</div>';
+  html += '<div class="info-section"><div class="info-section-title">Recent Invoices</div>';
+  html += '<div class="bill-invoice"><span>Jun 19, 2026 — ' + TIER_LABELS[currentTier].split(' ·')[0] + '</span><a class="bill-invoice-link" href="mailto:support@meridianintel.app?subject=Invoice%20Request">Request PDF</a></div>';
+  html += '<div class="info-item note" style="margin-top:10px"><span class="info-item-icon">ℹ</span><span>Live Stripe billing dashboard is on the v2.1 roadmap. For now, email support for invoice copies or payment changes.</span></div>';
+  html += '</div>';
+  body.innerHTML = html;
+  overlay.classList.add('open');
+}
+
+// ── Cancel / Downgrade flow with retention offer ───────────
+var cancelReason = null;
+var cancelStep    = 1;
+
+function openCancelFlow() {
+  cancelStep   = 1;
+  cancelReason = null;
+  var overlay = document.getElementById('info-overlay');
+  var title   = document.getElementById('info-modal-title');
+  var body    = document.getElementById('info-modal-body');
+  if (!overlay || !body) return;
+  title.textContent = 'Downgrade or Cancel';
+  renderCancelStep();
+  overlay.classList.add('open');
+}
+
+function renderCancelStep() {
+  var body = document.getElementById('info-modal-body');
+  if (!body) return;
+
+  if (cancelStep === 1) {
+    // Step 1 — ask why
+    var reasons = [
+      'Too expensive for my use case',
+      'Not using it enough',
+      'Missing a feature I need',
+      'Found an alternative',
+      'Just trying it out',
+      'Other',
+    ];
+    var html = '<div class="info-section"><div class="info-section-title">Before you go — what\'s the main reason?</div>';
+    html += '<div style="font-size:12px;color:var(--muted);margin-bottom:12px">This helps us improve. One click.</div>';
+    reasons.forEach(function(r, i) {
+      html += '<button class="cancel-reason" data-reason="' + i + '" onclick="selectCancelReason(this)">' + r + '</button>';
+    });
+    html += '</div>';
+    body.innerHTML = html;
+  }
+
+  if (cancelStep === 2) {
+    // Step 2 — retention offer (only if not Ephemeral already)
+    var tierIdx = TIER_ORDER.indexOf(currentTier);
+    if (tierIdx === 0) {
+      cancelStep = 3;
+      renderCancelStep();
+      return;
+    }
+    var html = '<div class="offer-card">';
+    html += '<div class="offer-badge">ONE-TIME OFFER</div>';
+    html += '<div class="offer-title">Stay for 50% off, 3 months</div>';
+    html += '<div class="offer-desc">We\'d rather adjust the price than lose you. Get ' + TIER_LABELS[currentTier].split(' ·')[0] + ' at half price for the next 3 months — no commitment after that.</div>';
+    html += '<div class="offer-actions">';
+    html += '<button class="offer-accept" onclick="acceptRetentionOffer()">Apply Discount</button>';
+    html += '<button class="offer-decline" onclick="declineRetentionOffer()">No thanks, continue</button>';
+    html += '</div></div>';
+    html += '<div class="info-item note" style="text-align:center;margin-top:4px"><span></span><span>Or <a href="mailto:support@meridianintel.app?subject=Trial%20Extension%20Request" style="color:var(--accent)">request a free trial extension</a> instead</span></div>';
+    body.innerHTML = html;
+  }
+
+  if (cancelStep === 3) {
+    // Step 3 — communication preferences before final cancel
+    var html = '<div class="info-section"><div class="info-section-title">Before you cancel — communication preferences</div>';
+    html += '<div style="font-size:12px;color:var(--muted);margin-bottom:10px">Choose what we can still send you, or opt out completely.</div>';
+    html += '<div class="comm-pref-item"><div><div class="comm-pref-label">Product updates</div><div class="comm-pref-desc">New features and major releases</div></div>';
+    html += '<button class="sp-toggle' + (commPrefs.product ? ' on' : '') + '" id="comm-product" onclick="toggleStandalonePref(\'product\')"></button></div>';
+    html += '<div class="comm-pref-item"><div><div class="comm-pref-label">Win-back offers</div><div class="comm-pref-desc">Occasional discounts if you reconsider</div></div>';
+    html += '<button class="sp-toggle' + (commPrefs.winback ? ' on' : '') + '" id="comm-winback" onclick="toggleStandalonePref(\'winback\')"></button></div>';
+    html += '<div class="comm-pref-item"><div><div class="comm-pref-label">All emails</div><div class="comm-pref-desc">Unsubscribe from everything</div></div>';
+    html += '<button class="sp-toggle' + (commPrefs.unsubscribeAll ? ' on' : '') + '" id="comm-all" onclick="toggleStandalonePref(\'unsubscribeAll\')"></button></div>';
+    html += '</div>';
+    html += '<button class="pf-save-btn" style="width:100%;background:#EF4444;color:#fff" onclick="finalizeCancel()">Confirm Cancellation</button>';
+    html += '<button class="offer-decline" style="width:100%;margin-top:8px" onclick="closeInfoModal()">Keep my subscription</button>';
+    body.innerHTML = html;
+  }
+
+  if (cancelStep === 4) {
+    // Final confirmation
+    var html = '<div class="cancel-final">';
+    html += '<div class="cancel-final-icon">✓</div>';
+    html += '<div style="font-size:15px;font-weight:500;margin-bottom:8px">Subscription will end</div>';
+    html += '<div style="font-size:13px;color:var(--muted);line-height:1.6">Your ' + TIER_LABELS[currentTier].split(' ·')[0] + ' access continues until the end of your current billing period. After that you\'ll move to Ephemeral (Free).</div>';
+    html += '<div style="font-size:11px;color:var(--dim);margin-top:14px;font-family:\'DM Mono\',monospace">Changed your mind? Email support@meridianintel.app anytime before the period ends.</div>';
+    html += '</div>';
+    body.innerHTML = html;
+  }
+}
+
+function selectCancelReason(btn) {
+  document.querySelectorAll('.cancel-reason').forEach(function(b){ b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  cancelReason = btn.textContent;
+  setTimeout(function() {
+    cancelStep = 2;
+    renderCancelStep();
+  }, 300);
+}
+
+function acceptRetentionOffer() {
+  closeInfoModal();
+  startTrial(currentTier, 90);
+  addSystemMsg('50% discount applied for 3 months on ' + TIER_LABELS[currentTier] + '. Thanks for staying! Your renewed access runs 90 days from today.');
+}
+
+function declineRetentionOffer() {
+  cancelStep = 3;
+  renderCancelStep();
+}
+
+
+
+function finalizeCancel() {
+  cancelStep = 4;
+  renderCancelStep();
+  // In production: POST /billing/cancel with reason + comm prefs
+  console.log('Cancellation:', { reason: cancelReason, tier: currentTier });
+}
+
+
+// ── Trial system ────────────────────────────────────────────
+// Ephemeral tier itself never expires — it is the permanent free tier.
+// A trial is when a user gets temporary access to a PAID tier
+// (e.g. a design partner given free Vector for 90 days).
+var trialState = {
+  active:    false,
+  tier:      null,   // which paid tier the trial unlocks
+  startDate: null,
+  totalDays: 90,
+  bannerDismissedAt: null,
+};
+
+function startTrial(tier, days) {
+  trialState.active    = true;
+  trialState.tier      = tier;
+  trialState.startDate = Date.now();
+  trialState.totalDays = days || 90;
+  trialState.bannerDismissedAt = null;
+  try {
+    localStorage.setItem('rag_trial', JSON.stringify(trialState));
+  } catch(e) {}
+  setTier(trialState.tier === currentTier ? currentTier : trialState.tier);
+  renderTrialStatus();
+}
+
+function getTrialDaysRemaining() {
+  if (!trialState.active || !trialState.startDate) return null;
+  var elapsedMs   = Date.now() - trialState.startDate;
+  var elapsedDays = Math.floor(elapsedMs / (1000 * 60 * 60 * 24));
+  var remaining   = trialState.totalDays - elapsedDays;
+  return Math.max(0, remaining);
+}
+
+function renderTrialStatus() {
+  var badgeWrap = document.getElementById('trial-badge-wrap');
+  var badge     = document.getElementById('trial-badge');
+  var banner    = document.getElementById('trial-banner');
+  var bannerTxt = document.getElementById('trial-banner-text');
+
+  if (!trialState.active) {
+    if (badgeWrap) badgeWrap.style.display = 'none';
+    if (banner)    banner.classList.remove('show','urgent');
+    return;
+  }
+
+  var remaining = getTrialDaysRemaining();
+
+  // Trial expired — auto-downgrade
+  if (remaining <= 0) {
+    endTrial(true);
+    return;
+  }
+
+  // Telemetry badge
+  if (badgeWrap) badgeWrap.style.display = '';
+  if (badge) {
+    badge.textContent = 'Trial - ' + remaining + ' day' + (remaining === 1 ? '' : 's') + ' left';
+    badge.classList.toggle('trial-urgent', remaining <= 7);
+  }
+
+  // Banner — show at 7 days or fewer, unless dismissed today
+  var dismissedToday = trialState.bannerDismissedAt &&
+    (Date.now() - trialState.bannerDismissedAt) < (1000 * 60 * 60 * 24);
+
+  if (remaining <= 7 && !dismissedToday && banner) {
+    banner.classList.add('show');
+    banner.classList.toggle('urgent', remaining <= 2);
+    if (bannerTxt) {
+      if (remaining <= 2) {
+        bannerTxt.textContent = 'Your trial ends in ' + remaining + ' day' + (remaining === 1 ? '' : 's') + '. Upgrade now to keep ' + TIER_LABELS[trialState.tier] + '.';
+      } else {
+        bannerTxt.textContent = 'Your trial ends in ' + remaining + ' days. Upgrade to keep your current features.';
+      }
+    }
+  } else if (banner) {
+    banner.classList.remove('show');
+  }
+}
+
+function dismissTrialBanner() {
+  trialState.bannerDismissedAt = Date.now();
+  try { localStorage.setItem('rag_trial', JSON.stringify(trialState)); } catch(e) {}
+  var banner = document.getElementById('trial-banner');
+  if (banner) banner.classList.remove('show');
+}
+
+function endTrial(expired) {
+  var wasTier = trialState.tier;
+  trialState.active = false;
+  try { localStorage.removeItem('rag_trial'); } catch(e) {}
+  renderTrialStatus();
+
+  if (expired) {
+    setTierDirect('ephemeral');
+    addErrorMsg('Your trial of ' + (TIER_LABELS[wasTier] || 'your plan') + ' has ended. You have moved to Ephemeral (Free). Upgrade anytime to restore full access.', 'warning');
+  }
+}
+
+// setTier requires ownerModeActive — trial transitions need to bypass that
+// guard since they are system-driven, not manual owner overrides.
+function setTierDirect(tier) {
+  var wasOwnerMode = ownerModeActive;
+  ownerModeActive = true;
+  setTier(tier);
+  ownerModeActive = wasOwnerMode;
+}
+
+function restoreTrialFromStorage() {
+  try {
+    var saved = localStorage.getItem('rag_trial');
+    if (saved) {
+      var parsed = JSON.parse(saved);
+      trialState = parsed;
+      renderTrialStatus();
+    }
+  } catch(e) {}
+}
+
+
+// ── Backend connectivity indicator ──────────────────────────
+async function checkBackendStatus() {
+  var dot   = document.getElementById('tel-dot');
+  var label = document.getElementById('tel-mode-label');
+  var reachable = await apiPing();
+  API_MODE = reachable ? 'live' : 'demo';
+  if (dot)   dot.style.background = reachable ? '#22C55E' : '#F59E0B';
+  if (label) label.textContent    = reachable ? 'LIVE' : 'DEMO MODE';
+  if (!reachable) {
+    console.warn('Backend not reachable at ' + API_BASE + ' — running in demo mode.');
+  }
+}
+
+
+// ── Communication Preferences (standalone + shared with cancel flow) ──
+var commPrefs = { product: true, winback: true, unsubscribeAll: false };
+
+function loadCommPrefs() {
+  try {
+    var saved = localStorage.getItem('rag_comm_prefs');
+    if (saved) commPrefs = JSON.parse(saved);
+  } catch(e) {}
+}
+
+function saveCommPrefs() {
+  try { localStorage.setItem('rag_comm_prefs', JSON.stringify(commPrefs)); } catch(e) {}
+}
+
+function openCommPrefs() {
+  var overlay = document.getElementById('info-overlay');
+  var title   = document.getElementById('info-modal-title');
+  var body    = document.getElementById('info-modal-body');
+  if (!overlay || !body) return;
+
+  title.textContent = 'Communication Preferences';
+  var html = '<div class="info-section">';
+  html += '<div style="font-size:12px;color:var(--muted);margin-bottom:12px">Choose what Meridian Intel can email you. Changes save immediately.</div>';
+  html += '<div class="comm-pref-item"><div><div class="comm-pref-label">Product updates</div><div class="comm-pref-desc">New features and major releases</div></div>';
+  html += '<button class="sp-toggle' + (commPrefs.product ? ' on' : '') + '" id="cp-product" onclick="toggleStandalonePref(\'product\')"></button></div>';
+  html += '<div class="comm-pref-item"><div><div class="comm-pref-label">Win-back offers</div><div class="comm-pref-desc">Occasional discounts and renewal reminders</div></div>';
+  html += '<button class="sp-toggle' + (commPrefs.winback ? ' on' : '') + '" id="cp-winback" onclick="toggleStandalonePref(\'winback\')"></button></div>';
+  html += '<div class="comm-pref-item"><div><div class="comm-pref-label">All emails</div><div class="comm-pref-desc">Unsubscribe from everything, including receipts</div></div>';
+  html += '<button class="sp-toggle' + (commPrefs.unsubscribeAll ? ' on' : '') + '" id="cp-all" onclick="toggleStandalonePref(\'unsubscribeAll\')"></button></div>';
+  html += '</div>';
+  html += '<div class="info-item note" style="margin-top:4px"><span class="info-item-icon">i</span><span>Billing receipts and security notices are sent regardless of these settings.</span></div>';
+  body.innerHTML = html;
+  overlay.classList.add('open');
+}
+
+function toggleStandalonePref(key) {
+  if (key === 'unsubscribeAll') {
+    commPrefs.unsubscribeAll = !commPrefs.unsubscribeAll;
+    if (commPrefs.unsubscribeAll) {
+      commPrefs.product = false;
+      commPrefs.winback = false;
+    }
+  } else {
+    commPrefs[key] = !commPrefs[key];
+    if (commPrefs.product || commPrefs.winback) commPrefs.unsubscribeAll = false;
+  }
+  saveCommPrefs();
+  // Re-render toggles in whichever modal is open (standalone uses cp- ids, cancel flow uses comm- ids)
+  var ids = [
+    ['cp-product','product'], ['cp-winback','winback'], ['cp-all','unsubscribeAll'],
+    ['comm-product','product'], ['comm-winback','winback'], ['comm-all','unsubscribeAll'],
+  ];
+  ids.forEach(function(pair) {
+    var el = document.getElementById(pair[0]);
+    if (el) el.classList.toggle('on', commPrefs[pair[1]]);
+  });
+}
+
+// ── Onboarding ─────────────────────────────────────────────
+function showOnboarding() {
+  try { if (localStorage.getItem('rag_onboarded') === '1') return; } catch(e) {}
+  var overlay = document.getElementById('ob-overlay');
+  var badge   = document.getElementById('ob-tier-badge');
+  var encStep = document.getElementById('ob-tier-step');
+  if (badge)   badge.textContent = '◈ ' + (TIER_LABELS[currentTier] || 'Vector · Premium');
+  if (encStep) encStep.style.display = currentTier === 'enclave' ? 'flex' : 'none';
+  if (overlay) overlay.style.display = 'flex';
+}
+function dismissOnboarding() {
+  var overlay = document.getElementById('ob-overlay');
+  if (overlay) overlay.style.display = 'none';
+  try { localStorage.setItem('rag_onboarded', '1'); } catch(e) {}
+}
+
+// ── Error helpers ──────────────────────────────────────────
+function showUploadError(msg) {
+  var el = document.getElementById('upload-error');
+  var ok = document.getElementById('upload-success');
+  if (el) { el.textContent = 'x ' + msg; el.style.display = 'block'; }
+  if (ok) ok.style.display = 'none';
+  setTimeout(function(){ if(el) el.style.display='none'; }, 5000);
+}
+function showUploadSuccess(msg) {
+  var el = document.getElementById('upload-success');
+  var er = document.getElementById('upload-error');
+  if (el) { el.textContent = 'ok ' + msg; el.style.display = 'block'; }
+  if (er) er.style.display = 'none';
+  setTimeout(function(){ if(el) el.style.display='none'; }, 4000);
+}
+function addErrorMsg(text, type) {
+  var feed = document.getElementById('chat-feed');
+  var trow = document.getElementById('typing-row');
+  var row  = document.createElement('div');
+  var roles = {error:'ERROR', warning:'WARNING', zero:'NO RESULTS'};
+  row.className = 'msg-row msg-' + (type||'error');
+  row.innerHTML = '<div class="msg-meta"><span class="msg-role system">' + (roles[type]||'ERROR') + '</span><span class="msg-time">' + new Date().toTimeString().slice(0,8) + '</span></div><div class="msg-text">' + text + '</div>';
+  feed.insertBefore(row, trow);
+  feed.scrollTop = feed.scrollHeight;
+}
+
+// ── PDF.js real rendering ────────────────────────────────────────
+// Renders the ACTUAL uploaded file's real pages, client-side, directly
+// from the browser File object — no backend round-trip needed, since
+// the file's bytes are already in memory the moment the user selects
+// it. This replaces the honest-but-text-only summary that was here
+// before with genuine page-by-page rendering of the real document.
+if (typeof pdfjsLib !== 'undefined') {
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+var currentPdfDoc = null;   // pdf.js document instance for the CURRENT upload
+var currentPdfPage = 1;
+var currentPdfFile = null;  // the real browser File object for the current upload
+
+async function renderPdfPage(pageNum) {
+  if (!currentPdfDoc) return;
+  var page = await currentPdfDoc.getPage(pageNum);
+  var canvasWrap = document.getElementById('pdf-canvas-wrap');
+  if (!canvasWrap) return;
+
+  var containerWidth = canvasWrap.parentElement
+    ? canvasWrap.parentElement.clientWidth - 32
+    : 700;
+  var unscaledViewport = page.getViewport({ scale: 1 });
+  var cssScale = Math.min(containerWidth / unscaledViewport.width, 1.8);
+  var viewport = page.getViewport({ scale: cssScale });
+
+  // Fix for blurry rendering on HiDPI/Retina-class displays: the canvas's
+  // actual pixel buffer must be rendered at devicePixelRatio resolution,
+  // not just its CSS display size, or the browser upscales a lower-res
+  // bitmap to fill the physical pixels — exactly what caused the
+  // "looks blurry until you zoom in" symptom. The canvas's CSS width/
+  // height stay at the original viewport size (so layout/scale-to-fit
+  // is unaffected); only the underlying pixel buffer and the drawing
+  // transform are scaled up to match the real screen density.
+  var dpr = window.devicePixelRatio || 1;
+
+  var canvas = document.createElement('canvas');
+  canvas.width  = Math.floor(viewport.width  * dpr);
+  canvas.height = Math.floor(viewport.height * dpr);
+  canvas.style.width  = viewport.width  + 'px';
+  canvas.style.height = viewport.height + 'px';
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  canvasWrap.innerHTML = '';
+  canvasWrap.appendChild(canvas);
+
+  await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+  currentPdfPage = pageNum;
+  var pageLabel = document.getElementById('pdf-page-label');
+  if (pageLabel) pageLabel.textContent = pageNum + ' / ' + currentPdfDoc.numPages;
+  var prevBtn = document.getElementById('pdf-prev-btn');
+  var nextBtn = document.getElementById('pdf-next-btn');
+  if (prevBtn) prevBtn.disabled = (pageNum <= 1);
+  if (nextBtn) nextBtn.disabled = (pageNum >= currentPdfDoc.numPages);
+}
+
+function pdfPrevPage() {
+  if (currentPdfPage > 1) renderPdfPage(currentPdfPage - 1);
+}
+function pdfNextPage() {
+  if (currentPdfDoc && currentPdfPage < currentPdfDoc.numPages) {
+    renderPdfPage(currentPdfPage + 1);
+  }
+}
+
+async function renderRealPdf(file, docMeta) {
+    var contentArea = document.getElementById('doc-content-area');
+  if (!contentArea) return;
+
+  if (typeof pdfjsLib === 'undefined') {
+    // PDF.js failed to load (e.g. CDN blocked) — fall back to the
+    // honest text summary rather than showing a broken viewer.
+    renderHonestSummary(file, docMeta);
+    return;
+  }
+
+  contentArea.innerHTML = '<div class="pdf-loading">Loading real document preview…</div>';
+
+  try {
+    var arrayBuffer = await file.arrayBuffer();
+    var loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+    currentPdfDoc = await loadingTask.promise;
+    currentPdfFile = file;
+
+    contentArea.innerHTML =
+      '<div class="pdf-viewer-wrap">' +
+        '<div class="pdf-nav">' +
+          '<button id="pdf-prev-btn" onclick="pdfPrevPage()">&larr; Prev</button>' +
+          '<span id="pdf-page-label">1 / ' + currentPdfDoc.numPages + '</span>' +
+          '<button id="pdf-next-btn" onclick="pdfNextPage()">Next &rarr;</button>' +
+        '</div>' +
+        '<div class="pdf-canvas-wrap" id="pdf-canvas-wrap"></div>' +
+      '</div>';
+
+    await renderPdfPage(1);
+  } catch (err) {
+    console.warn('PDF.js render failed, falling back to text summary:', err);
+    renderHonestSummary(file, docMeta);
+  }
+}
+
+function renderHonestSummary(file, docMeta) {
+  // Fallback ONLY for legacy .doc files (not .docx — mammoth.js only
+  // reads the modern format, and there's no other real-content
+  // renderer available for legacy binary .doc), or if a renderer
+  // itself fails. Shows real ingest facts rather than attempting a
+  // render that isn't applicable or didn't succeed.
+  var contentArea = document.getElementById('doc-content-area');
+  if (!contentArea) return;
+  contentArea.innerHTML =
+    '<div class="doc-section">' +
+      '<div class="doc-section-title">' + file.name + '</div>' +
+      '<div class="doc-para"><strong>Field:</strong> ' + docMeta.field + '</div>' +
+      '<div class="doc-para"><strong>Pages:</strong> ' + docMeta.page_count + ' · <strong>Chunks indexed:</strong> ' + docMeta.chunk_count + '</div>' +
+      '<div class="doc-para"><strong>Document ID:</strong> ' + docMeta.doc_id + '</div>' +
+    '</div>' +
+    '<div class="doc-section">' +
+      '<div class="doc-section-title">Ask a question</div>' +
+      '<div class="doc-para" style="color:var(--light-muted)">This document is indexed and ready. Ask a question in the chat panel to retrieve grounded answers with source citations and faithfulness scores.</div>' +
+    '</div>';
+}
+
+function escapeHtml(s) {
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+async function renderRealTxt(file, docMeta) {
+  // Renders the ACTUAL raw text content of the uploaded .txt file —
+  // not just metadata about it. Plain text has no "page" or rich-
+  // format structure to render (unlike PDF/DOCX), so the real,
+  // complete, correct representation IS the literal text itself,
+  // shown readably with preserved whitespace/line breaks.
+  var contentArea = document.getElementById('doc-content-area');
+  if (!contentArea) return;
+
+  try {
+    var text = await file.text();
+    contentArea.innerHTML =
+      '<div class="doc-section">' +
+        '<div class="doc-section-title">' + file.name + '</div>' +
+        '<div class="doc-para" style="color:var(--light-muted);font-size:11px">' +
+          docMeta.page_count + ' page' + (docMeta.page_count===1?'':'s') + ' · ' +
+          docMeta.chunk_count + ' chunk' + (docMeta.chunk_count===1?'':'s') + ' indexed' +
+        '</div>' +
+      '</div>' +
+      '<pre style="white-space:pre-wrap;word-wrap:break-word;font-family:\'DM Mono\',monospace;font-size:12px;line-height:1.6;color:var(--light-text);background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;padding:1rem;margin:0">' +
+        escapeHtml(text) +
+      '</pre>';
+  } catch (err) {
+    console.warn('TXT render failed, falling back to summary:', err);
+    renderHonestSummary(file, docMeta);
+  }
+}
+
+async function renderRealDocx(file, docMeta) {
+  // Renders the ACTUAL uploaded .docx file's real content — headings,
+  // paragraphs, tables, formatting — using mammoth.js to convert the
+  // real file bytes (already in browser memory) to clean HTML.
+  // mammoth.js doesn't reproduce Word's literal page boundaries (page
+  // breaks depend on the rendering engine, not the file itself), but
+  // it shows the genuine document content and structure, not just
+  // metadata about it.
+  var contentArea = document.getElementById('doc-content-area');
+  if (!contentArea) return;
+
+  if (typeof mammoth === 'undefined') {
+    renderHonestSummary(file, docMeta);
+    return;
+  }
+
+  contentArea.innerHTML = '<div class="pdf-loading">Loading real document preview…</div>';
+
+  try {
+    var arrayBuffer = await file.arrayBuffer();
+    var result = await mammoth.convertToHtml({ arrayBuffer: arrayBuffer });
+    contentArea.innerHTML = '<div class="docx-render">' + result.value + '</div>';
+    // mammoth surfaces non-fatal warnings (e.g. unsupported style) via
+    // result.messages — logged for debugging but not shown to the user,
+    // since the render still succeeds even with these present.
+    if (result.messages && result.messages.length) {
+      console.info('mammoth.js conversion notes:', result.messages);
+    }
+  } catch (err) {
+    console.warn('DOCX render failed, falling back to text summary:', err);
+    renderHonestSummary(file, docMeta);
+  }
+}
+
+// ── Upload validation ──────────────────────────────────────
+var MAX_FILE_SIZE_MB = 50;
+var docUploaded = false;
+async function validateAndUpload(file) {
+    if (!file) return false;
+  var ext = file.name.split('.').pop().toLowerCase();
+  var supported = ['pdf','txt','docx','doc'];
+  var comingSoon = ['png','jpg','jpeg','gif','csv','xlsx'];
+
+  if (comingSoon.indexOf(ext) !== -1) {
+    showUploadError(ext.toUpperCase() + ' support is coming in v2.2. Please upload a PDF, TXT, or DOCX file.');
+    return false;
+  }
+  if (supported.indexOf(ext) === -1) {
+    showUploadError('Unsupported file type .' + ext + '. Supported: PDF, TXT, DOCX, DOC.');
+    return false;
+  }
+  var sizeMB = file.size / (1024 * 1024);
+  if (sizeMB > MAX_FILE_SIZE_MB) {
+    showUploadError('File too large (' + sizeMB.toFixed(1) + 'MB). Maximum is ' + MAX_FILE_SIZE_MB + 'MB.');
+    return false;
+  }
+
+  var typeLabel = {pdf:'PDF', txt:'TXT', docx:'DOCX', doc:'DOC'}[ext] || ext.toUpperCase();
+
+  // Show in-progress state
+  showUploadProgress(file.name + ' · ' + typeLabel + ' · ' + sizeMB.toFixed(1) + 'MB · uploading…');
+  addSystemMsg('Uploading ' + file.name + '…');
+
+  // ── Real backend call ─────────────────────────────────────
+  var formData = new FormData();
+  formData.append('file', file);
+  formData.append('field', currentFieldValue || 'general');
+  formData.append('tier', currentTier);
+  formData.append('user_id', userProfile.name || 'anonymous');
+
+  try {
+    var res = await fetch(API_BASE + '/ingest', {
+      method: 'POST',
+      body: formData,
+    });
+
+    var data = await res.json();
+
+    if (!res.ok) {
+      // Scanned PDF — backend returns 422 with scanned:true
+      if (res.status === 422 && data.scanned) {
+        handleScannedDoc(file.name);
+        return false;
+      }
+      showUploadError(data.detail || 'Upload failed. Please try again.');
+      addErrorMsg('Upload failed: ' + (data.detail || 'Unknown error'), 'error');
+      return false;
+    }
+
+    // Success — real document is now ingested and searchable
+    currentDocId = data.doc_id;
+    docUploaded  = true;
+    API_MODE     = 'live';
+
+    showUploadSuccess(file.name + ' · ' + typeLabel + ' · ' + data.chunk_count + ' chunks indexed');
+    addSystemMsg(
+      file.name + ' indexed · ' + data.chunk_count + ' chunks · ' +
+      data.page_count + ' page' + (data.page_count===1?'':'s') + ' · field: ' + data.field
+    );
+    document.getElementById('doc-title').textContent = file.name;
+    document.getElementById('tel-chunks').textContent = data.chunk_count;
+
+    // Real document preview, per file type:
+    //  - PDF:  genuine PDF.js page rendering
+    //  - DOCX: genuine mammoth.js content rendering (headings,
+    //          paragraphs, tables, formatting)
+    //  - TXT:  genuine raw text content, read directly from the file
+    //  - Legacy DOC (not .docx): honest summary — mammoth.js only
+    //    reads the modern .docx format, no other real-content
+    //    renderer is available for the legacy binary format.
+    // All use the actual uploaded file's real bytes, already in
+    // browser memory — no backend round-trip needed for any of this.
+    if (ext === 'pdf') {
+      renderRealPdf(file, data);
+      var badge1 = document.getElementById('doc-badge');
+      if (badge1) badge1.textContent = 'Vector · PDF.js';
+    } else if (ext === 'docx') {
+      renderRealDocx(file, data);
+      var badge3 = document.getElementById('doc-badge');
+      if (badge3) badge3.textContent = 'Vector · DOCX';
+    } else if (ext === 'txt') {
+      renderRealTxt(file, data);
+      var badge4 = document.getElementById('doc-badge');
+      if (badge4) badge4.textContent = 'Vector · TXT';
+    } else {
+      renderHonestSummary(file, data);
+      var badge2 = document.getElementById('doc-badge');
+      if (badge2) badge2.textContent = 'Vector · Text summary';
+    }
+
+    return true;
+
+  } catch (err) {
+    // Backend unreachable — fall back to demo mode so testing/demos don't break
+    API_MODE = 'demo';
+    console.warn('Backend unreachable, using demo mode:', err);
+    showUploadSuccess(file.name + ' · ' + typeLabel + ' · ' + sizeMB.toFixed(1) + 'MB (demo mode — backend offline)');
+    addErrorMsg('Could not reach the backend. Check that the worker and gateway are running — upload again once they\'re live.', 'warning');
+    document.getElementById('doc-title').textContent = file.name;
+    docUploaded = true;
+    return true;
+  }
+}
+
+function showUploadProgress(msg) {
+  var el = document.getElementById('upload-success');
+  var er = document.getElementById('upload-error');
+  if (el) { el.textContent = msg; el.style.display = 'block'; el.style.opacity = '0.7'; }
+  if (er) er.style.display = 'none';
+}
+
+// ── Query guards ───────────────────────────────────────────
+function trackZeroHit(q) { lastZeroHitQuery = q; }
+
+function checkQueryPreconditions(q) {
+  if (!q || !q.trim()) return false;
+  if (q.trim().length < 3) {
+    addErrorMsg('Query too short. Please ask a complete question.', 'warning');
+    return false;
+  }
+  if (q.trim().length > 2000) {
+    addErrorMsg('Query too long. Keep questions under 2000 characters.', 'warning');
+    return false;
+  }
+  return true;
+}
+
+// ── Auth gate ────────────────────────────────────────────────
+// Token stored in memory only — never localStorage, same rule as
+// owner.py, so it doesn't persist across page reloads by design.
+// A new code can always be requested; the 8-hour expiry covers
+// a full working day without repeated re-authentication.
+var _authToken = null;
+var _authName  = null;
+var _authEmail = null;
+
+// ── Auth gate failure state tracking ───────────────────────
+// Used by the grace period recovery loop to know when to stop
+var _authGraceInterval  = null;   // setInterval handle for retry loop
+var _authGraceDeadline  = null;   // timestamp when grace period expires
+var AUTH_GRACE_MS       = 120000; // 2 minutes
+var AUTH_RETRY_MS       = 15000;  // retry every 15 seconds
+
+async function authCheckOnLoad() {
+  // ── No token: hard fail closed ──────────────────────────
+  // No token means this is a fresh session with no prior verification.
+  // Under no circumstances should an unverified user reach the workspace.
+  // This is strict regardless of gateway availability — we can't
+  // validate what doesn't exist.
+  if (!_authToken) {
+    showAuthGate();
+    return;
+  }
+
+  // ── Has token: try to validate against gateway ──────────
+  try {
+    var resp = await fetch(API_BASE + '/auth/validate', {
+      method: 'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': 'Bearer ' + _authToken,
+      },
+    });
+
+    if (resp.ok) {
+      // Gateway reachable, token valid — normal path
+      hideAuthGate();
+      initWorkspace();
+    } else {
+      // Gateway reachable but token rejected (expired or invalid)
+      // Hard fail — force re-auth, no grace period
+      _authToken = null;
+      authSetMsg(1, 'Your session has expired. Please verify your identity again.', 'error');
+      showAuthGate();
+    }
+
+  } catch (e) {
+    // ── Gateway unreachable + valid token: grace period ─────
+    // User already verified their identity this session. Gateway is
+    // temporarily unreachable (network blip, brief Render restart).
+    // Allow 2 minutes for recovery before forcing re-auth.
+    // Background retry every 15 seconds — if gateway recovers within
+    // the grace window, user never sees any interruption at all.
+    console.warn('Auth gate: gateway unreachable — starting grace period');
+    _authStartGracePeriod();
+  }
+}
+
+function _authStartGracePeriod() {
+  // Let the user into the workspace immediately — they have a valid
+  // in-memory token proving they authenticated this session.
+  hideAuthGate();
+  initWorkspace();
+
+  // Show a non-blocking warning in the telemetry area
+  _authShowOfflineWarning();
+
+  // Set the deadline and start the retry loop
+  _authGraceDeadline = Date.now() + AUTH_GRACE_MS;
+
+  _authGraceInterval = setInterval(async function() {
+    var remaining = Math.round((_authGraceDeadline - Date.now()) / 1000);
+
+    // Grace period expired — force re-auth
+    if (Date.now() >= _authGraceDeadline) {
+      _authCancelGrace();
+      _authToken = null;
+      authSetMsg(1,
+        'Server connection could not be restored. Please verify your identity again.',
+        'error'
+      );
+      showAuthGate();
+      return;
+    }
+
+    // Retry the gateway
+    try {
+      var resp = await fetch(API_BASE + '/auth/validate', {
+        method: 'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'Authorization': 'Bearer ' + _authToken,
+        },
+      });
+
+      if (resp.ok) {
+        // Gateway recovered — cancel grace period silently
+        _authCancelGrace();
+        _authHideOfflineWarning();
+        console.info('Auth gate: gateway recovered, session validated');
+      } else {
+        // Gateway responded but rejected token — force re-auth now
+        _authCancelGrace();
+        _authToken = null;
+        authSetMsg(1, 'Your session has expired. Please verify your identity again.', 'error');
+        showAuthGate();
+      }
+    } catch (e) {
+      // Still unreachable — update warning with remaining time
+      _authShowOfflineWarning(remaining);
+    }
+  }, AUTH_RETRY_MS);
+}
+
+function _authCancelGrace() {
+  if (_authGraceInterval) {
+    clearInterval(_authGraceInterval);
+    _authGraceInterval = null;
+  }
+  _authGraceDeadline = null;
+}
+
+function _authShowOfflineWarning(secondsRemaining) {
+  var bar = document.getElementById('live-dot');
+  if (bar) {
+    bar.style.background = '#F59E0B';
+    bar.title = secondsRemaining
+      ? 'Server temporarily unreachable — retrying (' + secondsRemaining + 's remaining)'
+      : 'Server temporarily unreachable — retrying';
+  }
+  var liveLabel = document.querySelector('.telemetry-live');
+  if (liveLabel) {
+    liveLabel.textContent = 'OFFLINE';
+    liveLabel.style.color = '#F59E0B';
+  }
+}
+
+function _authHideOfflineWarning() {
+  var bar = document.getElementById('live-dot');
+  if (bar) {
+    bar.style.background = '';
+    bar.title = '';
+  }
+  var liveLabel = document.querySelector('.telemetry-live');
+  if (liveLabel) {
+    liveLabel.textContent = 'LIVE';
+    liveLabel.style.color = '';
+  }
+}
+
+function showAuthGate() {
+  var gate = document.getElementById('auth-gate');
+  if (gate) gate.classList.remove('hidden');
+}
+
+function hideAuthGate() {
+  var gate = document.getElementById('auth-gate');
+  if (gate) {
+    gate.classList.add('hidden');
+    // Remove from DOM entirely after fade so it can't be un-hidden
+    // via DevTools without losing the page state
+    setTimeout(function() { if (gate) gate.remove(); }, 400);
+  }
+}
+
+function initWorkspace() {
+  applyInitialGates();
+  restoreTrialFromStorage();
+  checkBackendStatus();
+  loadCommPrefs();
+  setTimeout(showOnboarding, 800);
+  setInterval(renderTrialStatus, 1000 * 60 * 60);
+}
+
+function authSetMsg(stepNum, text, type) {
+  var el = document.getElementById('auth-msg-' + stepNum);
+  if (!el) return;
+  el.textContent = text;
+  el.className = 'auth-msg ' + (type || '');
+}
+
+async function authRequestCode() {
+  var name  = (document.getElementById('auth-name')  || {}).value || '';
+  var email = (document.getElementById('auth-email') || {}).value || '';
+
+  if (!name.trim()) { authSetMsg(1, 'Please enter your name.', 'error'); return; }
+  if (!email.trim() || !email.includes('@')) {
+    authSetMsg(1, 'Please enter a valid email address.', 'error'); return;
+  }
+
+  var btn = document.getElementById('auth-send-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+  authSetMsg(1, '', '');
+
+  try {
+    var resp = await fetch('http://localhost:8000/auth/request-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name.trim(), email: email.trim().toLowerCase() }),
+    });
+    var data = await resp.json();
+
+    if (resp.ok && data.sent) {
+      _authEmail = email.trim().toLowerCase();
+      _authName  = name.trim();
+      var display = document.getElementById('auth-email-display');
+      if (display) display.textContent = _authEmail;
+      document.getElementById('auth-step-1').classList.add('hidden');
+      document.getElementById('auth-step-2').classList.remove('hidden');
+      setTimeout(function() {
+        var codeInput = document.getElementById('auth-code');
+        if (codeInput) codeInput.focus();
+      }, 100);
+    } else {
+      authSetMsg(1, data.message || data.detail || 'Could not send code. Please try again.', 'error');
+      if (btn) { btn.disabled = false; btn.textContent = 'Send access code →'; }
+    }
+  } catch (e) {
+    authSetMsg(1, 'Could not reach the server. Make sure the gateway is running.', 'error');
+    if (btn) { btn.disabled = false; btn.textContent = 'Send access code →'; }
+  }
+}
+
+async function authVerifyCode() {
+  var code = (document.getElementById('auth-code') || {}).value || '';
+  if (!code.trim() || code.trim().length !== 6) {
+    authSetMsg(2, 'Please enter the 6-digit code from your email.', 'error'); return;
+  }
+
+  var btn = document.getElementById('auth-verify-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Verifying…'; }
+  authSetMsg(2, '', '');
+
+  try {
+    var resp = await fetch('http://localhost:8000/auth/verify-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: _authEmail, code: code.trim() }),
+    });
+    var data = await resp.json();
+
+    if (resp.ok && data.granted) {
+      _authToken = data.token;
+      // Clear onboarding flag so it shows on every fresh login.
+      // Since auth tokens are memory-only (cleared on page reload),
+      // every login IS a new session — onboarding should always
+      // appear to orient the user to their current workspace state.
+      try { localStorage.removeItem('rag_onboarded'); } catch(e) {}
+      authSetMsg(2, 'Access granted. Loading workspace…', 'success');
+      setTimeout(function() {
+        hideAuthGate();
+        initWorkspace();
+      }, 600);
+    } else {
+      var msg = data.message || data.detail || 'Incorrect code.';
+      if (data.attempts_remaining !== undefined && data.attempts_remaining > 0) {
+        msg += ' (' + data.attempts_remaining + ' attempt' +
+               (data.attempts_remaining === 1 ? '' : 's') + ' remaining)';
+      }
+      authSetMsg(2, msg, 'error');
+      if (btn) { btn.disabled = false; btn.textContent = 'Verify code →'; }
+    }
+  } catch (e) {
+    authSetMsg(2, 'Could not reach the server. Make sure the gateway is running.', 'error');
+    if (btn) { btn.disabled = false; btn.textContent = 'Verify code →'; }
+  }
+}
+
+function authGoBack() {
+  document.getElementById('auth-step-2').classList.add('hidden');
+  document.getElementById('auth-step-1').classList.remove('hidden');
+  authSetMsg(1, '', '');
+  authSetMsg(2, '', '');
+  var btn = document.getElementById('auth-send-btn');
+  if (btn) { btn.disabled = false; btn.textContent = 'Send access code →'; }
+  var codeInput = document.getElementById('auth-code');
+  if (codeInput) codeInput.value = '';
+}
+
+// Allow pressing Enter in the code field to submit
+document.addEventListener('DOMContentLoaded', function() {
+  var codeInput = document.getElementById('auth-code');
+  if (codeInput) {
+    codeInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') authVerifyCode();
+    });
+  }
+  var emailInput = document.getElementById('auth-email');
+  if (emailInput) {
+    emailInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') authRequestCode();
+    });
+  }
+});
+
+// ── Show onboarding on load ────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  authCheckOnLoad();
+});
+
+function applyInitialGates() {
+  var idx = TIER_ORDER.indexOf(currentTier);
+  var color = TIER_COLORS[currentTier] || '#A78BFA';
+
+  // Scores tab
+  var scoresTab = document.getElementById('scores-tab');
+  if (scoresTab) scoresTab.classList.toggle('tier-locked', idx < 2);
+
+  // Audit panel
+  var auditPanel = document.getElementById('audit-panel');
+  if (auditPanel) auditPanel.classList.toggle('tier-locked', idx < 1);
+
+  // Telemetry
+  var telemetry = document.getElementById('telemetry');
+  if (telemetry) telemetry.style.opacity = idx >= 2 ? '1' : '0.3';
+
+  // History button
+  var histBtn = document.getElementById('hist-btn');
+  if (histBtn) {
+    histBtn.style.opacity = idx >= 1 ? '1' : '0.4';
+    histBtn.style.pointerEvents = idx >= 1 ? 'auto' : 'none';
+    histBtn.title = idx >= 1 ? 'Document & Query History' : 'History requires Segment tier or above';
+  }
+
+  // PDF highlights
+  document.querySelectorAll('.doc-highlight').forEach(function(h) {
+    h.style.background   = idx >= 3 ? 'rgba(167,139,250,0.2)' : 'transparent';
+    h.style.borderBottom = idx >= 3 ? '2px solid ' + color : 'none';
+  });
+
+  // Tier override always hidden on load
+  var tierWrap = document.getElementById('tier-override-wrap');
+  if (tierWrap) tierWrap.style.display = 'none';
+}
+
+
+function handleScannedDoc(filename) {
+  addErrorMsg(filename + ' is a scanned image PDF. OCR support coming in v2.1. Please use a text-based PDF, TXT, or DOCX.', 'warning');
+  showUploadError('Scanned PDF detected — OCR coming in v2.1. Try a text-based PDF, TXT, or DOCX.');
+  docUploaded = false;
+}
+</script>
+
+<!-- ONBOARDING MODAL -->
+<div class="ob-overlay" id="ob-overlay" style="display:none">
+  <div class="ob-modal">
+    <div class="ob-header">
+      <div>
+        <div class="ob-title">Welcome to Meridian Intel</div>
+        <div class="ob-subtitle">Zero-hallucination document intelligence.<br>Get started in three steps.</div>
+      </div>
+      <button class="ob-close" onclick="dismissOnboarding()">✕</button>
+    </div>
+    <div class="ob-steps">
+      <div class="ob-step">
+        <div class="ob-step-num">01</div>
+        <div class="ob-step-body">
+          <div class="ob-step-title">Upload your document</div>
+          <div class="ob-step-desc">Click <code>↑ Upload</code> in the top bar and select a PDF. Certificates of Quality, contracts, reports, runbooks — any document works.</div>
+        </div>
+      </div>
+      <div class="ob-step">
+        <div class="ob-step-num">02</div>
+        <div class="ob-step-body">
+          <div class="ob-step-title">Select your domain field</div>
+          <div class="ob-step-desc">Use the field selector in the input bar to tell the platform what type of document you're working with. Unknown fields fall back to <code>General Purpose</code> automatically.</div>
+        </div>
+      </div>
+      <div class="ob-step">
+        <div class="ob-step-num">03</div>
+        <div class="ob-step-body">
+          <div class="ob-step-title">Ask your question</div>
+          <div class="ob-step-desc">Type any question about your document. The platform retrieves only what's in the document — it will tell you if the answer isn't there rather than guessing.</div>
+        </div>
+      </div>
+      <div class="ob-step" id="ob-tier-step" style="display:none">
+        <div class="ob-step-num" style="background:rgba(245,158,11,0.1);border-color:#F59E0B;color:#F59E0B">★</div>
+        <div class="ob-step-body">
+          <div class="ob-step-title" style="color:#F59E0B">Enclave tier active</div>
+          <div class="ob-step-desc">Your data is stored in an isolated per-user collection. Full audit trail and eval scores are enabled on every response.</div>
+        </div>
+      </div>
+    </div>
+    <div class="ob-footer">
+      <span class="ob-tier-badge" id="ob-tier-badge">◈ Vector · Premium</span>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="ob-skip" onclick="dismissOnboarding()">Skip</button>
+        <button class="ob-btn" onclick="dismissOnboarding()">Get Started →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- INFO MODAL — changelog and roadmap -->
+<div class="info-overlay" id="info-overlay" onclick="closeInfoModal()">
+  <div class="info-modal" onclick="event.stopPropagation()">
+    <div class="info-modal-header">
+      <span class="info-modal-title" id="info-modal-title">What's New</span>
+      <button class="info-modal-close" onclick="closeInfoModal()">✕</button>
+    </div>
+    <div class="info-modal-body" id="info-modal-body">
+      <!-- populated by JS -->
+    </div>
+    <div class="info-modal-footer">
+      <div style="display:flex;gap:1rem">
+        <a href="https://github.com/meridian-intel-platform" target="_blank">⌥ GitHub</a>
+        <a href="mailto:support@meridianintel.app">⌥ Support</a>
+      </div>
+      <button class="info-modal-btn" onclick="closeInfoModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

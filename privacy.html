@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy · Meridian Intel</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080D14;--bg2:#0F172A;--bg3:#1E293B;
+  --text:#F8FAFC;--muted:#64748B;--dim:#334155;--border:#1E293B;
+  --accent:#A78BFA;--accent-dim:rgba(167,139,250,0.12);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;line-height:1.7;min-height:100vh}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(8,13,20,0.92);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);padding:0 2rem;height:52px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-family:'DM Mono',monospace;font-size:12px;color:var(--text);display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.nav-back{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 14px;border-radius:4px;transition:all 0.2s}
+.nav-back:hover{color:var(--text);border-color:var(--dim)}
+
+/* LAYOUT */
+.page{max-width:760px;margin:0 auto;padding:4rem 2rem 6rem}
+
+/* HERO */
+.doc-type{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.doc-title{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:600;letter-spacing:-0.02em;margin-bottom:0.75rem}
+.doc-meta{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+
+/* CONTENT */
+.section{margin-bottom:3rem}
+h2{font-size:1.15rem;font-weight:500;color:var(--text);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);letter-spacing:-0.01em}
+h3{font-size:1rem;font-weight:500;color:var(--accent);margin:1.5rem 0 0.5rem;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase}
+p{color:#CBD5E1;font-size:15px;margin-bottom:1rem}
+ul,ol{color:#CBD5E1;font-size:15px;padding-left:1.5rem;margin-bottom:1rem}
+li{margin-bottom:0.4rem}
+strong{color:var(--text);font-weight:500}
+code{font-family:'DM Mono',monospace;font-size:12px;background:var(--bg2);padding:2px 7px;border-radius:3px;color:var(--accent)}
+
+/* HIGHLIGHT BOX */
+.highlight{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px;padding:1.25rem 1.5rem;margin:1.5rem 0}
+.highlight p{margin-bottom:0;font-size:14px}
+
+/* TABLE */
+.policy-table{width:100%;border-collapse:collapse;margin:1rem 0 1.5rem;font-size:14px}
+.policy-table th{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;font-weight:400}
+.policy-table td{padding:10px 12px;border-bottom:1px solid rgba(30,41,59,0.5);color:#CBD5E1;vertical-align:top}
+.policy-table tr:last-child td{border-bottom:none}
+
+/* CONTACT */
+.contact-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin-top:2rem}
+.contact-box a{color:var(--accent);text-decoration:none}
+.contact-box a:hover{text-decoration:underline}
+
+/* TOC */
+.toc{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin-bottom:3rem}
+.toc-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.toc ol{counter-reset:toc-counter;list-style:none;padding:0}
+.toc li{counter-increment:toc-counter;padding:4px 0}
+.toc li::before{content:counter(toc-counter,decimal-leading-zero) '. ';font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
+.toc a{color:#CBD5E1;text-decoration:none;font-size:14px;transition:color 0.2s}
+.toc a:hover{color:var(--accent)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-family:'DM Mono',monospace;font-size:10px;color:var(--dim)}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--text)}
+
+/* MOBILE */
+@media(max-width:640px){
+  .page{padding:2rem 1.25rem 4rem}
+  .doc-meta{gap:1rem}
+  nav{padding:0 1rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <div class="nav-dot"></div>
+    Meridian Intel
+  </a>
+  <a href="index.html" class="nav-back">← Back to Platform</a>
+</nav>
+
+<div class="page">
+
+  <p class="doc-type">Legal Document</p>
+  <h1 class="doc-title">Privacy Policy</h1>
+  <div class="doc-meta">
+    <span>Effective: June 1, 2026</span>
+    <span>Last updated: June 22, 2026</span>
+    <span>Version: 2.0</span>
+    <span>Mazal Arc · Meridian Intel</span>
+  </div>
+
+  <div class="highlight">
+    <p><strong>Plain English summary:</strong> We collect only what we need to run the platform. Your uploaded documents are processed to answer your queries and are never sold, shared with advertisers, or used to train AI models. You control your data and can request deletion at any time.</p>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#who-we-are">Who we are</a></li>
+      <li><a href="#what-we-collect">What we collect</a></li>
+      <li><a href="#document-data">How we handle your documents</a></li>
+      <li><a href="#pii-scrubbing">PII scrubbing</a></li>
+      <li><a href="#how-we-use">How we use your data</a></li>
+      <li><a href="#sharing">Who we share data with</a></li>
+      <li><a href="#retention">Data retention</a></li>
+      <li><a href="#security">Security</a></li>
+      <li><a href="#your-rights">Your rights</a></li>
+      <li><a href="#cookies">Cookies and local storage</a></li>
+      <li><a href="#ai-models">AI models and third parties</a></li>
+      <li><a href="#children">Children's privacy</a></li>
+      <li><a href="#changes">Changes to this policy</a></li>
+      <li><a href="#contact">Contact us</a></li>
+    </ol>
+  </div>
+
+  <!-- 1 -->
+  <div class="section" id="who-we-are">
+    <h2>1. Who we are</h2>
+    <p>Meridian Intel is a product of <strong>Mazal Arc</strong>, a technology company building at the intersection of business, tech, and community.</p>
+    <p>Meridian Intel is a zero-hallucination Retrieval-Augmented Generation (RAG) platform that allows users to upload documents and query them using natural language. The platform operates across fourteen domain fields including pharmaceutical compliance, legal, finance, research, and general enterprise use.</p>
+    <p><strong>Contact:</strong> <a href="mailto:support@meridianintel.app" style="color:var(--accent)">support@meridianintel.app</a></p>
+  </div>
+
+  <!-- 2 -->
+  <div class="section" id="what-we-collect">
+    <h2>2. What we collect</h2>
+
+    <h3>Account information</h3>
+    <ul>
+      <li>Email address (used for workspace access verification via one-time code)</li>
+      <li>Name (optional, used for profile display)</li>
+      <li>Tier selection and billing information (processed by Stripe — we never see your card number)</li>
+    </ul>
+
+    <h3>Usage data</h3>
+    <ul>
+      <li>Queries submitted to the platform</li>
+      <li>Feedback ratings (thumbs up/down on responses)</li>
+      <li>Document upload history (filename, field type, chunk count, timestamp)</li>
+      <li>Query history (question text, faithfulness scores, timestamps)</li>
+      <li>Session identifiers</li>
+    </ul>
+
+    <h3>Technical data</h3>
+    <ul>
+      <li>IP address (used for security and rate limiting only)</li>
+      <li>Browser type and version</li>
+      <li>Device type (desktop, tablet, mobile)</li>
+      <li>Platform preferences (dark/light mode, font size, accent color) stored in your browser's local storage</li>
+    </ul>
+
+    <h3>What we do NOT collect</h3>
+    <ul>
+      <li>Social security numbers or government IDs</li>
+      <li>Payment card details (handled entirely by Stripe)</li>
+      <li>Biometric data</li>
+      <li>Location data beyond IP-level country detection</li>
+      <li>Any data from children under 13</li>
+    </ul>
+  </div>
+
+  <!-- 3 -->
+  <div class="section" id="document-data">
+    <h2>3. How we handle your documents</h2>
+
+    <div class="highlight">
+      <p><strong>Core principle:</strong> Your documents are yours. They are processed to serve your queries and for no other purpose.</p>
+    </div>
+
+    <p>When you upload a document to Meridian Intel, the following happens:</p>
+    <ol>
+      <li>The document is received by our OCaml gateway and forwarded to our FastAPI processing worker</li>
+      <li>Text is extracted from the PDF using <code>pdfplumber</code></li>
+      <li>The text is split into chunks using our recursive chunking algorithm (chunk size determined by your tier)</li>
+      <li>PII scrubbing is applied before any data reaches an AI model (see Section 4)</li>
+      <li>Chunks are embedded into vector representations and stored in ChromaDB under your user collection</li>
+      <li>The original PDF file is not stored permanently — only the processed text chunks and their embeddings</li>
+    </ol>
+
+    <h3>Enclave tier isolation</h3>
+    <p>Enclave (Enterprise) tier users receive per-user ChromaDB collection isolation. Your document chunks are stored in a collection accessible only to your user ID and are never co-mingled with other users' data.</p>
+
+    <h3>Free and mid tiers</h3>
+    <p>Ephemeral, Segment, Lattice, and Vector tier users share a ChromaDB collection namespace. Individual documents are tagged with your user ID and are not accessible to other users, but they are stored in a shared infrastructure environment.</p>
+  </div>
+
+  <!-- 4 -->
+  <div class="section" id="pii-scrubbing">
+    <h2>4. PII scrubbing</h2>
+    <p>Meridian Intel applies automatic PII scrubbing before any document content reaches an AI language model. This is a core architectural feature, not an optional add-on.</p>
+
+    <table class="policy-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Default (General)</th>
+          <th>Default (Pharma fields)</th>
+          <th>User overridable</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Email addresses</td><td>Scrubbed</td><td>Scrubbed</td><td>Yes</td></tr>
+        <tr><td>Phone numbers</td><td>Scrubbed</td><td>Not scrubbed</td><td>Yes</td></tr>
+        <tr><td>Social Security Numbers</td><td>Scrubbed</td><td>Scrubbed</td><td>Yes</td></tr>
+        <tr><td>Credit card numbers</td><td>Not scrubbed</td><td>Not scrubbed</td><td>Yes</td></tr>
+        <tr><td>IP addresses</td><td>Not scrubbed</td><td>Not scrubbed</td><td>Yes</td></tr>
+        <tr><td>Passport numbers</td><td>Not scrubbed</td><td>Not scrubbed</td><td>Yes</td></tr>
+        <tr><td>Dates of birth</td><td>Scrubbed</td><td>Scrubbed</td><td>Yes</td></tr>
+        <tr><td>Physical addresses</td><td>Scrubbed</td><td>Scrubbed</td><td>Yes</td></tr>
+        <tr><td>Personal names</td><td>Scrubbed</td><td>Scrubbed</td><td>Yes</td></tr>
+      </tbody>
+    </table>
+
+    <p>Pharmaceutical field defaults are calibrated to preserve lot numbers, batch numbers, catalog IDs, and article numbers which would otherwise be incorrectly flagged by broad phone or numeric patterns.</p>
+    <p>PII scrubbing runs on query text, retrieved document chunks, and generated responses before any data is stored in query history.</p>
+  </div>
+
+  <!-- 5 -->
+  <div class="section" id="how-we-use">
+    <h2>5. How we use your data</h2>
+    <table class="policy-table">
+      <thead>
+        <tr><th>Data</th><th>Purpose</th><th>Legal basis</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Account email</td><td>Authentication, support communication</td><td>Contract performance</td></tr>
+        <tr><td>Document chunks</td><td>Answer your queries</td><td>Contract performance</td></tr>
+        <tr><td>Query history</td><td>History sidebar, regression analysis</td><td>Legitimate interest</td></tr>
+        <tr><td>Feedback ratings</td><td>Improve retrieval quality</td><td>Legitimate interest</td></tr>
+        <tr><td>Usage analytics</td><td>Platform performance monitoring</td><td>Legitimate interest</td></tr>
+        <tr><td>IP address</td><td>Security, rate limiting, fraud prevention</td><td>Legitimate interest</td></tr>
+        <tr><td>Support tickets</td><td>Resolve your support requests</td><td>Contract performance</td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>We never use your data to:</strong></p>
+    <ul>
+      <li>Train AI models (neither ours nor third parties)</li>
+      <li>Serve advertising</li>
+      <li>Sell to data brokers</li>
+      <li>Profile you for marketing purposes</li>
+      <li>Share with law enforcement except where legally required</li>
+    </ul>
+  </div>
+
+  <!-- 6 -->
+  <div class="section" id="sharing">
+    <h2>6. Who we share data with</h2>
+    <p>We share data only with the following categories of third parties, and only to the extent necessary to operate the platform:</p>
+
+    <table class="policy-table">
+      <thead>
+        <tr><th>Third party</th><th>Purpose</th><th>Data shared</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Resend</strong></td><td>Workspace access verification emails</td><td>Name and email address for one-time code delivery only</td></tr>
+        <tr><td><strong>Stripe</strong></td><td>Payment processing</td><td>Billing information only — we never see card details</td></tr>
+        <tr><td><strong>Google (Gemini)</strong></td><td>Cloud AI fallback inference (AUTO mode only)</td><td>Scrubbed query text and scrubbed document chunks only — no raw PII reaches Gemini</td></tr>
+        <tr><td><strong>OpenAI</strong></td><td>Cloud AI tertiary fallback inference (AUTO mode only)</td><td>Scrubbed query text and scrubbed document chunks only — no raw PII reaches OpenAI</td></tr>
+        <tr><td><strong>Render</strong></td><td>Cloud infrastructure hosting</td><td>All platform data is hosted on Render servers</td></tr>
+        <tr><td><strong>Cloudflare</strong></td><td>DNS and DDoS protection</td><td>Network traffic metadata only</td></tr>
+      </tbody>
+    </table>
+
+    <p>We do not use advertising networks, analytics resellers, or social media tracking pixels.</p>
+  </div>
+
+  <!-- 7 -->
+  <div class="section" id="retention">
+    <h2>7. Data retention</h2>
+    <table class="policy-table">
+      <thead>
+        <tr><th>Data type</th><th>Retention period</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Document chunks (Ephemeral tier)</td><td>Session only — deleted on logout or session expiry</td></tr>
+        <tr><td>Document chunks (Segment / Lattice / Vector)</td><td>Until you delete the document or close your account</td></tr>
+        <tr><td>Document chunks (Enclave)</td><td>Per contract terms — default 12 months</td></tr>
+        <tr><td>Query history</td><td>Lattice: 7 days · Vector: 90 days · Enclave: per contract</td></tr>
+        <tr><td>Account information</td><td>Until account deletion + 30 days</td></tr>
+        <tr><td>Support tickets</td><td>24 months</td></tr>
+        <tr><td>Billing records</td><td>7 years (legal requirement)</td></tr>
+        <tr><td>Security logs</td><td>90 days</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 8 -->
+  <div class="section" id="security">
+    <h2>8. Security</h2>
+    <p>Meridian Intel is built with security as a core architectural concern, not an afterthought:</p>
+    <ul>
+      <li><strong>Transport encryption:</strong> All data in transit is encrypted via TLS 1.3. We verify our hosting provider (Render) and CDN (Cloudflare) enforce HTTPS on all connections — including internal service-to-service communication.</li>
+      <li><strong>Encryption at rest:</strong> Data stored on our servers (document chunks, query history, metadata) is protected by infrastructure-level encryption at rest provided by Render. This protects against unauthorized physical or infrastructure-level access. Application-level end-to-end encryption (where data is encrypted before it reaches our servers) is on our security roadmap.</li>
+      <li><strong>API gateway:</strong> All requests pass through our OCaml gateway which enforces JWT authentication, rate limiting, and request validation before reaching the ML worker</li>
+      <li><strong>Workspace access:</strong> Workspace access requires identity verification via a one-time email code. Session tokens are HMAC-signed JWTs stored in browser memory only — never in localStorage or cookies.</li>
+      <li><strong>Owner verification:</strong> Administrative access requires a server-side verified JWT — the access code is never stored in frontend code</li>
+      <li><strong>PII scrubbing:</strong> Applied at the infrastructure level before data reaches any AI model</li>
+      <li><strong>Zero-hallucination guarantee:</strong> The LLM call is blocked entirely if retrieval returns no relevant chunks — preventing generation of false information</li>
+      <li><strong>Enclave isolation:</strong> Enterprise users receive per-user vector store isolation with zero cross-document contamination, verified across real multi-document test scenarios</li>
+      <li><strong>No external analytics:</strong> No Google Analytics, Meta Pixel, or third-party tracking scripts are loaded on the platform</li>
+      <li><strong>local_only mode:</strong> Enclave-tier users can enable a zero-cloud inference guarantee — document content never leaves our infrastructure under any condition when this mode is active</li>
+    </ul>
+    <p>In the event of a data breach that affects your personal data, we will notify you within 72 hours of becoming aware of it.</p>
+  </div>
+
+  <!-- 9 -->
+  <div class="section" id="your-rights">
+    <h2>9. Your rights</h2>
+    <p>Depending on your location, you may have the following rights regarding your personal data:</p>
+    <ul>
+      <li><strong>Access:</strong> Request a copy of the personal data we hold about you</li>
+      <li><strong>Correction:</strong> Request correction of inaccurate personal data</li>
+      <li><strong>Deletion:</strong> Request deletion of your account and all associated data</li>
+      <li><strong>Portability:</strong> Request your data in a machine-readable format</li>
+      <li><strong>Objection:</strong> Object to processing based on legitimate interest</li>
+      <li><strong>Restriction:</strong> Request restriction of processing while a dispute is resolved</li>
+      <li><strong>Withdrawal:</strong> Withdraw consent at any time where processing is consent-based</li>
+    </ul>
+    <p>To exercise any of these rights, email us at <a href="mailto:support@meridianintel.app" style="color:var(--accent)">support@meridianintel.app</a>. We will respond within 30 days.</p>
+    <p>You also have the right to lodge a complaint with your local data protection authority if you believe we have not handled your data appropriately.</p>
+  </div>
+
+  <!-- 10 -->
+  <div class="section" id="cookies">
+    <h2>10. Cookies and local storage</h2>
+    <p>Meridian Intel uses minimal browser storage:</p>
+    <table class="policy-table">
+      <thead>
+        <tr><th>Storage key</th><th>Purpose</th><th>Type</th><th>Expires</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>rag_dark_mode</code></td><td>Remember your light/dark preference</td><td>localStorage</td><td>Never (until cleared)</td></tr>
+        <tr><td><code>rag_accent</code></td><td>Remember your accent color choice</td><td>localStorage</td><td>Never (until cleared)</td></tr>
+        <tr><td><code>rag_font_size</code></td><td>Remember your font size preference</td><td>localStorage</td><td>Never (until cleared)</td></tr>
+        <tr><td>Workspace access token (JWT)</td><td>Authentication session</td><td>Browser memory only (not persisted)</td><td>8 hours</td></tr>
+      </tbody>
+    </table>
+    <p>We do not use advertising cookies, tracking cookies, or third-party analytics cookies. No cookie consent banner is required for essential platform functionality cookies under ePrivacy Directive exemptions.</p>
+  </div>
+
+  <!-- 11 -->
+  <div class="section" id="ai-models">
+    <h2>11. AI models and third parties</h2>
+
+    <h3>Local inference (Mistral-7B)</h3>
+    <p>By default, query processing uses a locally hosted Mistral-7B model running on Meridian Intel's infrastructure. Your document content and queries do not leave our servers during local inference.</p>
+
+    <h3>Cloud fallback (Gemini 2.5 Flash)</h3>
+    <p>When local inference is unavailable or rate-limited, our AUTO Shield feature routes requests to Google's Gemini 2.5 Flash API, then OpenAI gpt-4o-mini as a tertiary fallback. Only scrubbed text (after PII removal) is sent to any cloud provider. We do not send raw document content, account information, or identifiable user data to Google or OpenAI. Users who require a complete zero-cloud guarantee may enable <code>local_only</code> engine mode, which disables all cloud fallback entirely.</p>
+    <p>Google's use of data submitted via API is governed by the <a href="https://ai.google.dev/terms" target="_blank" style="color:var(--accent)">Google AI API Terms of Service</a>. Google does not use API data to train its models by default.</p>
+
+    <h3>No model training on your data</h3>
+    <p>Neither Mazal Arc nor any third-party AI provider uses your uploaded documents or queries to train, fine-tune, or improve AI models. This applies to both local and cloud inference paths.</p>
+  </div>
+
+  <!-- 12 -->
+  <div class="section" id="children">
+    <h2>12. Children's privacy</h2>
+    <p>Meridian Intel is not directed at children under the age of 13. We do not knowingly collect personal information from children under 13. If you believe a child under 13 has provided us with personal information, please contact us immediately at <a href="mailto:support@meridianintel.app" style="color:var(--accent)">support@meridianintel.app</a> and we will delete it promptly.</p>
+  </div>
+
+  <!-- 13 -->
+  <div class="section" id="changes">
+    <h2>13. Changes to this policy</h2>
+    <p>We may update this Privacy Policy from time to time. When we make material changes, we will:</p>
+    <ul>
+      <li>Update the "Last updated" date at the top of this page</li>
+      <li>Send an email notification to registered users</li>
+      <li>Display a notice in the platform workspace</li>
+    </ul>
+    <p>Continued use of the platform after changes take effect constitutes acceptance of the updated policy. If you do not agree with the changes, you may delete your account by contacting us.</p>
+  </div>
+
+  <!-- 14 -->
+  <div class="section" id="contact">
+    <h2>14. Contact us</h2>
+    <div class="contact-box">
+      <p style="margin-bottom:0.75rem"><strong>Mazal Arc · Meridian Intel</strong></p>
+      <p style="margin-bottom:0.5rem">For privacy questions, data requests, or concerns:</p>
+      <p style="margin-bottom:0.5rem">Email: <a href="mailto:support@meridianintel.app">support@meridianintel.app</a></p>
+      <p style="margin-bottom:0.5rem">GitHub: <a href="https://github.com/meridian-intel-platform" target="_blank">github.com/meridian-intel-platform</a></p>
+      <p style="margin-bottom:0;font-size:13px;color:var(--muted);margin-top:1rem">We aim to respond to all privacy-related inquiries within 30 days.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2026 Mazal Arc · All rights reserved &nbsp;·&nbsp;
+  <a href="index.html">Platform</a> &nbsp;·&nbsp;
+  <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+  <a href="terms.html">Terms of Service</a> &nbsp;·&nbsp;
+  <a href="mailto:support@meridianintel.app">support@meridianintel.app</a>
+  </p>
+</footer>
+
+</body>
+</html>
